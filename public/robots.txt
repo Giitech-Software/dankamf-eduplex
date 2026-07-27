@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /dashboard
+Disallow: /login
+Disallow: /admissions/status
+
+Sitemap: https://dankamf-eduplex.web.app/sitemap.xml

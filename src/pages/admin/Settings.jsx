@@ -33,7 +33,7 @@ export default function Settings() {
     e.preventDefault();
     setMsg('');
     try {
-      if (role !== 'super_admin') {
+      if (role !== 'superadmin') {
         setMsg('❌ Only super admins can update settings.');
         return;
       }
@@ -106,11 +106,11 @@ export default function Settings() {
 
         <button
           className="bg-primary text-white px-6 py-3 rounded hover:bg-cta transition disabled:opacity-60"
-          disabled={role !== 'super_admin'}
+          disabled={role !== 'superadmin'}
         >
           Save Settings
         </button>
-        {role !== 'super_admin' && (
+        {role !== 'superadmin' && (
           <p className="text-sm text-red-600 dark:text-red-400 mt-1">
             Only super admins can save changes.
           </p>

@@ -3,8 +3,8 @@
 Upload the hero banner image in this folder as:
 
 ```text
-hero-banner.jpg
+hero-banner.webp
 ```
 
-Recommended size: 1920 x 900px.
-Use a compressed JPG or WebP-style export saved with the `.jpg` filename expected by `src/components/HeroSection.jsx`.
+Recommended size: 1920 x 1080px.
+Use a compressed JPG or WebP-style export saved with the `.webp` filename expected by `src/components/HeroSection.jsx`.

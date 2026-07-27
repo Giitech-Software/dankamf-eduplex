@@ -2,78 +2,17 @@ rules_version = '2';
 
 service firebase.storage {
   match /b/{bucket}/o {
-    function signedIn() {
-      return request.auth != null;
+  
+    // Helper function to check for admin/superadmin role from Firestore
+    function isAdmin() {
+      // This checks the 'users' collection in Firestore for the user's role.
+      return request.auth != null && get(/databases/(default)/documents/users/$(request.auth.uid)).data.role in ['admin', 'superadmin'];
     }
 
-    function isImage() {
-      return request.resource != null
-        && request.resource.contentType.matches('image/.*')
-        && request.resource.size < 10 * 1024 * 1024;
-    }
-
-    function isPdf() {
-      return request.resource != null
-        && request.resource.contentType == 'application/pdf'
-        && request.resource.size < 10 * 1024 * 1024;
-    }
-
-    match /projects/{fileName} {
-      allow read: if true;
-      allow create, update: if signedIn() && isImage();
-      allow delete: if signedIn();
-    }
-
-    match /posts/{fileName} {
-      allow read: if true;
-      allow create, update: if signedIn() && isImage();
-      allow delete: if signedIn();
-    }
-
-    match /blogImages/{fileName} {
-      allow read: if true;
-      allow create, update: if signedIn() && isImage();
-      allow delete: if signedIn();
-    }
-
-    match /partners/{fileName} {
-      allow read: if true;
-      allow create, update: if signedIn() && isImage();
-      allow delete: if signedIn();
-    }
-
-    match /serviceIcons/{fileName} {
-      allow read: if true;
-      allow create, update: if signedIn() && isImage();
-      allow delete: if signedIn();
-    }
-
-    match /enterpriseFeatures/{fileName} {
-      allow read: if true;
-      allow create, update: if signedIn() && isImage();
-      allow delete: if signedIn();
-    }
-
-    match /clientTestimonials/{fileName} {
-      allow read: if true;
-      allow create, update: if signedIn() && isImage();
-      allow delete: if signedIn();
-    }
-
-    match /profileImages/{uid}/{fileName} {
-      allow read: if true;
-      allow create, update: if signedIn() && request.auth.uid == uid && isImage();
-      allow delete: if signedIn() && request.auth.uid == uid;
-    }
-
-    match /applications/{jobId}/{fileName} {
-      allow read: if signedIn();
-      allow create: if isPdf();
-      allow update, delete: if signedIn();
-    }
-
+    // Allow public read access to all files, but restrict writes to admins.
     match /{allPaths=**} {
-      allow read, write: if false;
+      allow read: if true;
+      allow write: if isAdmin(); // Only admins can upload, update, or delete files.
     }
   }
 }

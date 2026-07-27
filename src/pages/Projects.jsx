@@ -71,11 +71,11 @@ export default function Projects() {
           <div className="mb-8 flex flex-col justify-between gap-5 px-4 text-left sm:px-0 md:flex-row md:items-end">
             <div className="max-w-2xl">
               <h1 className="text-3xl font-black tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
-                Portfolio of Excellence
+                Vibrant School Life
               </h1>
               <div className="w-20 h-1.5 bg-warm mt-3 rounded-full"></div>
               <p className="mt-3 text-slate-600 text-base leading-relaxed">
-                Transforming industries through bespoke digital architecture and scalable engineering.
+                Explore the rich tapestry of student life at Dankamf Eduplex, from exciting clubs and sports to cultural events and academic competitions.
               </p>
             </div>
 

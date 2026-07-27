@@ -1,23 +1,24 @@
 // src/firebase/config.js
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
+import { getAuth } from "firebase/auth";
+
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBcPdMLtvfAo9lRZQ7DgoW38SM2W8NAcBg",
-  authDomain: "giitech-software-systems.firebaseapp.com",
-  projectId: "giitech-software-systems",
- storageBucket: "giitech-software-systems.firebasestorage.app",
-  messagingSenderId: "228673418378",
-  appId: "1:228673418378:web:d7642b35c951464bb2a973",
-  measurementId: "G-5T3Q137S1L"
+  apiKey: "AIzaSyClkuK14XE6_uC6PEzLyngq-CxTHDjsJfw",
+  authDomain: "dankamf-eduplex.firebaseapp.com",
+  projectId: "dankamf-eduplex",
+  storageBucket: "dankamf-eduplex.firebasestorage.app",
+  messagingSenderId: "665022847750",
+  appId: "1:665022847750:web:84a197b57576a6e756dc87",
 };
+
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const storage = getStorage(app);
-// eslint-disable-next-line
-const analytics = getAnalytics(app);
+const auth = getAuth(app);
 
-export { app, db, storage };
+
+export { app, db, storage, auth };

@@ -56,11 +56,11 @@ export default function MainLayout() {
           <img
             key={location.pathname}
             src={logo}
-            alt="ASTEM Software Labs Logo"
-            className="h-28 w-28 animate-bounce object-contain drop-shadow-lg"
+            alt="Dankamf Eduplex Logo"
+            className="h-36 w-36 animate-bounce object-contain drop-shadow-xl sm:h-44 sm:w-44"
           />
-          <p className="mt-4 text-lg font-semibold text-white animate-pulse">
-            Loading ASTEM Software Labs...
+          <p className="mt-4 text-lg font-semibold text-white animate-pulse tracking-wider">
+            Dankamf Educational Complex
           </p>
         </div>
       )}

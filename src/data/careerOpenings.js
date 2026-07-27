@@ -1,54 +1,34 @@
-export const featuredOpenings = [
+export const admissionPrograms = [
   {
-    id: 'frontend-developer',
-    title: 'Frontend Developer',
-    location: 'Remote / Accra',
-    type: 'Full-time',
+    id: 'creche-nursery',
+    title: 'Crèche & Nursery',
+    location: 'On Campus',
+    type: 'Ages 1-3',
     description:
-      'Build polished, responsive web interfaces for modern business platforms and digital products.',
+      'A safe, stimulating, and caring environment for our youngest learners to play, explore, and begin their educational journey. Focus on early childhood development.',
     requirements:
-      'Strong React, JavaScript, HTML, CSS, responsive design, API integration, and Git workflow experience.',
+      'Birth certificate, immunization records. Our team will guide you through the simple enrollment process.',
   },
   {
-    id: 'backend-developer',
-    title: 'Backend Developer',
-    location: 'Accra / Hybrid',
-    type: 'Full-time',
+    id: 'kindergarten-primary',
+    title: 'Kindergarten & Primary',
+    location: 'On Campus',
+    type: 'Ages 4-11',
     description:
-      'Design reliable APIs, data services, and secure backend systems that support business-critical workflows.',
+      'A strong foundation in literacy, numeracy, and critical thinking. Our primary school program fosters curiosity and a love for learning in a structured setting.',
     requirements:
-      'Experience with server-side development, REST APIs, databases, authentication, cloud deployment, and Git.',
+      'Previous academic records, birth certificate. An entrance assessment may be required for placement. Please contact our admissions office for details.',
   },
   {
-    id: 'python-programming-expert',
-    title: 'Python Programming Expert',
-    location: 'Remote / Accra',
-    type: 'Full-time',
+    id: 'junior-high-school',
+    title: 'Junior High School',
+    location: 'On Campus',
+    type: 'Ages 12-15',
     description:
-      'Develop robust Python solutions for automation, integrations, analytics, and scalable software services.',
+      'Preparing students for the next stage of their education with a rigorous academic program, leadership opportunities, and character development initiatives.',
     requirements:
-      'Advanced Python skills with experience in APIs, data processing, testing, databases, and production-ready code.',
-  },
-  {
-    id: 'react-native-expert',
-    title: 'React Native Expert',
-    location: 'Remote / Accra',
-    type: 'Contract / Full-time',
-    description:
-      'Create high-quality cross-platform mobile applications with a strong focus on performance and usability.',
-    requirements:
-      'Strong React Native, JavaScript or TypeScript, API integration, mobile UI, debugging, and app release experience.',
-  },
-  {
-    id: 'seo-engineer',
-    title: 'SEO Engineer',
-    location: 'Accra / Hybrid',
-    type: 'Full-time',
-    description:
-      'Improve technical SEO, discoverability, and measurable organic performance across client platforms.',
-    requirements:
-      'Experience with technical audits, analytics, search optimization, structured data, and performance reporting.',
+      'Successful completion of primary education, transcript from previous school, and birth certificate. Prospective students will sit for an entrance examination.',
   },
 ];
 
-export const findFeaturedOpening = id => featuredOpenings.find(opening => opening.id === id);
+export const findAdmissionProgram = id => admissionPrograms.find(program => program.id === id);

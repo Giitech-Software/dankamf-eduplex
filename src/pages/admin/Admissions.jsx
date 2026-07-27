@@ -1,0 +1,14 @@
+import React, { useEffect, useState } from 'react';
+import { collection, getDocs, orderBy, query, updateDoc, doc } from 'firebase/firestore';
+import { db } from '../../firebase/config';
+import AdminLayout from '../../components/AdminLayout';
+import PageTitle from '../../components/PageTitle';
+import LoadingSpinner from '../../components/LoadingSpinner';
+import { Link } from 'react-router-dom';
+
+export default function Admissions() {
+  const [applications, setApplications] = useState([]); const [loading, setLoading] = useState(true);
+  useEffect(() => { getDocs(query(collection(db, 'admissionApplications'), orderBy('createdAt', 'desc'))).then((snap) => setApplications(snap.docs.map((item) => ({ id: item.id, ...item.data() })))).catch(console.error).finally(() => setLoading(false)); }, []);
+  const updateStatus = async (id, status) => { await updateDoc(doc(db, 'admissionApplications', id), { status }); setApplications((items) => items.map((item) => item.id === id ? { ...item, status } : item)); };
+  return <AdminLayout><PageTitle>Admission Applications</PageTitle>{loading ? <LoadingSpinner label="Loading applications" /> : <div className="mt-5 overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm"><table className="min-w-full divide-y divide-slate-200"><thead className="bg-slate-50"><tr>{['Student', 'Reference', 'Programme', 'Guardian', 'Contact', 'Status', 'Documents'].map((heading) => <th key={heading} className="px-5 py-3 text-left text-xs font-bold uppercase tracking-wider text-slate-500">{heading}</th>)}</tr></thead><tbody className="divide-y divide-slate-100">{applications.length === 0 ? <tr><td colSpan="7" className="p-8 text-center text-slate-500">No applications received.</td></tr> : applications.map((application) => <tr key={application.id}><td className="px-5 py-4 font-bold text-darkgray">{application.studentName}<p className="text-xs font-normal text-slate-500">{application.dateOfBirth}</p></td><td className="px-5 py-4 text-xs font-bold tracking-wider text-primary">{application.applicationReference || '—'}</td><td className="px-5 py-4 text-sm">{application.program}</td><td className="px-5 py-4 text-sm">{application.parentName}</td><td className="px-5 py-4 text-sm">{application.email}<br />{application.phone}</td><td className="px-5 py-4"><select value={application.status || 'new'} onChange={(event) => updateStatus(application.id, event.target.value)} className="rounded-full border border-slate-300 px-3 py-1.5 text-xs font-bold"><option value="new">New</option><option value="reviewing">Reviewing</option><option value="interview">Interview</option><option value="accepted">Accepted</option><option value="declined">Declined</option></select></td><td className="px-5 py-4"><Link to={`/admin/admissions/${application.id}/documents`} className="text-sm font-bold text-primary hover:underline">Manage files</Link></td></tr>)}</tbody></table></div>}</AdminLayout>;
+}

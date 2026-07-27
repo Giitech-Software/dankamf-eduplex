@@ -1,74 +1,60 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import {
-  getAuth,
-  onAuthStateChanged,
-  signInWithEmailAndPassword,
-  signOut,
-} from 'firebase/auth';
-import { doc, getDoc, getFirestore } from 'firebase/firestore';
-import { app } from '../firebase/config';
+// src/context/AuthContext.jsx
+import { createContext, useContext, useEffect, useState } from 'react';
+import { onAuthStateChanged } from 'firebase/auth';
+import { doc, getDoc } from 'firebase/firestore';
+import { auth, db } from '../firebase/config';
+import { logoutUser } from '../firebase/auth';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 const AuthContext = createContext();
 
-const auth = getAuth(app);
-const db = getFirestore(app);
+export function useAuth() {
+  return useContext(AuthContext);
+}
 
-export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [role, setRole] = useState(null);
+export function AuthProvider({ children }) {
+  const [currentUser, setCurrentUser] = useState(null);
+  const [userRole, setUserRole] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      if (currentUser) {
-        setUser(currentUser);
-        console.log('✅ Logged in:', currentUser.email);
-
-        const userDocRef = doc(db, 'users', currentUser.uid);
-        const docSnap = await getDoc(userDocRef);
-
-        if (docSnap.exists()) {
-          const fetchedRole = docSnap.data().role;
-          console.log('✅ Role from Firestore:', fetchedRole);
-          setRole(fetchedRole);
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      setCurrentUser(user);
+      if (user) {
+        // User is signed in, now get their custom role from Firestore
+        const userDocRef = doc(db, 'users', user.uid);
+        const userDoc = await getDoc(userDocRef);
+        if (userDoc.exists()) {
+          setUserRole(userDoc.data().role); // e.g., 'admin', 'superadmin'
         } else {
-          console.warn('⚠️ User document not found in Firestore!');
-          setRole(null);
+          setUserRole(null); // User exists in Auth, but not in our 'users' collection
         }
       } else {
-        console.log('🔒 User signed out.');
-        setUser(null);
-        setRole(null);
+        // User is signed out
+        setUserRole(null);
       }
-
       setLoading(false);
     });
 
-    return () => unsubscribe();
+    return unsubscribe;
   }, []);
 
-  // ✅ Add login function
-  const login = async (email, password) => {
-    await signInWithEmailAndPassword(auth, email, password);
+  const value = {
+    currentUser,
+    userRole,
+    // Keep both names available because protected routes use the shorter
+    // user/role names while the login page uses currentUser/isAdmin.
+    user: currentUser,
+    role: userRole,
+    isAdmin: userRole === 'admin' || userRole === 'superadmin',
+    isSuperAdmin: userRole === 'superadmin',
+    logout: logoutUser,
   };
 
-  // ✅ Updated logout function
-  const logout = async () => {
-    try {
-      await signOut(auth);
-      setUser(null);
-      setRole(null);
-      document.body.style.overflow = 'auto'; // ✅ Re-enable scroll on logout
-    } catch (error) {
-      console.error('Logout failed:', error);
-    }
-  };
+  // Show a loading screen while we verify auth state
+  if (loading) {
+    return <LoadingSpinner fullPage label="Loading session..." />;
+  }
 
-  return (
-    <AuthContext.Provider value={{ user, role, login, logout, loading }}>
-      {children}
-    </AuthContext.Provider>
-  );
-};
-
-export const useAuth = () => useContext(AuthContext);
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+}

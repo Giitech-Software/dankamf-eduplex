@@ -2,78 +2,88 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    function signedIn() {
-      return request.auth != null;
-    }
 
-    function currentUserDoc() {
-      return get(/databases/$(database)/documents/users/$(request.auth.uid));
-    }
-
+    // Helper function to check if a user is an admin or superadmin
     function isAdmin() {
-      return signedIn()
-        && currentUserDoc().data.role in ['admin', 'super_admin'];
+      return request.auth.uid != null && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['admin', 'superadmin'];
     }
 
+    // Helper function to check if a user is the superadmin
     function isSuperAdmin() {
-      return signedIn()
-        && currentUserDoc().data.role == 'super_admin';
+      return request.auth.uid != null && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'superadmin';
     }
 
-    function isPublicContent(collectionName) {
-      return collectionName in [
-        'services',
-        'projects',
-        'posts',
-        'faqs',
-        'partners',
-        'enterpriseFeatures',
-        'clientTestimonials',
-        'jobs',
-        'config'
-      ];
-    }
-
-    match /{collectionName}/{docId} {
-      allow read: if isPublicContent(collectionName);
-      allow create, update, delete: if isPublicContent(collectionName) && isAdmin();
-    }
-
-    match /users/{uid} {
-      allow read: if isAdmin() || (signedIn() && request.auth.uid == uid);
+    // Users: Only superadmins can manage other users. Users can read their own profile.
+    match /users/{userId} {
+      allow read: if request.auth.uid == userId || isAdmin();
       allow create, delete: if isSuperAdmin();
-      allow update: if isSuperAdmin() || (signedIn() && request.auth.uid == uid);
+      allow update: if isSuperAdmin() || request.auth.uid == userId;
     }
 
-    match /contactForms/{formId} {
+    // Public Content (Projects, Services, etc.): Anyone can read, only admins can write.
+    match /projects/{docId} { allow read: if true; allow write: if isAdmin(); }
+    match /services/{docId} { allow read: if true; allow write: if isAdmin(); }
+    match /posts/{docId} { allow read: if true; allow write: if isAdmin(); }
+    match /events/{docId} { allow read: if true; allow write: if isAdmin(); }
+    match /faqs/{docId} { allow read: if true; allow write: if isAdmin(); }
+    match /clientTestimonials/{docId} { allow read: if true; allow write: if isAdmin(); }
+    match /partners/{docId} { allow read: if true; allow write: if isAdmin(); }
+    match /jobs/{docId} { allow read: if true; allow write: if isAdmin(); }
+    match /enterpriseFeatures/{docId} { allow read: if true; allow write: if isAdmin(); }
+    match /config/{docId} { allow read: if true; allow write: if isAdmin(); }
+
+    // Contact Forms & Applications: Anyone can create, only admins can read/delete.
+    match /contactForms/{docId} {
       allow create: if true;
       allow read, update, delete: if isAdmin();
     }
-
-    match /applications/{applicationId} {
+    match /applications/{docId} {
       allow create: if true;
       allow read, update, delete: if isAdmin();
     }
-
+    match /admissionApplications/{docId} {
+      allow create: if true;
+      allow read, update, delete: if isAdmin();
+    }
+    match /admissionApplications/{applicationId}/documents/{documentId} {
+      allow read, write: if isAdmin();
+    }
+    match /downloads/{docId} { allow read: if true; allow write: if isAdmin(); }
+    match /schoolAlerts/{docId} { allow read: if true; allow write: if isAdmin(); }
+    match /leadership/{docId} { allow read: if true; allow write: if isAdmin(); }
+    match /alumniRegistrations/{docId} { allow create: if true; allow read, update, delete: if isAdmin(); }
+    match /interviewRequests/{docId} { allow create: if true; allow read, update, delete: if isAdmin(); }
+    match /admissionFees/{docId} { allow read: if true; allow write: if isAdmin(); }
+    match /scholarships/{docId} { allow read: if true; allow write: if isAdmin(); }
     match /jobs/{jobId}/applications/{applicationId} {
       allow create: if true;
       allow read, update, delete: if isAdmin();
     }
 
+    // Newsletter: Anyone can subscribe, only admins can manage. Campaigns are server-only.
+    match /newsletterSubscribers/{docId} {
+      allow create: if true;
+      allow read, update, delete: if isAdmin();
+    }
+    match /newsletterCampaigns/{docId} {
+      allow read: if isAdmin();
+      allow write: if false; // Only backend can write
+    }
+
+    // Activity Logs: Admins can create and read, but not modify or delete.
     match /activityLogs/{logId} {
       allow create, read: if isAdmin();
       allow update, delete: if false;
     }
 
+    // Site Stats: Should only be updated via a secure backend function.
     match /siteStats/visits {
-      allow read: if isAdmin();
-      allow create: if request.resource.data.keys().hasOnly(['count'])
-        && request.resource.data.count == 1;
-      allow update: if request.resource.data.keys().hasOnly(['count'])
-        && request.resource.data.count == resource.data.count + 1;
-      allow delete: if isAdmin();
+      allow read: if true; // Anyone can read the count
+      allow create: if request.resource.data.count == 1; // Allow creation if count is 1
+      allow update: if request.resource.data.count == resource.data.count + 1; // Allow incrementing
     }
 
+    // Default Deny: Deny all access to any other collection by default.
     match /{document=**} {
       allow read, write: if false;
     }

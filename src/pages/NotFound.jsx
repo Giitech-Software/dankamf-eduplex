@@ -4,7 +4,7 @@ import useSiteSettings from '../hooks/useSiteSettings';
 
 export default function NotFound() {
   const { settings } = useSiteSettings();
-  const siteName = settings?.siteName || 'ASTEM Software Labs';
+  const siteName = settings?.siteName || 'Dankamf Eduplex';
 
   return (
     <div className="min-h-screen bg-background flex flex-col items-center justify-center text-center px-6">

@@ -29,7 +29,7 @@ export default function Topbar() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 h-16 bg-white dark:bg-primary px-4 shadow-md flex justify-between items-center pl-20 lg:pl-72">
       <h1 className="text-base sm:text-xl font-bold text-primary dark:text-white truncate">
-        ASTEM Admin Panel
+        Dankamf Admin Panel
       </h1>
       <div className="flex items-center gap-2 sm:gap-4 min-w-0">
         <ThemeToggle />

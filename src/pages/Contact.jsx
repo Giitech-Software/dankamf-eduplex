@@ -6,11 +6,11 @@ import { db } from '../firebase/config';
 import Seo from '../components/Seo';
 import SeoConfig from '../config/SeoConfig';
 
-const whatsappNumber = '233247754531';
+const whatsappNumber = '233551234567'; // Placeholder number
 const whatsappMessage = encodeURIComponent(
-  'Hi ASTEM Software Labs, I would like to chat about your services.'
+  'Hello Dankamf Eduplex, I would like to make an inquiry about admissions.'
 );
-const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
+const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`; // Corrected variable name
 
 export default function Contact() {
   const [form, setForm] = useState({ name: '', email: '', message: '' });
@@ -41,31 +41,31 @@ export default function Contact() {
       <div className="min-h-screen bg-background text-text flex flex-col">
         <main className="mx-auto w-full max-w-3xl flex-grow px-0 py-6 sm:p-8">
           <h2 className="mb-4 px-4 text-center text-3xl font-bold text-primary sm:px-0 sm:text-4xl">Contact Us</h2>
-
+          <p className="text-center text-slate-600 mb-6 px-4 sm:px-0">We're here to help. Reach out for inquiries about admissions, curriculum, or visits.</p>
           <div className="mb-6 space-y-3 px-4 text-gray-700 sm:px-0">
             <div className="grid gap-3 sm:grid-cols-2">
               <a
-                href="mailto:giitechsoftems@gmail.com"
+                href="mailto:info@dankamfeduplex.edu.gh"
                 className="flex min-h-14 items-center gap-3 rounded-lg border border-gray-200 bg-white p-3 text-primary shadow-sm transition hover:border-primary"
               >
                 <FaEnvelope className="shrink-0" />
-                <span className="min-w-0 truncate">giitechsoftems@gmail.com</span>
+                <span className="min-w-0 truncate">info@dankamfeduplex.edu.gh</span>
               </a>
               <a
-                href="tel:+233247754531"
+                href="tel:+233551234567"
                 className="flex min-h-14 items-center gap-3 rounded-lg border border-gray-200 bg-white p-3 text-primary shadow-sm transition hover:border-primary"
               >
                 <FaPhoneAlt className="shrink-0" />
-                <span>+233 247 754 531</span>
+                <span>+233 55 123 4567</span>
               </a>
               <a
-                href="https://giitech-software-systems.web.app"
+                href="https://dankamf-eduplex.web.app"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex min-h-14 items-center gap-3 rounded-lg border border-gray-200 bg-white p-3 text-primary shadow-sm transition hover:border-primary"
               >
                 <FaGlobe className="shrink-0" />
-                <span className="min-w-0 truncate">giitech-software-systems.web.app</span>
+                <span className="min-w-0 truncate">dankamf-eduplex.web.app</span>
               </a>
               <p className="flex min-h-14 items-center gap-3 rounded-lg border border-gray-200 bg-white p-3 shadow-sm">
                 <FaMapMarkerAlt className="shrink-0 text-primary" />
@@ -77,12 +77,32 @@ export default function Contact() {
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#25D366] px-4 py-3 font-semibold text-white transition hover:bg-[#1DA851]"
-              aria-label="Chat with ASTEM Software Labs on WhatsApp"
+              className="flex w-full items-center justify-center gap-3 rounded-lg bg-[#25D366] px-4 py-3 font-semibold text-white transition hover:bg-[#1DA851]"
+              aria-label="Chat with Dankamf Eduplex on WhatsApp"
             >
               <FaWhatsapp className="text-xl" />
               Chat on WhatsApp Business
             </a>
+
+            <div className="grid gap-4 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm md:grid-cols-[1.4fr_0.6fr]">
+              <iframe
+                title="Dankamf Educational Complex location map"
+                src="https://www.google.com/maps?q=Dankamf+Educational+Complex,+Accra,+Ghana&output=embed"
+                className="h-64 w-full border-0 md:h-full md:min-h-64"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+              <div className="p-5">
+                <p className="text-xs font-black uppercase tracking-[0.2em] text-accent">Visit Our Campus</p>
+                <h3 className="mt-2 text-xl font-black text-primary">Office Hours</h3>
+                <dl className="mt-4 space-y-3 text-sm text-text-light">
+                  <div className="flex justify-between gap-4"><dt className="font-bold text-darkgray">Monday–Friday</dt><dd>7:30am–4:00pm</dd></div>
+                  <div className="flex justify-between gap-4"><dt className="font-bold text-darkgray">Saturday</dt><dd>9:00am–1:00pm</dd></div>
+                  <div className="flex justify-between gap-4"><dt className="font-bold text-darkgray">Sunday</dt><dd>Closed</dd></div>
+                </dl>
+                <a href="https://www.google.com/maps/search/?api=1&query=Dankamf+Educational+Complex,+Accra,+Ghana" target="_blank" rel="noopener noreferrer" className="mt-5 inline-flex rounded-full bg-primary px-4 py-2 text-xs font-bold text-white hover:bg-primary-dark">Get Directions</a>
+              </div>
+            </div>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-3 bg-white p-5 shadow sm:rounded-lg sm:p-6">

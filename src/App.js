@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import AcademicProgramDetails from './pages/AcademicProgramDetails';
 
 import Home from './pages/Home';
 import Services from './pages/Services';
@@ -35,6 +36,7 @@ import ManageServices from './pages/admin/ManageServices';
 import AddService from './pages/admin/AddService';
 import ManageEnterpriseFeatures from './pages/admin/ManageEnterpriseFeatures';
 import ManageClientTestimonials from './pages/admin/ManageClientTestimonials';
+import Newsletter from './pages/admin/Newsletter';
 
 import ManageFAQs from './pages/admin/ManageFAQs';
 import AddFAQ from './pages/admin/AddFAQ';
@@ -48,6 +50,29 @@ import ScrollToTop from './components/ScrollToTop';
 import ManageProjects from './pages/admin/ManageProjects';
 import EditProject from './pages/admin/EditProject';
 import AddPartner from './pages/admin/AddPartner';
+import AddEvent from './pages/admin/AddEvent';
+import ManageEvents from './pages/admin/ManageEvents';
+import EditEvent from './pages/admin/EditEvent';
+import AdmissionApplication from './pages/AdmissionApplication';
+import Admissions from './pages/admin/Admissions';
+import Gallery from './pages/Gallery';
+import ManageDownloads from './pages/admin/ManageDownloads';
+import Search from './pages/Search';
+import Downloads from './pages/Downloads';
+import Academics from './pages/Academics';
+import BookTour from './pages/BookTour';
+import ManageAlerts from './pages/admin/ManageAlerts';
+import ManageLeadership from './pages/admin/ManageLeadership';
+import StudentLife from './pages/StudentLife';
+import Alumni from './pages/Alumni';
+import ManageAlumni from './pages/admin/ManageAlumni';
+import InterviewBooking from './pages/InterviewBooking';
+import InterviewRequests from './pages/admin/InterviewRequests';
+import ManageFees from './pages/admin/ManageFees';
+import Fees from './pages/Fees';
+import AdmissionStatus from './pages/AdmissionStatus';
+import ApplicationDocuments from './pages/admin/ApplicationDocuments';
+import Calendar from './pages/Calendar';
 import { ThemeProvider } from './context/ThemeContext';
 import './index.css';
 
@@ -61,11 +86,24 @@ export default function App() {
           {/* Public pages wrapped with MainLayout */}
           <Route element={<MainLayout />}>
             <Route path="/" element={<Home />} />
+            <Route path="/academics/:slug" element={<AcademicProgramDetails />} />
             <Route path="/services" element={<Services />} />
+            <Route path="/academics" element={<Academics />} />
             <Route path="/projects" element={<Projects />} />
+            <Route path="/gallery" element={<Gallery />} />
+            <Route path="/student-life" element={<StudentLife />} />
+            <Route path="/alumni" element={<Alumni />} />
+            <Route path="/search" element={<Search />} />
+            <Route path="/downloads" element={<Downloads />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/jobs" element={<Jobs />} />
+            <Route path="/admissions/apply" element={<AdmissionApplication />} />
+            <Route path="/book-a-tour" element={<BookTour />} />
+            <Route path="/admissions/interview" element={<InterviewBooking />} />
+            <Route path="/admissions/status" element={<AdmissionStatus />} />
+            <Route path="/calendar" element={<Calendar />} />
+            <Route path="/admissions/fees" element={<Fees />} />
             <Route path="/jobs/:id" element={<JobDetails />} />
             <Route path="/about" element={<About />} />
             <Route path="/privacy" element={<Privacy />} />
@@ -82,7 +120,7 @@ export default function App() {
           <Route
             path="/dashboard"
             element={
-              <ProtectedRoute allowedRoles={['admin', 'super_admin']}>
+              <ProtectedRoute allowedRoles={['admin', 'superadmin']}>
                 <Dashboard />
               </ProtectedRoute>
             }
@@ -90,7 +128,7 @@ export default function App() {
           <Route
             path="/admin/add-project"
             element={
-              <ProtectedRoute allowedRoles={['admin', 'super_admin']}>
+              <ProtectedRoute allowedRoles={['admin', 'superadmin']}>
                 <AddProject />
               </ProtectedRoute>
             }
@@ -98,7 +136,7 @@ export default function App() {
           <Route
             path="/admin/add-post"
             element={
-              <ProtectedRoute allowedRoles={['admin', 'super_admin']}>
+              <ProtectedRoute allowedRoles={['admin', 'superadmin']}>
                 <AddPost />
               </ProtectedRoute>
             }
@@ -106,7 +144,7 @@ export default function App() {
           <Route
             path="/admin/edit-post/:id"
             element={
-              <ProtectedRoute allowedRoles={['admin', 'super_admin']}>
+              <ProtectedRoute allowedRoles={['admin', 'superadmin']}>
                 <EditPost />
               </ProtectedRoute>
             }
@@ -114,7 +152,7 @@ export default function App() {
 <Route
   path="/admin/manage-posts"
   element={
-    <ProtectedRoute allowedRoles={['admin', 'super_admin']}>
+    <ProtectedRoute allowedRoles={['admin', 'superadmin']}>
       <ManagePosts />
     </ProtectedRoute>
   }
@@ -122,7 +160,7 @@ export default function App() {
 <Route
   path="/admin/services"
   element={
-    <ProtectedRoute allowedRoles={['admin', 'super_admin']}>
+    <ProtectedRoute allowedRoles={['admin', 'superadmin']}>
       <AddService />
     </ProtectedRoute>
   }
@@ -130,7 +168,7 @@ export default function App() {
           <Route
             path="/admin/edit-service/:id"
             element={
-              <ProtectedRoute allowedRoles={['admin', 'super_admin']}>
+              <ProtectedRoute allowedRoles={['admin', 'superadmin']}>
                 <EditService />
               </ProtectedRoute>
             }
@@ -138,7 +176,7 @@ export default function App() {
           <Route
             path="/admin/manage-services"
             element={
-              <ProtectedRoute allowedRoles={['admin', 'super_admin']}>
+              <ProtectedRoute allowedRoles={['admin', 'superadmin']}>
                 <ManageServices />
               </ProtectedRoute>
             }
@@ -146,7 +184,7 @@ export default function App() {
           <Route
             path="/admin/enterprise-features"
             element={
-              <ProtectedRoute allowedRoles={['admin', 'super_admin']}>
+              <ProtectedRoute allowedRoles={['admin', 'superadmin']}>
                 <ManageEnterpriseFeatures />
               </ProtectedRoute>
             }
@@ -154,15 +192,62 @@ export default function App() {
           <Route
             path="/admin/client-testimonials"
             element={
-              <ProtectedRoute allowedRoles={['admin', 'super_admin']}>
+              <ProtectedRoute allowedRoles={['admin', 'superadmin']}>
                 <ManageClientTestimonials />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/newsletter"
+            element={
+              <ProtectedRoute allowedRoles={['admin', 'superadmin']}>
+                <Newsletter />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/add-event"
+            element={
+              <ProtectedRoute allowedRoles={['admin', 'superadmin']}>
+                <AddEvent />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/admissions"
+            element={
+              <ProtectedRoute allowedRoles={['admin', 'superadmin']}>
+                <Admissions />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/admin/downloads" element={<ProtectedRoute allowedRoles={['admin', 'superadmin']}><ManageDownloads /></ProtectedRoute>} />
+          <Route path="/admin/alerts" element={<ProtectedRoute allowedRoles={['admin', 'superadmin']}><ManageAlerts /></ProtectedRoute>} />
+          <Route path="/admin/leadership" element={<ProtectedRoute allowedRoles={['admin', 'superadmin']}><ManageLeadership /></ProtectedRoute>} />
+          <Route path="/admin/alumni" element={<ProtectedRoute allowedRoles={['admin', 'superadmin']}><ManageAlumni /></ProtectedRoute>} />
+          <Route path="/admin/interviews" element={<ProtectedRoute allowedRoles={['admin', 'superadmin']}><InterviewRequests /></ProtectedRoute>} />
+          <Route path="/admin/fees" element={<ProtectedRoute allowedRoles={['admin', 'superadmin']}><ManageFees /></ProtectedRoute>} />
+          <Route path="/admin/admissions/:applicationId/documents" element={<ProtectedRoute allowedRoles={['admin', 'superadmin']}><ApplicationDocuments /></ProtectedRoute>} />
+          <Route
+            path="/admin/manage-events"
+            element={
+              <ProtectedRoute allowedRoles={['admin', 'superadmin']}>
+                <ManageEvents />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/edit-event/:id"
+            element={
+              <ProtectedRoute allowedRoles={['admin', 'superadmin']}>
+                <EditEvent />
               </ProtectedRoute>
             }
           />
           <Route
             path="/admin/forms"
             element={
-              <ProtectedRoute allowedRoles={['admin', 'super_admin']}>
+              <ProtectedRoute allowedRoles={['admin', 'superadmin']}>
                 <ContactForms />
               </ProtectedRoute>
             }
@@ -170,7 +255,7 @@ export default function App() {
           <Route
             path="/admin/activity-logs"
             element={
-              <ProtectedRoute allowedRoles={['admin', 'super_admin']}>
+              <ProtectedRoute allowedRoles={['admin', 'superadmin']}>
                 <ActivityLogs />
               </ProtectedRoute>
             }
@@ -178,7 +263,7 @@ export default function App() {
           <Route
             path="/admin/users"
             element={
-              <ProtectedRoute allowedRoles={['super_admin']}>
+              <ProtectedRoute allowedRoles={['superadmin']}>
                 <Users />
               </ProtectedRoute>
             }
@@ -186,7 +271,7 @@ export default function App() {
           <Route
             path="/admin/settings"
             element={
-              <ProtectedRoute allowedRoles={['admin', 'super_admin']}>
+              <ProtectedRoute allowedRoles={['admin', 'superadmin']}>
                 <Settings />
               </ProtectedRoute>
             }
@@ -194,7 +279,7 @@ export default function App() {
           <Route
             path="/admin/add-user"
             element={
-              <ProtectedRoute allowedRoles={['super_admin']}>
+              <ProtectedRoute allowedRoles={['superadmin']}>
                 <AddUser />
               </ProtectedRoute>
             }
@@ -202,7 +287,7 @@ export default function App() {
           <Route
             path="/admin/profile"
             element={
-              <ProtectedRoute allowedRoles={['admin', 'super_admin']}>
+              <ProtectedRoute allowedRoles={['admin', 'superadmin']}>
                 <AdminProfile />
               </ProtectedRoute>
             }
@@ -210,7 +295,7 @@ export default function App() {
           <Route
             path="/admin/jobs"
             element={
-              <ProtectedRoute allowedRoles={['admin', 'super_admin']}>
+              <ProtectedRoute allowedRoles={['admin', 'superadmin']}>
                 <JobsAdmin />
               </ProtectedRoute>
             }
@@ -218,7 +303,7 @@ export default function App() {
           <Route
             path="/admin/add-job"
             element={
-              <ProtectedRoute allowedRoles={['admin', 'super_admin']}>
+              <ProtectedRoute allowedRoles={['admin', 'superadmin']}>
                 <AddJob />
               </ProtectedRoute>
             }
@@ -226,7 +311,7 @@ export default function App() {
           <Route
             path="/admin/edit-job/:id"
             element={
-              <ProtectedRoute allowedRoles={['admin', 'super_admin']}>
+              <ProtectedRoute allowedRoles={['admin', 'superadmin']}>
                 <EditJob />
               </ProtectedRoute>
             }
@@ -234,7 +319,7 @@ export default function App() {
           <Route
             path="/admin/applications/:jobId"
             element={
-              <ProtectedRoute allowedRoles={['admin', 'super_admin']}>
+              <ProtectedRoute allowedRoles={['admin', 'superadmin']}>
                 <JobApplications />
               </ProtectedRoute>
             }
@@ -242,7 +327,7 @@ export default function App() {
           <Route
             path="/admin/blog"
             element={
-              <ProtectedRoute allowedRoles={['admin', 'super_admin']}>
+              <ProtectedRoute allowedRoles={['admin', 'superadmin']}>
                 <AdminLayout>
                   <Blog />
                 </AdminLayout>
@@ -255,7 +340,7 @@ export default function App() {
           <Route
             path="/admin/manage-faqs"
             element={
-              <ProtectedRoute allowedRoles={['admin', 'super_admin']}>
+              <ProtectedRoute allowedRoles={['admin', 'superadmin']}>
                 <AdminLayout>
                   <ManageFAQs />
                 </AdminLayout>
@@ -265,7 +350,7 @@ export default function App() {
           <Route
             path="/admin/add-faq"
             element={
-              <ProtectedRoute allowedRoles={['admin', 'super_admin']}>
+              <ProtectedRoute allowedRoles={['admin', 'superadmin']}>
                 <AdminLayout>
                   <AddFAQ />
                 </AdminLayout>
@@ -275,7 +360,7 @@ export default function App() {
           <Route
             path="/admin/edit-faq/:id"
             element={
-              <ProtectedRoute allowedRoles={['admin', 'super_admin']}>
+              <ProtectedRoute allowedRoles={['admin', 'superadmin']}>
                 <AdminLayout>
                   <EditFAQ />
                 </AdminLayout>
@@ -286,7 +371,7 @@ export default function App() {
 <Route
   path="/admin/manage-projects"
   element={
-    <ProtectedRoute allowedRoles={['admin', 'super_admin']}>
+    <ProtectedRoute allowedRoles={['admin', 'superadmin']}>
       <ManageProjects />
     </ProtectedRoute>
   }
@@ -294,7 +379,7 @@ export default function App() {
 <Route
   path="/admin/edit-project/:id"
   element={
-    <ProtectedRoute allowedRoles={['admin', 'super_admin']}>
+    <ProtectedRoute allowedRoles={['admin', 'superadmin']}>
       <EditProject />
     </ProtectedRoute>
   }

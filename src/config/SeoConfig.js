@@ -1,39 +1,39 @@
-// src/config/SeoConfig.js
+﻿﻿﻿﻿// src/config/SeoConfig.js
 
-const baseUrl = 'https://giitech-software-systems.web.app';
-const siteName = 'ASTEM Software Labs';
-const siteAuthor = 'ASTEM Team';
-const sitePublisher = 'ASTEM Software Labs';
+const baseUrl = 'https://dankamf-eduplex.web.app'; 
+const siteName = 'Dankamf Educational Complex';
+const siteAuthor = 'Dankamf Educational Complex';
+const sitePublisher = 'Dankamf Educational Complex';
 
 // Static Pages
 const staticPages = {
   home: {
     title: siteName,
-    description: 'Innovative software solutions tailored for growth-focused organizations.',
+    description: 'A premier educational institution committed to excellence in learning and character development.',
     path: '/',
     url: `${baseUrl}/`,
     author: siteAuthor,
     publisher: sitePublisher,
   },
   services: {
-    title: `Services | ${siteName}`,
-    description: 'Modern, scalable software and IT services delivered by ASTEM Software Labs.',
+    title: `Academics | ${siteName}`,
+    description: 'Explore our comprehensive academic programs and curriculum.',
     path: '/services',
     url: `${baseUrl}/services`,
     author: siteAuthor,
     publisher: sitePublisher,
   },
   projects: {
-    title: `Our Projects | ${siteName}`,
-    description: 'Explore our portfolio of completed software and web projects.',
+    title: `School Life | ${siteName}`,
+    description: 'Discover student activities, events, and life at Dankamf Eduplex.',
     path: '/projects',
     url: `${baseUrl}/projects`,
     author: siteAuthor,
     publisher: sitePublisher,
   },
   blog: {
-    title: `Blog & News | ${siteName}`,
-    description: 'Insights, updates, and industry news from ASTEM Software Labs.',
+    title: `News & Events | ${siteName}`,
+    description: 'Latest news, announcements, and upcoming events at Dankamf Eduplex.',
     path: '/blog',
     url: `${baseUrl}/blog`,
     author: siteAuthor,
@@ -41,23 +41,23 @@ const staticPages = {
   },
   contact: {
     title: `Contact Us | ${siteName}`,
-    description: 'Reach out to ASTEM Software Labs for support or collaboration.',
+    description: 'Get in touch with Dankamf Educational Complex for admissions and inquiries.',
     path: '/contact',
     url: `${baseUrl}/contact`,
     author: siteAuthor,
     publisher: sitePublisher,
   },
   careers: {
-    title: `Careers | ${siteName}`,
-    description: 'Join our innovative team at ASTEM Software Labs.',
+    title: `Admissions | ${siteName}`,
+    description: 'Learn about the admission process and join the Dankamf Educational Complex family.',
     path: '/jobs',
     url: `${baseUrl}/jobs`,
     author: siteAuthor,
     publisher: sitePublisher,
   },
   clientConfidence: {
-    title: `Client Confidence | ${siteName}`,
-    description: 'Read what clients say about working with ASTEM Software Labs.',
+    title: `Testimonials | ${siteName}`,
+    description: 'Read what parents and students say about Dankamf Educational Complex.',
     path: '/client-confidence',
     url: `${baseUrl}/client-confidence`,
     author: siteAuthor,
@@ -65,7 +65,7 @@ const staticPages = {
   },
   faqs: {
     title: `Frequently Asked Questions | ${siteName}`,
-    description: 'Find answers to common questions about ASTEM Software Labs and our services.',
+    description: 'Find answers to common questions about Dankamf Educational Complex.',
     path: '/faqs',
     url: `${baseUrl}/faqs`,
     author: siteAuthor,
@@ -76,23 +76,31 @@ const staticPages = {
 // Dynamic Pages
 const dynamicPages = {
   blogPost: ({ title, excerpt, id }) => ({
-    title: `${title} | Blog | ${siteName}`,
+    title: `${title} | News | ${siteName}`,
     description: excerpt,
     path: `/blog/${id}`,
     url: `${baseUrl}/blog/${id}`,
     author: siteAuthor,
     publisher: sitePublisher,
   }),
-  jobPost: ({ title, excerpt, id }) => ({
-    title: `${title} | Careers | ${siteName}`,
+  admissionInfo: ({ title, excerpt, id }) => ({
+    title: `${title} | Admissions | ${siteName}`,
     description: excerpt,
     path: `/jobs/${id}`,
     url: `${baseUrl}/jobs/${id}`,
     author: siteAuthor,
     publisher: sitePublisher,
   }),
-  projectDetails: ({ title, excerpt, id }) => ({
-    title: `${title} | Projects | ${siteName}`,
+  academicProgram: ({ title, excerpt, slug }) => ({
+    title: `${title} | Academics | ${siteName}`,
+    description: excerpt,
+    path: `/academics/${slug}`,
+    url: `${baseUrl}/academics/${slug}`,
+    author: siteAuthor,
+    publisher: sitePublisher,
+  }),
+  eventDetails: ({ title, excerpt, id }) => ({
+    title: `${title} | School Life | ${siteName}`,
     description: excerpt,
     path: `/projects/${id}`,
     url: `${baseUrl}/projects/${id}`,

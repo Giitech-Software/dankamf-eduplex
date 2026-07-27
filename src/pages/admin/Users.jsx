@@ -112,14 +112,14 @@ export default function Users() {
               <tr key={u.id} className="border-t border-gray-200 dark:border-gray-700">
                 <td className="p-3">{u.email}</td>
                 <td className="p-3">
-                  {role === 'super_admin' ? (
+                  {role === 'superadmin' ? (
                     <select
                       value={u.role}
                       onChange={(e) => handleRoleChange(u.id, e.target.value)}
                       className="border p-1 rounded dark:bg-gray-900 dark:text-white dark:border-gray-700"
                     >
                       <option value="admin">admin</option>
-                      <option value="super_admin">super_admin</option>
+                      <option value="superadmin">superadmin</option>
                       <option value="editor">editor</option>
                     </select>
                   ) : (
@@ -134,7 +134,7 @@ export default function Users() {
                   )}
                 </td>
                 <td className="p-3 space-x-2">
-                  {role === 'super_admin' && (
+                  {role === 'superadmin' && (
                     <>
                       <button
   onClick={() => toggleActive(u.id, u.disabled)}

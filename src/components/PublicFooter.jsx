@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { subscribeToNewsletter } from '../utils/newsletter';
 import {
   FaFacebookF,
   FaTwitter,
@@ -19,25 +20,46 @@ const socialLinks = [
   {
     icon: <FaWhatsapp />,
     label: 'WhatsApp',
-    url: 'https://wa.me/233247754531?text=Hi%20ASTEM%20Software%20Labs%2C%20I%20need%20assistance.',
+    url: 'https://wa.me/233551234567?text=Hello%20Dankamf%20Eduplex%2C%20I%20would%20like%20to%20make%20an%20inquiry.',
   },
 ];
 
 const PublicFooter = () => {
+  const [email, setEmail] = useState('');
+  const [status, setStatus] = useState('idle');
+  const [message, setMessage] = useState('');
+
+  const handleSubscribe = async (event) => {
+    event.preventDefault();
+    setStatus('submitting');
+    setMessage('');
+
+    try {
+      await subscribeToNewsletter(email, 'footer');
+      setEmail('');
+      setStatus('success');
+      setMessage('Thanks for subscribing!');
+    } catch (error) {
+      console.error('Newsletter subscription failed:', error);
+      setStatus('error');
+      setMessage('Subscription failed. Please try again.');
+    }
+  };
+
   return (
     <footer className="bg-primary text-white px-4 sm:px-6 py-8 mt-10 text-sm">
       <div className="max-w-7xl mx-auto grid gap-6 sm:grid-cols-2 md:grid-cols-4">
         <div>
-          <h3 className="text-xl font-bold mb-1">ASTEM Software Labs</h3>
-          <p className="text-accent mb-4">Future Ready Software for a Smarter World</p>
+          <h3 className="text-xl font-bold mb-1">Dankamf Eduplex</h3>
+          <p className="text-accent mb-4">Excellence in Learning & Character</p>
           <div className="space-y-1 text-xs">
-            <p><strong>Office:</strong> 23 Innovation Lane, Accra, Ghana</p>
+            <p><strong>Location:</strong> Accra, Ghana</p>
             <p><strong>Hours:</strong> Mon - Fri, 8:00 AM - 5:00 PM</p>
-            <p><strong>GPS:</strong> GA-123-4567</p>
+            <p><strong>Email:</strong> info@dankamfeduplex.edu.gh</p>
             <p className="flex items-center gap-1">
               <FaMapMarkerAlt className="text-accent" />
               <a
-                href="https://maps.google.com/?q=23+Innovation+Lane,+Accra,+Ghana"
+                href="https://maps.google.com/?q=Dankamf+Educational+Complex,+Accra,+Ghana"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-accent underline hover:text-white"
@@ -78,25 +100,38 @@ const PublicFooter = () => {
         <div>
           <h4 className="text-lg font-semibold mb-3">Newsletter</h4>
           <p className="text-sm mb-3">Get updates straight to your inbox.</p>
-          <form onSubmit={(e) => e.preventDefault()} className="space-y-2">
+          <form onSubmit={handleSubscribe} className="space-y-2">
             <input
               type="email"
+              name="newsletter-email"
               placeholder="Enter your email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              autoComplete="email"
               className="px-3 py-2 w-full text-black rounded text-sm"
               required
+              disabled={status === 'submitting'}
             />
             <button
               type="submit"
-              className="bg-accent hover:bg-white hover:text-primary px-4 py-2 rounded text-sm font-medium w-full sm:w-auto"
+              disabled={status === 'submitting'}
+              className="bg-accent hover:bg-white hover:text-primary disabled:cursor-not-allowed disabled:opacity-70 px-4 py-2 rounded text-sm font-medium w-full sm:w-auto"
             >
-              Subscribe
+              {status === 'submitting' ? 'Subscribing...' : 'Subscribe'}
             </button>
+            {message && (
+              <p role="status" aria-live="polite" className={status === 'error' ? 'text-red-200' : 'text-green-200'}>
+                {message}
+              </p>
+            )}
           </form>
         </div>
       </div>
 
       <div className="mt-6 border-t border-white/20 pt-4 text-center text-xs px-4">
-        &copy; {new Date().getFullYear()} ASTEM Software Labs. All rights reserved.
+        <span>&copy; {new Date().getFullYear()} Dankamf Educational Complex. All rights reserved.</span>
+        <span className="mx-2 text-white/50" aria-hidden="true">|</span>
+        <span>Powered by ASTEM Software Lab</span>
       </div>
     </footer>
   );

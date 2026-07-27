@@ -1,6 +1,7 @@
 // src/components/Social.jsx
 import React from 'react';
-import { FaFacebook, FaTwitter, FaInstagram, FaTiktok, FaWhatsapp } from 'react-icons/fa';
+import { FaFacebook, FaInstagram, FaTiktok, FaWhatsapp } from 'react-icons/fa';
+import { FaXTwitter } from 'react-icons/fa6';
 
 const socialLinks = [
   {
@@ -9,9 +10,9 @@ const socialLinks = [
     label: 'Facebook',
   },
   {
-    icon: <FaTwitter />,
-    href: 'https://twitter.com',
-    label: 'Twitter',
+    icon: <FaXTwitter />,
+    href: 'https://x.com',
+    label: 'X (formerly Twitter)',
   },
   {
     icon: <FaInstagram />,
@@ -25,7 +26,7 @@ const socialLinks = [
   },
   {
     icon: <FaWhatsapp />,
-    href: 'https://wa.me/233247754531?text=Hi%20ASTEM%20Software%20Labs%2C%20I%20need%20assistance.',
+    href: 'https://wa.me/233551234567?text=Hello%20Dankamf%20Eduplex%2C%20I%20would%20like%20to%20make%20an%20inquiry.',
     label: 'WhatsApp',
   },
 ];

@@ -18,6 +18,9 @@ export default function EditService() {
   const [service, setService] = useState({
     title: '',
     description: '',
+    curriculum: '',
+    assessment: '',
+    timetable: '',
     iconUrl: '',
     iconImage: null,
   });
@@ -36,6 +39,9 @@ export default function EditService() {
           setService({
             title: data.title || '',
             description: data.description || '',
+            curriculum: data.curriculum || '',
+            assessment: data.assessment || '',
+            timetable: data.timetable || '',
             iconUrl: data.iconUrl || '',
             iconImage: null,
           });
@@ -67,6 +73,9 @@ export default function EditService() {
       await updateDoc(doc(db, 'services', id), {
         title: service.title,
         description: service.description,
+        curriculum: service.curriculum,
+        assessment: service.assessment,
+        timetable: service.timetable,
         iconUrl,
         updatedAt: serverTimestamp(),
       });
@@ -121,6 +130,10 @@ export default function EditService() {
           required
           className="w-full p-3 border rounded h-40 bg-white dark:bg-gray-900 dark:border-gray-700 dark:text-white"
         />
+
+        <textarea name="curriculum" value={service.curriculum} onChange={(e) => setService({ ...service, curriculum: e.target.value })} placeholder="Curriculum overview (Markdown supported)" className="w-full h-32 p-3 border rounded bg-white dark:bg-gray-900 dark:border-gray-700 dark:text-white" />
+        <textarea name="assessment" value={service.assessment} onChange={(e) => setService({ ...service, assessment: e.target.value })} placeholder="Assessment approach (Markdown supported)" className="w-full h-32 p-3 border rounded bg-white dark:bg-gray-900 dark:border-gray-700 dark:text-white" />
+        <textarea name="timetable" value={service.timetable} onChange={(e) => setService({ ...service, timetable: e.target.value })} placeholder="Timetable and academic calendar (Markdown supported)" className="w-full h-32 p-3 border rounded bg-white dark:bg-gray-900 dark:border-gray-700 dark:text-white" />
 
         <div>
           {service.iconUrl && (

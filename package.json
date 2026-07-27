@@ -1,7 +1,8 @@
 {
-  "name": "gii-tech-site",
+  "name": "dankamf-eduplex",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://dankamf-eduplex.web.app",
   "dependencies": {
     "@headlessui/react": "^2.2.5",
     "@heroicons/react": "^2.2.0",
@@ -12,7 +13,6 @@
     "baseline-browser-mapping": "^2.10.13",
     "caniuse-lite": "^1.0.30001784",
     "firebase": "^11.9.1",
-    "firebase-admin": "^13.4.0",
     "framer-motion": "^12.23.0",
     "lucide-react": "^0.525.0",
     "react": "^19.1.0",

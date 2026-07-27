@@ -35,27 +35,27 @@ export default function ProjectsPreview() {
   }, []);
 
   return (
-    <section className="bg-white px-0 py-12 sm:px-5 lg:px-12">
+    <section className="bg-white px-0 py-16 sm:px-5 lg:px-12">
       <div className="max-w-7xl mx-auto">
 
         {/* Header Section */}
         <div className="mb-8 flex flex-col justify-between gap-4 px-4 sm:px-0 md:flex-row md:items-end">
           <div className="max-w-2xl">
             <h2 className="text-2xl font-black tracking-tight text-slate-900 sm:text-3xl md:text-4xl">
-              Featured Work
+              Highlights of School Life
             </h2>
-            <div className="w-16 h-1.5 bg-warm mt-3 rounded-full"></div>
-            <p className="mt-3 text-slate-600 text-base">
-              A glimpse into our latest digital architectures and engineering milestones.
+            <div className="w-16 h-1.5 bg-accent mt-3 rounded-full"></div>
+            <p className="mt-3 text-text-light text-base">
+              A glimpse into our vibrant events, activities, and student achievements.
             </p>
           </div>
 
           {/* Desktop "View All" link */}
           <Link
             to="/projects"
-            className="hidden items-center gap-2 text-sm font-black uppercase tracking-[0.16em] text-warm transition-transform hover:translate-x-2 md:flex"
+            className="hidden items-center gap-2 text-sm font-black uppercase tracking-[0.16em] text-accent transition-transform hover:translate-x-2 md:flex"
           >
-            View Full Portfolio &rarr;
+            See All Activities &rarr;
           </Link>
         </div>
 
@@ -84,9 +84,9 @@ export default function ProjectsPreview() {
 <div className="mt-8 px-4 text-center sm:px-0">
   <Link
     to="/projects"
-    className="inline-flex w-full items-center justify-center gap-3 rounded-lg bg-slate-900 px-6 py-3 text-sm font-black uppercase tracking-widest text-white transition-all duration-300 hover:-translate-y-1 hover:bg-warm hover:shadow-xl sm:w-auto sm:px-8"
+    className="inline-flex w-full items-center justify-center gap-3 rounded-full bg-accent-yellow px-5 py-2.5 text-xs font-black uppercase tracking-widest text-darkgray transition-all duration-300 hover:-translate-y-1 hover:bg-accent-yellow-dark hover:shadow-xl sm:w-auto sm:px-6"
   >
-    Explore All Projects &rarr;
+    Explore All Activities &rarr;
   </Link>
 </div>
           </>

@@ -5,38 +5,42 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // --- Existing Tech Palette ---
-        primary: '#1E2A78',
-        accent: '#00D1FF',
-        cta: '#0052CC',
-        text: '#333333',
-        background: '#F4F6F8',
-
-        // --- New Stunning Warm Palette ---
-        warm: {
-          light: '#FFF9F5',  // Soft cream for backgrounds
-          DEFAULT: '#F97316', // Vibrant Orange (Sunset)
-          amber: '#F59E0B',   // Golden Amber for highlights
-          terracotta: '#C2410C', // Deep warm red-orange for borders/headers
-          sand: '#E5E7EB',    // Neutral warm gray
-        },
+        // --- New Enterprise Palette for Dankamf Eduplex ---
+        primary: '#1E3A8A',      // A strong, professional blue (like Tailwind's blue-800)
+        'primary-dark': '#1E293B', // A very dark blue/slate for hover states or dark elements
+        accent: '#3B82F6',        // A brighter, friendly blue for links and highlights (blue-500)
+        'accent-light': '#EFF6FF', // A very light blue for backgrounds (blue-50)
+        highlight: '#F59E0B',      // Legacy warm amber; retain for existing components
+        'accent-yellow': '#F4B400', // Enterprise gold for primary buttons and calls to action
+        'accent-yellow-dark': '#D99A00', // Button hover/pressed state
+        darkgray: '#374151',       // High-contrast enterprise body text
+        text: '#374151',            // Keep the existing semantic text class aligned with darkgray
+        'text-light': '#6B7280',  // A lighter gray for secondary text (gray-500)
+        background: '#FFFFFF',    // Pure white for main backgrounds
+        'background-alt': '#F9FAFB', // An off-white for alternate sections (gray-50)
+      },
+      gray: {
+        100: '#f3f4f6',
+        200: '#e5e7eb',
+        300: '#d1d5db',
+        600: '#4b5563',
       },
 
       // Custom prose (typography) styles
       typography: (theme) => ({
         DEFAULT: {
           css: {
-            color: theme('colors.gray.700'),
+            color: theme('colors.text'),
             a: {
-              color: theme('colors.warm.DEFAULT'), // Updated links to warm orange
+              color: theme('colors.accent'),
               '&:hover': {
-                color: theme('colors.warm.terracotta'),
+                color: theme('colors.primary'),
               },
               textDecoration: 'underline',
             },
-            strong: { color: theme('colors.primary') },
-            h1: { color: theme('colors.primary') },
-            h2: { color: theme('colors.primary') },
+            strong: { color: theme('colors.text') },
+            h1: { color: theme('colors.text') },
+            h2: { color: theme('colors.text') },
           },
         },
       }),

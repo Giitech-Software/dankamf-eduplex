@@ -39,7 +39,7 @@ export default function ContactForms() {
     fetchForms();
   }, []);
 
-  if (!['admin', 'super_admin'].includes(role)) {
+  if (!['admin', 'superadmin'].includes(role)) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <p className="text-red-500 text-lg dark:text-red-400">

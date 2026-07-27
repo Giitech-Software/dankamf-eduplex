@@ -1,26 +1,35 @@
-<!-- public/index.html -->
+﻿<!-- public/index.html -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-  <!-- Favicon -->
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+
+    <!-- Favicons / app icons -->
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" href="%PUBLIC_URL%/favicon-96x96.png" sizes="96x96" />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/apple-touch-icon.png" sizes="180x180" />
+    <meta name="apple-mobile-web-app-title" content="Dankamf Eduplex" />
 
     <!-- Essential for mobile responsiveness -->
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta name="google-site-verification" content="a09ba4300567a419" />
+    <meta name="google-site-verification" content="a09ba4300567a419" />
+
+    <!-- Enterprise default metadata for crawlers that do not execute React Helmet -->
+    <title>Dankamf Educational Complex</title>
+    <meta name="description" content="A premier educational institution committed to excellence in learning and character development." />
+    <meta property="og:title" content="Dankamf Educational Complex" />
+    <meta property="og:description" content="A premier educational institution committed to excellence in learning and character development." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://dankamf-eduplex.web.app/" />
+    <meta name="twitter:title" content="Dankamf Educational Complex" />
+    <meta name="twitter:description" content="A premier educational institution committed to excellence in learning and character development." />
 
     <!-- PWA / theme color -->
-    <meta name="theme-color" content="#004ba0" data-react-helmet="true" />
+    <meta name="theme-color" content="#1E2A78" data-react-helmet="true" />
 
-    <!-- App manifest -->
+    <!-- App manifests -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-
-    <!--
-      React Helmet (via <Seo />) will inject the real
-      <title> and <meta name="description"> tags at runtime.
-    -->
-   
+    <link rel="manifest" href="%PUBLIC_URL%/site.webmanifest" />
   </head>
 
   <body>
@@ -28,5 +37,3 @@
     <div id="app"></div>
   </body>
 </html>
-
- 

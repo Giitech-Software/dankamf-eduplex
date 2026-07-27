@@ -1,55 +1,81 @@
-// scripts/generate-sitemap.js
+﻿﻿// scripts/generate-sitemap.js
 
 const fs = require("fs");
 const path = require("path");
-const admin = require("firebase-admin");
 
-const SITE_URL = "https://giitech-software-systems.web.app";
+const SITE_URL = "https://dankamf-eduplex.web.app";
 
-// 🚨 Ensure you have the serviceAccountKey.json in the root or use an ENV variable
-const serviceAccount = require("../serviceAccountKey.json");
-
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-});
-
-const db = admin.firestore();
-
-// Static routes
 const staticRoutes = [
   "/",
   "/services",
+  "/academics",
   "/projects",
+  "/student-life",
+  "/gallery",
   "/blog",
   "/jobs",
+  "/admissions/apply",
+  "/admissions/interview",
+  "/admissions/status",
+  "/admissions/fees",
+  "/calendar",
+  "/downloads",
+  "/alumni",
+  "/book-a-tour",
   "/contact",
+  "/about",
+  "/privacy",
+  "/terms",
   "/client-confidence",
   "/faqs",
-  "/jobs/frontend-developer",
-  "/jobs/backend-developer",
-  "/jobs/python-programming-expert",
-  "/jobs/react-native-expert",
-  "/jobs/seo-engineer",
-  "/login",
 ];
 
-// Helper: build XML from routes
+const routeImages = {
+  "/": [
+    {
+      loc: `${SITE_URL}/logo512.png`,
+      title: "Dankamf Educational Complex Logo",
+    },
+  ],
+};
+
+function escapeXml(value) {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
+}
+
 function generateSitemapXml(routes) {
   const timestamp = new Date().toISOString();
 
-  const urls = routes.map(
-    route => `
+  const urls = routes.map((route) => {
+    const images = routeImages[route] || [];
+    const imageXml = images
+      .map(
+        (image) => `
+    <image:image>
+      <image:loc>${escapeXml(image.loc)}</image:loc>
+      <image:title>${escapeXml(image.title)}</image:title>
+    </image:image>`
+      )
+      .join("");
+
+    return `
   <url>
     <loc>${SITE_URL}${route}</loc>
     <lastmod>${timestamp}</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>${route === "/" ? "1.0" : "0.7"}</priority>
-  </url>`
-  );
+    <priority>${route === "/" ? "1.0" : "0.7"}</priority>${imageXml}
+  </url>`;
+  });
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <urlset
   xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
 >
 ${urls.join("\n")}
 </urlset>`;
@@ -57,21 +83,15 @@ ${urls.join("\n")}
 
 async function generateSitemap() {
   try {
-    const blogSnapshot = await db.collection("blogPosts").get();
-    const jobSnapshot = await db.collection("jobPosts").get();
-
-    const blogRoutes = blogSnapshot.docs.map(doc => `/blog/${doc.id}`);
-    const jobRoutes = jobSnapshot.docs.map(doc => `/jobs/${doc.id}`);
-
-    const allRoutes = [...staticRoutes, ...blogRoutes, ...jobRoutes];
-    const xml = generateSitemapXml(allRoutes);
+    const xml = generateSitemapXml(staticRoutes);
 
     const outputPath = path.join(__dirname, "../public/sitemap.xml");
     fs.writeFileSync(outputPath, xml);
 
-    console.log("✅ Sitemap generated with", allRoutes.length, "routes.");
+    console.log("Sitemap generated with", staticRoutes.length, "routes.");
   } catch (err) {
-    console.error("❌ Error generating sitemap:", err);
+    console.error("Error generating sitemap:", err);
+    process.exitCode = 1;
   }
 }
 

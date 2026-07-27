@@ -24,7 +24,9 @@ import {
   FaRegNewspaper,
   FaHandshake,
   FaLayerGroup,
-  FaQuoteLeft
+  FaQuoteLeft,
+  FaEnvelope
+  , FaCalendarAlt, FaFileDownload, FaBell, FaUserTie
 } from 'react-icons/fa';
 
 export default function AdminLayout({ children }) {
@@ -59,15 +61,24 @@ export default function AdminLayout({ children }) {
   const SidebarContent = () => (
     <div className="flex flex-col h-full min-h-0">
       <div className="mb-3 shrink-0">
-        <h2 className="text-lg font-bold text-white">ASTEM Admin</h2>
+        <h2 className="text-lg font-bold text-white">Dankamf Admin</h2>
         <p className="text-xs text-warm-amber font-medium tracking-wide">{role?.toUpperCase()}</p>
       </div>
 
       <nav className="flex-1 min-h-0 space-y-1 overflow-y-auto pr-1.5 custom-scrollbar">
         <Link to="/dashboard" className={navLinkClass}><FaTachometerAlt /> Dashboard</Link>
-        <Link to="/admin/users" className={navLinkClass}><FaUsers /> Manage Users</Link>
+        {role === 'superadmin' && <Link to="/admin/users" className={navLinkClass}><FaUsers /> Manage Users</Link>}
         <Link to="/admin/forms" className={navLinkClass}><FaWpforms /> Contact Forms</Link>
-        <Link to="/admin/add-user" className={navLinkClass}><FaUserPlus /> Add User</Link>
+        <Link to="/admin/newsletter" className={navLinkClass}><FaEnvelope /> Newsletter</Link>
+        <Link to="/admin/manage-events" className={navLinkClass}><FaCalendarAlt /> Manage Events</Link>
+        <Link to="/admin/admissions" className={navLinkClass}><FaWpforms /> Admission Applications</Link>
+        <Link to="/admin/downloads" className={navLinkClass}><FaFileDownload /> Download Center</Link>
+        <Link to="/admin/alerts" className={navLinkClass}><FaBell /> School Alerts</Link>
+        <Link to="/admin/leadership" className={navLinkClass}><FaUserTie /> Leadership Team</Link>
+        <Link to="/admin/alumni" className={navLinkClass}><FaUsers /> Alumni Registrations</Link>
+        <Link to="/admin/interviews" className={navLinkClass}><FaCalendarAlt /> Interview Requests</Link>
+        <Link to="/admin/fees" className={navLinkClass}><FaScroll /> Admissions Fees</Link>
+        {role === 'superadmin' && <Link to="/admin/add-user" className={navLinkClass}><FaUserPlus /> Add User</Link>}
 
         <div className={sectionClass}>Services & Projects</div>
         <Link to="/admin/services" className={navLinkClass}><FaTools /> Add Service</Link>

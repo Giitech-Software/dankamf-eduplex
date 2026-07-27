@@ -30,12 +30,12 @@ export default function TrustedLogos() {
       <div className="max-w-7xl mx-auto">
         {/* Header: Centered, Clean, and Authoritative */}
         <div className="mb-6 flex flex-col items-center px-4 sm:px-0">
-          <h2 className="mb-3 text-center text-2xl font-black tracking-tight text-slate-900 sm:text-3xl md:text-4xl">
-            Institutional <span className="text-primary">Partnerships</span>
+          <h2 className="mb-3 text-center text-2xl font-black tracking-tight text-slate-900 sm:text-3xl">
+            Accreditation & <span className="text-primary">Affiliations</span>
           </h2>
           <div className="h-1.5 w-20 bg-primary rounded-full mb-4"></div>
           <p className="text-center text-xs font-bold uppercase tracking-[0.2em] text-slate-400 sm:text-sm sm:tracking-[0.3em]">
-            Trusted by Innovative Institutions Worldwide
+            Recognized by Leading Educational Bodies
           </p>
         </div>
         

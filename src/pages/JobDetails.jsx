@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { doc, getDoc, collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { BriefcaseBusiness, MapPin } from 'lucide-react';
+import { MapPin } from 'lucide-react';
+import { FaSchool } from 'react-icons/fa';
 import { db, storage } from '../firebase/config';
 import Seo from '../components/Seo';
 import SeoConfig from '../config/SeoConfig';
 import LoadingSpinner from '../components/LoadingSpinner';
-import { findFeaturedOpening } from '../data/careerOpenings';
+import { findAdmissionProgram } from '../data/careerOpenings';
 
 export default function JobDetails() {
   const { id } = useParams();
@@ -18,8 +19,15 @@ export default function JobDetails() {
 
   useEffect(() => {
     const fetchJob = async () => {
-      const snap = await getDoc(doc(db, 'jobs', id));
-      setJob(snap.exists() ? snap.data() : findFeaturedOpening(id) || false);
+      // First, try to find the program in our hardcoded data.
+      const program = findAdmissionProgram(id);
+      if (program) {
+        setJob(program);
+      } else {
+        // Fallback to fetch from Firestore if it's a dynamic entry
+        const snap = await getDoc(doc(db, 'jobs', id));
+        setJob(snap.exists() ? snap.data() : false);
+      }
     };
 
     fetchJob();
@@ -72,30 +80,30 @@ export default function JobDetails() {
   if (job === false) {
     return (
       <main className="mx-auto max-w-3xl px-4 py-16 text-center">
-        <h1 className="text-3xl font-black text-primary">Position Not Found</h1>
-        <Link to="/jobs" className="mt-6 inline-flex text-cta hover:underline">
-          &larr; Back to Jobs
+        <h1 className="text-3xl font-black text-primary">Program Not Found</h1>
+        <Link to="/jobs" className="mt-6 inline-flex text-accent hover:underline">
+          &larr; Back to Admissions
         </Link>
       </main>
     );
   }
 
-  const excerpt = job.description?.slice(0, 150) || 'Job opportunity at ASTEM Software Labs.';
+  const excerpt = job.description?.slice(0, 150) || `Admission information for ${job.title}.`;
 
   return (
     <>
-      <Seo {...SeoConfig.dynamic.jobPost({ title: job.title, excerpt, id })} />
+      <Seo {...SeoConfig.dynamic.admissionInfo({ title: job.title, excerpt, id })} />
 
       <section className="bg-slate-950 px-4 py-12 text-white sm:px-8 sm:py-16">
         <div className="mx-auto max-w-4xl">
-          <Link to="/jobs" className="text-sm font-bold text-accent transition hover:text-white">
-            &larr; Back to Jobs
+          <Link to="/jobs" className="text-sm font-bold text-highlight transition hover:text-white">
+            &larr; Back to Admissions
           </Link>
-          <BriefcaseBusiness className="mt-8 h-8 w-8 text-warm" aria-hidden="true" />
+          <FaSchool className="mt-8 h-8 w-8 text-highlight" aria-hidden="true" />
           <h1 className="mt-4 text-4xl font-black tracking-tight sm:text-5xl">{job.title}</h1>
           <div className="mt-4 flex flex-wrap gap-4 text-sm font-bold text-slate-300">
             <span className="inline-flex items-center gap-2">
-              <MapPin className="h-4 w-4 text-warm" aria-hidden="true" />
+              <MapPin className="h-4 w-4 text-highlight" aria-hidden="true" />
               {job.location}
             </span>
             <span>{job.type}</span>
@@ -106,12 +114,12 @@ export default function JobDetails() {
       <main className="mx-auto grid w-full max-w-6xl gap-6 px-0 py-10 sm:px-8 sm:py-14 lg:grid-cols-[1fr_24rem]">
         <section className="space-y-6 px-4 sm:px-0">
           <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
-            <h2 className="text-2xl font-black text-primary">Role Description</h2>
-            <p className="mt-3 text-base leading-relaxed text-slate-600">{job.description}</p>
+            <h2 className="text-2xl font-black text-primary">Program Overview</h2>
+            <p className="mt-3 text-base leading-relaxed text-text-light">{job.description}</p>
           </div>
           <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
-            <h2 className="text-2xl font-black text-primary">Requirements</h2>
-            <p className="mt-3 text-base leading-relaxed text-slate-600">{job.requirements}</p>
+            <h2 className="text-2xl font-black text-primary">Admission Requirements</h2>
+            <p className="mt-3 text-base leading-relaxed text-text-light">{job.requirements}</p>
           </div>
         </section>
 
@@ -127,7 +135,7 @@ export default function JobDetails() {
               name="name"
               value={form.name}
               onChange={handleChange}
-              placeholder="Your Name"
+              placeholder="Parent/Guardian Name"
               required
               className="w-full rounded border border-slate-300 bg-white p-3"
             />
@@ -144,7 +152,7 @@ export default function JobDetails() {
               name="cover"
               value={form.cover}
               onChange={handleChange}
-              placeholder="Cover Letter (optional)"
+              placeholder="Message (optional)"
               className="h-28 w-full rounded border border-slate-300 bg-white p-3"
             />
             <input
@@ -152,11 +160,12 @@ export default function JobDetails() {
               name="cv"
               accept="application/pdf"
               onChange={handleChange}
+              required
               className="w-full rounded border border-slate-300 bg-white p-3 text-sm"
             />
             <button
               disabled={uploading}
-              className="w-full rounded bg-warm px-6 py-3 font-bold text-white transition hover:bg-warm-terracotta disabled:cursor-wait disabled:opacity-70"
+              className="w-full rounded bg-highlight px-6 py-3 font-bold text-white transition hover:bg-amber-600 disabled:cursor-wait disabled:opacity-70"
             >
               {uploading ? (
                 <span className="inline-flex items-center gap-2">

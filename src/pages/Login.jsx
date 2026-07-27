@@ -1,30 +1,31 @@
+// src/pages/Login.jsx
 import React, { useState, useEffect } from 'react';
 import { loginUser } from '../firebase/auth';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import Seo from '../components/Seo';
-import SeoConfig from '../config/SeoConfig';
 import { Eye, EyeOff } from 'lucide-react'; // ✅ Import icons
+import { useAuth } from '../context/AuthContext'; // ✅ Import useAuth
+import { toast } from 'react-hot-toast'; // ✅ Use react-hot-toast for consistency
+import logo from '../assets/logo.png'; // ✅ Use the school logo
 
 export default function Login() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [canRetry, setCanRetry] = useState(false);
   const [showPassword, setShowPassword] = useState(false); // ✅ Toggle state
+  const { currentUser, isAdmin } = useAuth(); // ✅ Get auth state
 
-  // Detect when internet comes back
+  // If an admin is already logged in, redirect them to the dashboard.
   useEffect(() => {
-    const handleOnline = () => {
-      if (error.includes('No internet connection')) {
-        setCanRetry(true);
-      }
-    };
-    window.addEventListener('online', handleOnline);
-    return () => {
-      window.removeEventListener('online', handleOnline);
-    };
-  }, [error]);
+    if (currentUser && isAdmin) {
+      // The dashboard route is registered at /dashboard. Keep the fallback
+      // aligned with App.js so a successful login never lands on a 404 page.
+      const from = location.state?.from?.pathname || '/dashboard';
+      navigate(from, { replace: true });
+    }
+  }, [currentUser, isAdmin, navigate, location.state]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -32,38 +33,42 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     if (e) e.preventDefault();
-    setError('');
-    setCanRetry(false);
     setLoading(true);
+    setError(''); // Reset error on new submission
 
     try {
-      const user = await loginUser(form.email, form.password);
-      console.log('Logged in as:', user.email);
-      navigate('/dashboard');
+      await loginUser(form.email, form.password);
+      toast.success('Login successful! Redirecting...');
+      // The useEffect above will handle the redirect automatically.
     } catch (err) {
       console.error(err);
+      const errorMessage = err.code === 'auth/invalid-credential' 
+        ? 'Invalid email or password.' 
+        : 'An error occurred during login.';
       if (err.code === 'auth/network-request-failed' || !navigator.onLine) {
-        setError('No internet connection. Please check your network and try again.');
+        toast.error('No internet connection. Please check your network.');
       } else {
-        setError('Invalid credentials or user not found.');
+        toast.error(errorMessage);
       }
     } finally {
-      loading && setLoading(false);
       setLoading(false);
     }
   };
 
   return (
     <>
-      <Seo {...SeoConfig.login} />
-      <div className="min-h-screen flex items-center justify-center bg-background px-4 py-8">
+      <Seo title="Admin Login" description="Admin login page for Dankamf Eduplex" />
+      <div className="flex min-h-screen items-center justify-center bg-slate-100 dark:bg-slate-900 px-4">
         <form
           onSubmit={handleSubmit}
-          className="bg-white p-6 rounded-lg shadow-xl w-full max-w-md space-y-3"
+          className="w-full max-w-sm space-y-6"
         >
-          <h2 className="text-2xl font-bold text-center text-primary">
-            ASTEM Admin Login
-          </h2>
+          <div className="text-center">
+            <img className="mx-auto h-20 w-auto" src={logo} alt="Dankamf Eduplex" />
+            <h2 className="mt-4 text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+              Administrator Access
+            </h2>
+          </div>
 
           <input
             type="email"
@@ -71,7 +76,7 @@ export default function Login() {
             placeholder="Email"
             value={form.email}
             onChange={handleChange}
-            className="w-full p-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary"
+            className="w-full p-3 border rounded-lg dark:bg-slate-800 dark:border-slate-700 dark:text-white focus:ring-primary focus:border-primary"
             required
           />
 
@@ -83,13 +88,13 @@ export default function Login() {
               placeholder="Password"
               value={form.password}
               onChange={handleChange}
-              className="w-full p-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary pr-10"
+              className="w-full p-3 border rounded-lg dark:bg-slate-800 dark:border-slate-700 dark:text-white focus:ring-primary focus:border-primary pr-10"
               required
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-primary transition-colors"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-primary transition-colors"
             >
               {showPassword ? (
                 <EyeOff size={20} />
@@ -99,57 +104,17 @@ export default function Login() {
             </button>
           </div>
 
-          {error && (
-            <div className="text-center space-y-2">
-              <p className="text-red-500 text-sm">{error}</p>
-              {canRetry && (
-                <button
-                  type="button"
-                  onClick={handleSubmit}
-                  className="bg-cta text-white px-4 py-2 rounded-xl hover:bg-primary transition"
-                >
-                  Retry
-                </button>
-              )}
-            </div>
-          )}
-
           <button
             type="submit"
             disabled={loading}
-            className={`w-full bg-primary text-white py-3 rounded-lg hover:bg-cta transition flex items-center justify-center ${
-              loading ? 'opacity-70 cursor-not-allowed' : ''
-            }`}
+            className="w-full justify-center rounded-lg bg-primary px-4 py-3 font-semibold text-white shadow-sm hover:bg-primary-dark disabled:opacity-50"
           >
-            {loading ? (
-              <svg
-                className="animate-spin h-5 w-5 text-white"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                ></circle>
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-                ></path>
-              </svg>
-            ) : (
-              'Login'
-            )}
+            {loading ? 'Signing in...' : 'Sign In'}
           </button>
 
           <Link
             to="/"
-            className="block mt-4 text-center text-sm text-primary hover:underline"
+            className="block pt-4 text-center text-sm text-slate-600 dark:text-slate-400 hover:underline"
           >
             ← Back to Homepage
           </Link>

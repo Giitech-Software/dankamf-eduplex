@@ -12,6 +12,9 @@ export default function AddService() {
   const [form, setForm] = useState({
     title: '',
     description: '',
+    curriculum: '',
+    assessment: '',
+    timetable: '',
     iconImage: null,
   });
 
@@ -43,6 +46,9 @@ export default function AddService() {
       await addDoc(collection(db, 'services'), {
         title: form.title,
         description: form.description,
+        curriculum: form.curriculum,
+        assessment: form.assessment,
+        timetable: form.timetable,
         iconUrl,
         createdAt: serverTimestamp(),
       });
@@ -50,7 +56,7 @@ export default function AddService() {
       await logActivity(user, 'add_service', `Added service: "${form.title}"`);
 
       setMsg('✅ Service added successfully!');
-      setForm({ title: '', description: '', iconImage: null });
+      setForm({ title: '', description: '', curriculum: '', assessment: '', timetable: '', iconImage: null });
     } catch (err) {
       setMsg('❌ ' + err.message);
     } finally {
@@ -71,6 +77,10 @@ export default function AddService() {
           required
           className="w-full p-3 border rounded bg-white dark:bg-gray-900 dark:border-gray-700 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
         />
+
+        <textarea name="curriculum" value={form.curriculum} onChange={handleChange} placeholder="Curriculum overview (Markdown supported)" className="w-full h-32 p-3 border rounded bg-white dark:bg-gray-900 dark:border-gray-700 dark:text-white placeholder-gray-500 dark:placeholder-gray-400" />
+        <textarea name="assessment" value={form.assessment} onChange={handleChange} placeholder="Assessment approach (Markdown supported)" className="w-full h-32 p-3 border rounded bg-white dark:bg-gray-900 dark:border-gray-700 dark:text-white placeholder-gray-500 dark:placeholder-gray-400" />
+        <textarea name="timetable" value={form.timetable} onChange={handleChange} placeholder="Timetable and academic calendar (Markdown supported)" className="w-full h-32 p-3 border rounded bg-white dark:bg-gray-900 dark:border-gray-700 dark:text-white placeholder-gray-500 dark:placeholder-gray-400" />
 
         <textarea
           name="description"

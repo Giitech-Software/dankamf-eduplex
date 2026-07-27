@@ -5,6 +5,7 @@ import useSiteSettings from '../hooks/useSiteSettings';
 import Seo from '../components/Seo';
 import SeoConfig from '../config/SeoConfig';
 import HeroSection from '../components/HeroSection';
+import StatsBanner from '../components/StatsBanner';
 import FeatureGrid from '../components/FeatureGrid';
 import ServiceGrid from '../components/ServiceGrid';
 import Testimonials from '../components/Testimonials';
@@ -16,6 +17,11 @@ import BlogPreview from '../components/BlogPreview';
 import NewsletterSignup from '../components/NewsletterSignup';
 import CTABanner from '../components/CTABanner';
 import CareerPreview from '../components/CareerPreview';
+import UpcomingEvents from '../components/UpcomingEvents';
+import CampusGallery from '../components/CampusGallery';
+import DownloadCenter from '../components/DownloadCenter';
+import SchoolAlerts from '../components/SchoolAlerts';
+import SocialConnect from '../components/SocialConnect';
 import LoadingSpinner from '../components/LoadingSpinner';
 
 export default function Home() {
@@ -26,15 +32,17 @@ export default function Home() {
   const { settings, loading } = useSiteSettings();
   if (loading) return <LoadingSpinner label="Loading homepage" fullPage />;
 
-  const siteName = settings?.siteName || 'ASTEM Software Labs';
-  const tagline = settings?.tagline || 'Future Ready Software for a Smarter World';
+  const siteName = settings?.siteName || 'Dankamf Educational Complex';
+  const tagline = settings?.tagline || 'Excellence in Learning & Character';
 
   return (
     <>
       <Seo {...SeoConfig.home} />
       <div className="min-h-screen bg-background text-text flex flex-col">
         <main className="flex-grow">
+          <SchoolAlerts />
           <HeroSection siteName={siteName} tagline={tagline} />
+          <StatsBanner />
           <TrustedLogos />
           <FeatureGrid />
           <ServiceGrid />
@@ -42,6 +50,10 @@ export default function Home() {
           <ProjectsPreview />
           <AboutSection />
           <BlogPreview />
+          <UpcomingEvents />
+          <CampusGallery />
+          <DownloadCenter />
+          <SocialConnect />
           <CareerPreview />
           <FAQSection />
           <NewsletterSignup />

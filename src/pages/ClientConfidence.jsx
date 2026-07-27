@@ -37,14 +37,14 @@ export default function ClientConfidence() {
       <section className="bg-slate-950 px-4 py-14 text-white sm:px-8 sm:py-16">
         <div className="mx-auto max-w-5xl text-center">
           <p className="text-sm font-black uppercase tracking-[0.3em] text-warm">
-            Client Confidence
+            Testimonials
           </p>
           <h1 className="mt-3 text-4xl font-black tracking-tight sm:text-5xl">
-            Trusted Partnerships, Real Results
+            Voices of Our Community
           </h1>
           <p className="mx-auto mt-4 max-w-3xl text-base leading-relaxed text-slate-200 sm:text-lg">
-            Explore the experiences of organizations and leaders who chose ASTEM Software Labs for
-            reliable software delivery and long-term technical support.
+            Hear what parents, students, and alumni have to say about their experience
+            at Dankamf Educational Complex.
           </p>
         </div>
       </section>
@@ -82,7 +82,7 @@ export default function ClientConfidence() {
               to="/contact"
               className="inline-flex rounded-lg bg-warm px-6 py-3 text-base font-bold text-white shadow-lg transition hover:bg-warm-terracotta"
             >
-              Start a Conversation
+            Contact Us for Admissions
             </Link>
           </div>
         </div>
