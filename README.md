@@ -1,70 +1,107 @@
-# Getting Started with Create React App
+# Dankamf Eduplex
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Enterprise school website and administration platform for Dankamf Educational Complex.
 
-## Available Scripts
+Live site: [dankamf-eduplex.web.app](https://dankamf-eduplex.web.app)
 
-In the project directory, you can run:
+## Platform overview
 
-### `npm start`
+- React single-page public website with responsive blue-and-white enterprise styling
+- Firebase Authentication for administrator access
+- Firestore-backed content management for news, events, admissions, downloads, alerts, leadership, alumni, fees, FAQs, services, projects and testimonials
+- Admin dashboard with role-based access (`admin` and `superadmin`)
+- Online admissions, interview booking, tour requests, application status checking and contact forms
+- Search across public pages and dynamic content
+- Gallery, calendar, download center, social links and SEO metadata
+- Firebase Hosting with SPA rewrites, sitemap and robots file
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Requirements
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- Node.js 18 or newer
+- npm
+- Firebase CLI for deployment
+- Access to the `dankamf-eduplex` Firebase project for protected features and deployment
 
-### `npm test`
+## Local development
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```bash
+npm install
+npm start
+```
 
-### `npm run build`
+Open [http://localhost:3000](http://localhost:3000).
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+The frontend Firebase configuration is in `src/firebase/config.js`. Firebase web configuration values are intended for client use; never commit service-account credentials or private API secrets.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Optional email service
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+The `email-server` directory contains the Node/Express service used for protected admission-status and email workflows.
 
-### `npm run eject`
+```bash
+cd email-server
+npm install
+copy .env.example .env
+npm start
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Set `REACT_APP_EMAIL_SERVER_URL` in the frontend environment when the email service is running outside the local default configuration. Keep `.env` files and service-account keys private.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Production build
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```bash
+$env:GENERATE_SOURCEMAP='false'; npm run build
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+The optimized application is generated in `build/`.
 
-## Learn More
+## Firebase deployment
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+The repository is pinned to the correct Firebase project through `.firebaserc`.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```bash
+firebase login
+firebase use dankamf-eduplex
+firebase deploy --only hosting
+```
 
-### Code Splitting
+Deploy Firestore and Storage rules only after reviewing their security impact:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```bash
+firebase deploy --only firestore:rules,storage
+```
 
-### Analyzing the Bundle Size
+## Project structure
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+```text
+src/components/     Shared public, admin and layout components
+src/pages/          Public pages and admin management screens
+src/context/        Authentication and theme state
+src/firebase/       Firebase client initialization and auth helpers
+public/              Static assets, sitemap and robots.txt
+email-server/        Optional backend email/status service
+scripts/             Build and sitemap utilities
+firestore.rules      Firestore access-control rules
+storage.rules        Storage access-control rules
+firebase.json        Firebase Hosting configuration
+```
 
-### Making a Progressive Web App
+## Administration
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Visit `/login` to access the administrator portal. A user must exist in Firebase Authentication and have a matching document in the Firestore `users` collection with an approved role. Use `superadmin` as the canonical elevated role name.
 
-### Advanced Configuration
+Admin routes are protected in the application and should also be protected by Firestore and Storage rules. Do not expose credentials, `.env` files, service-account JSON files or Firebase tokens in Git.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## Quality checks
 
-### Deployment
+Before deploying, run:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+```bash
+npm run build
+git status
+```
 
-### `npm run build` fails to minify
+The build may report existing non-blocking ESLint warnings; deployment should proceed only when the production build completes successfully.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## License and ownership
+
+This project is maintained for Dankamf Educational Complex. Branding, content and administrative data belong to the school and its authorized operators.
