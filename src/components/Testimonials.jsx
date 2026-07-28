@@ -78,7 +78,7 @@ export default function Testimonials() {
         <div className="mt-8 text-center">
           <Link
             to="/client-confidence"
-            className="inline-flex rounded-lg border border-primary px-5 py-2.5 text-sm font-bold text-primary transition hover:bg-primary hover:text-white"
+            className="inline-flex rounded-full border border-primary px-4 py-2 text-sm font-bold text-primary transition hover:bg-primary hover:text-white"
           >
             Read More Testimonials
           </Link>

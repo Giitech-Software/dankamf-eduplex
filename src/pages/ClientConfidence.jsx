@@ -80,7 +80,7 @@ export default function ClientConfidence() {
           <div className="mt-10 text-center">
             <Link
               to="/contact"
-              className="inline-flex rounded-lg bg-warm px-6 py-3 text-base font-bold text-white shadow-lg transition hover:bg-warm-terracotta"
+              className="inline-flex rounded-full bg-warm px-4 py-2 text-base font-bold text-white shadow-lg transition hover:bg-warm-terracotta"
             >
             Contact Us for Admissions
             </Link>

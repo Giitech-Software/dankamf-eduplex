@@ -92,7 +92,7 @@ export default function ServiceGrid() {
         <div className="mt-8 px-4 text-center sm:px-0">
           <Link
             to="/services"
-            className="inline-flex items-center justify-center rounded-full bg-accent-yellow px-5 py-2.5 text-xs font-black uppercase tracking-widest text-darkgray shadow-lg transition-all duration-300 hover:-translate-y-1 hover:bg-accent-yellow-dark hover:shadow-xl"
+            className="inline-flex items-center justify-center rounded-full bg-accent-yellow px-4 py-2 text-xs font-black uppercase tracking-widest text-darkgray shadow-lg transition-all duration-300 hover:-translate-y-1 hover:bg-accent-yellow-dark hover:shadow-xl"
           >
             Explore All Programs
           </Link>

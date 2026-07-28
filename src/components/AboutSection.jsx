@@ -18,7 +18,7 @@ export default function AboutSection() {
           </p>
           <Link
             to="/about"
-            className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-accent-yellow px-5 py-2.5 text-xs font-black uppercase tracking-widest text-darkgray transition-all duration-300 hover:bg-accent-yellow-dark hover:shadow-lg sm:w-auto"
+            className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-accent-yellow px-4 py-2 text-xs font-black uppercase tracking-widest text-darkgray transition-all duration-300 hover:bg-accent-yellow-dark hover:shadow-lg sm:w-auto"
           >
             Discover Our Story
           </Link>

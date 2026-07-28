@@ -2,9 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const heroImages = [
-  '/images/hero-banner.webp',
-  '/images/hero-banner3.webp',
-  // Add up to eight additional images here as they become available.
+  '/images/hero-banner-01.webp',
+  '/images/hero-banner-02.webp',
+  '/images/hero-banner-03.webp',
+  '/images/hero-banner-04.webp',
+  '/images/hero-banner-05.webp',
+   '/images/hero-banner-06.webp',
+    '/images/hero-banner-07.webp',
+
 ];
  
 export default function HeroSection({ siteName, tagline }) {
@@ -52,31 +57,27 @@ export default function HeroSection({ siteName, tagline }) {
           }`}
         />
       ))}
-      <div className="absolute inset-0 -z-10 bg-primary-dark/65" />
+      <div className="absolute inset-0 -z-10 bg-primary-dark/0" />
  
-      <div className="mx-auto max-w-6xl px-4 py-10 sm:px-10 lg:px-16 pt-20 sm:pt-28"> {/* Further reduced top padding */}
-        <div className="max-w-4xl text-center mx-auto">
+      <div className="mx-auto max-w-6xl px-4 pb-20 pt-20 sm:px-10 sm:pb-24 sm:pt-28 lg:px-16">
+        <div className="mx-auto max-w-4xl text-center">
           <h1 className="mt-3 text-[2.35rem] font-black leading-[1.04] sm:text-5xl lg:text-6xl">
-            <span className="block text-accent-yellow font-semibold text-2xl sm:text-3xl">Welcome to</span>
-            <span className="block mt-1 text-white">{siteName || 'Dankamf Educational Complex'}</span>
+            <span className="inline-block text-accent-yellow font-semibold text-2xl drop-shadow-[0_2px_3px_rgba(0,0,0,0.9)] sm:text-3xl">Welcome to</span>
+            <span className="mt-1 inline-block text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">{siteName || 'Dankamf Educational Complex'}</span>
           </h1>
-          <p className="mt-4 max-w-2xl text-lg font-medium leading-relaxed text-slate-200 sm:text-xl mx-auto">
-            A premier educational institution committed to nurturing bright minds and building strong moral foundations for future leaders through excellence in learning and character.
+          <p className="mx-auto mt-4 max-w-2xl text-lg font-medium italic leading-relaxed text-white drop-shadow-[0_2px_3px_rgba(0,0,0,0.8)] sm:text-xl">
+            Changing lives through Godly principles and quality education.
           </p>
-          {tagline && (
-            <p className="mt-5 max-w-2xl text-xl font-semibold italic leading-snug text-accent-light/90 sm:text-2xl mx-auto">
-              "{tagline}"
-            </p>
-          )}
-          <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-            <Link to="/admissions/apply" className="inline-flex w-full items-center justify-center rounded-full bg-accent-yellow px-5 py-2.5 text-sm font-bold text-darkgray shadow-lg transition-all hover:-translate-y-0.5 hover:bg-accent-yellow-dark active:translate-y-0 sm:w-auto sm:px-6">Apply Now</Link>
-            <Link to="/book-a-tour" className="inline-flex w-full items-center justify-center rounded-full border border-white/70 bg-white/10 px-5 py-2.5 text-sm font-bold text-white backdrop-blur-sm transition hover:bg-white hover:text-primary sm:w-auto sm:px-6">Book a Tour</Link>
+          <div className="mx-auto mt-8 flex max-w-2xl flex-wrap items-center justify-center gap-3 sm:gap-4">
+            <Link to="/admissions/apply" className="inline-flex min-h-9 w-fit items-center justify-center rounded-full border border-blue-200 bg-white/10 px-4 py-1.5 text-sm font-bold text-white shadow-lg ring-2 ring-blue-700/70 ring-offset-1 ring-offset-transparent backdrop-blur-sm transition-all hover:-translate-y-0.5 hover:bg-white hover:text-primary active:translate-y-0">Apply Now</Link>
+            <Link to="/book-a-tour" className="inline-flex min-h-9 w-fit items-center justify-center rounded-full border border-blue-200 bg-white/10 px-4 py-1.5 text-sm font-bold text-white ring-2 ring-blue-700/70 ring-offset-1 ring-offset-transparent backdrop-blur-sm transition hover:bg-white hover:text-primary">Book a Tour</Link>
+            <Link to="/contact" className="inline-flex min-h-9 w-fit items-center justify-center rounded-full border border-blue-200 bg-primary-dark/30 px-4 py-1.5 text-sm font-bold text-white ring-2 ring-blue-700/70 ring-offset-1 ring-offset-transparent backdrop-blur-sm transition hover:bg-blue-100 hover:text-primary">Contact Us</Link>
           </div>
         </div>
       </div>
 
       {heroImages.length > 1 && (
-        <div className="absolute bottom-5 left-1/2 flex -translate-x-1/2 items-center gap-3 rounded-full bg-primary-dark/50 px-3 py-2 backdrop-blur-sm">
+        <div className="absolute bottom-2 left-1/2 flex -translate-x-1/2 items-center gap-3 rounded-full bg-primary-dark/50 px-3 py-1.5 backdrop-blur-sm">
           <button
             type="button"
             onClick={showPrevious}

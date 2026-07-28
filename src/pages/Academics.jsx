@@ -4,11 +4,11 @@ import { ArrowRight, BookOpen, GraduationCap, Microscope, Palette, Users } from 
 import Seo from '../components/Seo';
 
 const levels = [
-  { title: 'Preschool', slug: 'creche-nursery', icon: <Users />, description: 'A caring, stimulating foundation for our youngest learners.' },
-  { title: 'Lower Primary', slug: 'kindergarten-primary', icon: <BookOpen />, description: 'Strong foundations in literacy, numeracy, curiosity, and confidence.' },
-  { title: 'Upper Primary', slug: 'kindergarten-primary', icon: <Palette />, description: 'Deeper learning, creativity, collaboration, and growing independence.' },
-  { title: 'Junior High School', slug: 'junior-high-school', icon: <Microscope />, description: 'Rigorous academics, leadership development, and character formation.' },
-  { title: 'Senior High School', slug: 'senior-high-school', icon: <GraduationCap />, description: 'A future-focused pathway for advanced learning and university readiness.' },
+  { title: 'Nursery', slug: 'creche-nursery', icon: <Users />, description: 'A safe, caring and stimulating environment where young learners build early literacy, numeracy, language, confidence and independence through play.' },
+  { title: 'Kindergarten', slug: 'kindergarten-primary', icon: <BookOpen />, description: 'Engaging activities develop reading readiness, writing, mathematics, creativity, physical development, values and teamwork.' },
+  { title: 'Primary School', slug: 'kindergarten-primary', icon: <Palette />, description: 'A balanced Ghana NaCCA curriculum covering English, Mathematics, Science, Creative Arts, Computing, Ghanaian Language and Religious and Moral Education.' },
+  { title: 'Junior High School', slug: 'junior-high-school', icon: <Microscope />, description: 'Quality instruction, continuous assessment, BECE preparation, leadership development, discipline and career guidance.' },
+  { title: 'ICT, Coding & STEM', slug: 'junior-high-school', icon: <GraduationCap />, description: 'Practical technology, coding, robotics, research and innovation projects prepare learners for a rapidly changing world.' },
 ];
 
 export default function Academics() {

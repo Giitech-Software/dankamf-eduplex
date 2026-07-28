@@ -3,17 +3,17 @@ import { Link } from 'react-router-dom';
 import { subscribeToNewsletter } from '../utils/newsletter';
 import {
   FaFacebookF,
-  FaTwitter,
   FaInstagram,
   FaLinkedin,
   FaTiktok,
   FaWhatsapp,
   FaMapMarkerAlt,
 } from 'react-icons/fa';
+import { FaXTwitter } from 'react-icons/fa6';
 
 const socialLinks = [
   { icon: <FaFacebookF />, label: 'Facebook', url: 'https://facebook.com' },
-  { icon: <FaTwitter />, label: 'Twitter', url: 'https://twitter.com' },
+  { icon: <FaXTwitter />, label: 'X', url: 'https://x.com' },
   { icon: <FaInstagram />, label: 'Instagram', url: 'https://instagram.com' },
   { icon: <FaLinkedin />, label: 'LinkedIn', url: 'https://linkedin.com' },
   { icon: <FaTiktok />, label: 'TikTok', url: 'https://tiktok.com' },
@@ -51,11 +51,11 @@ const PublicFooter = () => {
       <div className="max-w-7xl mx-auto grid gap-6 sm:grid-cols-2 md:grid-cols-4">
         <div>
           <h3 className="text-xl font-bold mb-1">Dankamf Eduplex</h3>
-          <p className="text-accent mb-4">Excellence in Learning & Character</p>
+          <p className="text-accent mb-4">Changing lives through Godly principles and quality education</p>
           <div className="space-y-1 text-xs">
-            <p><strong>Location:</strong> Accra, Ghana</p>
-            <p><strong>Hours:</strong> Mon - Fri, 8:00 AM - 5:00 PM</p>
-            <p><strong>Email:</strong> info@dankamfeduplex.edu.gh</p>
+            <p><strong>Location:</strong> Oyibi–Accra, near SDA Church</p>
+            <p><strong>Hours:</strong> Mon - Fri, 7:00 AM - 3:00 PM</p>
+            <p><strong>Email:</strong> info@dankamfeducationalcomplex.com</p>
             <p className="flex items-center gap-1">
               <FaMapMarkerAlt className="text-accent" />
               <a
@@ -115,7 +115,7 @@ const PublicFooter = () => {
             <button
               type="submit"
               disabled={status === 'submitting'}
-              className="bg-accent hover:bg-white hover:text-primary disabled:cursor-not-allowed disabled:opacity-70 px-4 py-2 rounded text-sm font-medium w-full sm:w-auto"
+              className="rounded-full bg-accent px-4 py-2 text-sm font-medium text-white transition hover:bg-white hover:text-primary disabled:cursor-not-allowed disabled:opacity-70 w-full sm:w-auto"
             >
               {status === 'submitting' ? 'Subscribing...' : 'Subscribe'}
             </button>

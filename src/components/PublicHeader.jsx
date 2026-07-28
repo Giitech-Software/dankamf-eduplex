@@ -159,7 +159,7 @@ export default function PublicHeader() {
           </div>
 
           {/* Mobile Navigation */}
-          <Disclosure.Panel className="md:hidden border-t border-white/10 bg-primary px-3 pb-4 pt-3 shadow-xl">
+          <Disclosure.Panel className="md:hidden max-h-[calc(100dvh-4rem)] overflow-y-auto overscroll-contain border-t border-white/10 bg-primary px-3 pb-4 pt-3 shadow-xl">
             <form onSubmit={handleSearch} className="mb-3 flex gap-2">
               <input
                 value={searchTerm}
@@ -183,6 +183,22 @@ export default function PublicHeader() {
                 {label}
               </Link>
             ))}
+            <div className="mt-2 border-t border-white/10 pt-3">
+              <p className="px-3 pb-2 text-xs font-black uppercase tracking-[0.2em] text-accent-yellow">Explore More</p>
+              <div className="grid grid-cols-2 gap-1">
+                {[
+                  ['About Us', '/about'], ['Apply Online', '/admissions/apply'],
+                  ['FAQs', '/faqs'], ['Calendar', '/calendar'],
+                  ['Check Status', '/admissions/status'], ['Downloads', '/downloads'],
+                  ['Testimonials', '/client-confidence'], ['Alumni', '/alumni'],
+                  ['Contact Us', '/contact'],
+                ].map(([label, to]) => (
+                  <Link key={to} to={to} className="rounded-lg px-3 py-3 text-sm font-semibold text-white transition hover:bg-white hover:text-primary">
+                    {label}
+                  </Link>
+                ))}
+              </div>
+            </div>
             {user && (
               <Link to="/dashboard" className="mt-2 block rounded-lg bg-white px-3 py-3 text-center text-base font-bold text-primary">
                 Dashboard

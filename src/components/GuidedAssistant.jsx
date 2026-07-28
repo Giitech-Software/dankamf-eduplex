@@ -43,6 +43,30 @@ const options = [
 
 export default function GuidedAssistant() {
   const [isOpen, setIsOpen] = useState(false);
+  const [offset, setOffset] = useState({ x: 0, y: 0 });
+  const dragRef = React.useRef(null);
+
+  const handlePointerMove = (event) => {
+    if (!dragRef.current) return;
+    const nextX = dragRef.current.startX - event.clientX + dragRef.current.originX;
+    const nextY = dragRef.current.startY - event.clientY + dragRef.current.originY;
+    setOffset({
+      x: Math.max(-window.innerWidth + 90, Math.min(0, nextX)),
+      y: Math.max(-window.innerHeight + 90, Math.min(0, nextY)),
+    });
+  };
+
+  const handlePointerUp = () => {
+    dragRef.current = null;
+    window.removeEventListener('pointermove', handlePointerMove);
+    window.removeEventListener('pointerup', handlePointerUp);
+  };
+
+  const handlePointerDown = (event) => {
+    dragRef.current = { startX: event.clientX, startY: event.clientY, originX: offset.x, originY: offset.y };
+    window.addEventListener('pointermove', handlePointerMove);
+    window.addEventListener('pointerup', handlePointerUp, { once: true });
+  };
 
   useEffect(() => {
     try {
@@ -74,15 +98,18 @@ export default function GuidedAssistant() {
   }, []);
 
   return (
-    <div className="fixed bottom-4 right-4 z-[60] flex flex-col items-end sm:bottom-6 sm:right-6">
+    <div
+      className="fixed bottom-4 right-4 z-[60] flex flex-col items-end sm:bottom-6 sm:right-6"
+      style={{ transform: `translate(${offset.x}px, ${offset.y}px)` }}
+    >
       {isOpen && (
         <section
           aria-label="Dankamf guided assistant"
-          className="mb-3 w-[calc(100vw-2rem)] max-w-[20rem] overflow-hidden rounded-xl border border-slate-200 bg-white shadow-2xl shadow-slate-950/20"
+          className="mb-2 w-[calc(100vw-2rem)] max-w-[17rem] overflow-hidden rounded-xl border border-slate-200 bg-white shadow-2xl shadow-slate-950/20"
         >
           <div className="flex items-start justify-between bg-gradient-to-r from-primary to-accent px-4 py-3 text-white">
-            <div className="flex items-center gap-2.5">
-              <div className="rounded-lg bg-white/10 p-1.5 text-white ring-1 ring-white/20">
+              <div className="flex items-center gap-2">
+              <div className="rounded-lg bg-white/10 p-1 text-white ring-1 ring-white/20">
                 <Sparkles className="h-4 w-4" aria-hidden="true" />
               </div>
               <div>
@@ -102,8 +129,8 @@ export default function GuidedAssistant() {
             </button>
           </div>
 
-          <div className="p-2.5">
-            <p className="px-1.5 pb-2 text-xs font-bold leading-relaxed text-slate-600">
+            <div className="p-2">
+            <p className="px-1 pb-1.5 text-[11px] font-bold leading-relaxed text-slate-600">
               Explore our site or start a conversation with our team.
             </p>
 
@@ -116,13 +143,13 @@ export default function GuidedAssistant() {
                     key={option.label}
                     to={option.to}
                     onClick={() => setIsOpen(false)}
-                    className="group flex items-center gap-2.5 rounded-lg border border-transparent px-2 py-2 transition hover:border-slate-200 hover:bg-slate-50"
+                    className="group flex items-center gap-2 rounded-lg border border-transparent px-1.5 py-1.5 transition hover:border-slate-200 hover:bg-slate-50"
                   >
                     <span className="rounded-md bg-accent-light p-1.5 text-accent transition group-hover:bg-accent group-hover:text-white">
                       <Icon className="h-4 w-4" aria-hidden="true" />
                     </span>
                     <span className="min-w-0">
-                      <span className="block text-xs font-black text-slate-900">{option.label}</span>
+                      <span className="block text-[11px] font-black text-slate-900">{option.label}</span>
                       <span className="mt-0.5 block text-[11px] leading-snug text-slate-500">
                         {option.description}
                       </span>
@@ -136,7 +163,7 @@ export default function GuidedAssistant() {
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-2 flex items-center justify-center gap-2 rounded-lg bg-green-500 px-3 py-2 text-xs font-black uppercase tracking-[0.12em] text-white transition hover:bg-green-600"
+              className="mt-1.5 flex items-center justify-center gap-2 rounded-lg bg-green-500 px-2.5 py-1.5 text-[11px] font-black uppercase tracking-[0.12em] text-white transition hover:bg-green-600"
             >
               <MessageCircle className="h-4 w-4" aria-hidden="true" />
               Chat on WhatsApp
@@ -149,10 +176,11 @@ export default function GuidedAssistant() {
         <button
           type="button"
           onClick={() => setIsOpen(true)}
+          onPointerDown={handlePointerDown}
           aria-label="Open Dankamf assistant"
-          className="inline-flex h-10 items-center justify-center gap-1.5 rounded-full bg-accent px-3 text-white shadow-lg shadow-slate-950/20 ring-1 ring-white/10 transition hover:-translate-y-0.5 hover:bg-blue-600 focus:outline-none focus:ring-4 focus:ring-accent/30"
+          className="inline-flex h-10 cursor-grab touch-none items-center justify-center gap-1.5 rounded-full border border-slate-200/80 bg-primary/40 px-3 text-white shadow-lg shadow-slate-950/20 ring-1 ring-white/40 backdrop-blur-sm transition hover:-translate-y-0.5 hover:bg-primary/60 focus:outline-none focus:ring-4 focus:ring-slate-300/60 active:cursor-grabbing"
         >
-          <MessageCircle className="h-4 w-4 animate-pulse text-white" aria-hidden="true" />
+          <MessageCircle className="h-4 w-4 animate-bounce text-accent-yellow" aria-hidden="true" />
           <span className="text-[10px] font-black uppercase tracking-[0.1em]">Let's Chat</span>
         </button>
       )}

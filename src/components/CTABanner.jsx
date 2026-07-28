@@ -21,13 +21,13 @@ export default function CTABanner() {
         <div className="flex flex-col gap-3 sm:flex-row md:shrink-0">
           <Link
             to="/contact"
-            className="inline-flex w-full items-center justify-center rounded-full bg-accent-yellow px-5 py-2.5 text-xs font-black uppercase tracking-widest text-darkgray transition-all duration-300 hover:bg-accent-yellow-dark hover:shadow-xl sm:w-auto"
+            className="inline-flex w-full items-center justify-center rounded-full bg-accent-yellow px-4 py-2 text-xs font-black uppercase tracking-widest text-darkgray transition-all duration-300 hover:bg-accent-yellow-dark hover:shadow-xl sm:w-auto"
           >
             Get In Touch
           </Link>
           <Link
             to="/services"
-            className="inline-flex w-full items-center justify-center rounded-lg border border-white/30 px-7 py-3 text-sm font-black uppercase tracking-widest text-white transition-all duration-300 hover:border-white hover:bg-white hover:text-primary-dark sm:w-auto"
+            className="inline-flex w-full items-center justify-center rounded-full border border-white/30 px-4 py-2 text-sm font-black uppercase tracking-widest text-white transition-all duration-300 hover:border-white hover:bg-white hover:text-primary-dark sm:w-auto"
           >
             Our Academics
           </Link>

@@ -6,7 +6,7 @@ import { db } from '../firebase/config';
 import Seo from '../components/Seo';
 import SeoConfig from '../config/SeoConfig';
 
-const whatsappNumber = '233551234567'; // Placeholder number
+const whatsappNumber = '233242172216';
 const whatsappMessage = encodeURIComponent(
   'Hello Dankamf Eduplex, I would like to make an inquiry about admissions.'
 );
@@ -45,18 +45,18 @@ export default function Contact() {
           <div className="mb-6 space-y-3 px-4 text-gray-700 sm:px-0">
             <div className="grid gap-3 sm:grid-cols-2">
               <a
-                href="mailto:info@dankamfeduplex.edu.gh"
+                href="mailto:info@dankamfeducationalcomplex.com"
                 className="flex min-h-14 items-center gap-3 rounded-lg border border-gray-200 bg-white p-3 text-primary shadow-sm transition hover:border-primary"
               >
                 <FaEnvelope className="shrink-0" />
-                <span className="min-w-0 truncate">info@dankamfeduplex.edu.gh</span>
+                <span className="min-w-0 truncate">info@dankamfeducationalcomplex.com</span>
               </a>
               <a
-                href="tel:+233551234567"
+                href="tel:+233242172216"
                 className="flex min-h-14 items-center gap-3 rounded-lg border border-gray-200 bg-white p-3 text-primary shadow-sm transition hover:border-primary"
               >
                 <FaPhoneAlt className="shrink-0" />
-                <span>+233 55 123 4567</span>
+                <span>024 217 2216</span>
               </a>
               <a
                 href="https://dankamf-eduplex.web.app"
@@ -69,7 +69,7 @@ export default function Contact() {
               </a>
               <p className="flex min-h-14 items-center gap-3 rounded-lg border border-gray-200 bg-white p-3 shadow-sm">
                 <FaMapMarkerAlt className="shrink-0 text-primary" />
-                <span>Accra, Ghana</span>
+                <span>Oyibi–Accra, near SDA Church, Greater Accra Region, Ghana</span>
               </p>
             </div>
 
@@ -96,9 +96,8 @@ export default function Contact() {
                 <p className="text-xs font-black uppercase tracking-[0.2em] text-accent">Visit Our Campus</p>
                 <h3 className="mt-2 text-xl font-black text-primary">Office Hours</h3>
                 <dl className="mt-4 space-y-3 text-sm text-text-light">
-                  <div className="flex justify-between gap-4"><dt className="font-bold text-darkgray">Monday–Friday</dt><dd>7:30am–4:00pm</dd></div>
-                  <div className="flex justify-between gap-4"><dt className="font-bold text-darkgray">Saturday</dt><dd>9:00am–1:00pm</dd></div>
-                  <div className="flex justify-between gap-4"><dt className="font-bold text-darkgray">Sunday</dt><dd>Closed</dd></div>
+                  <div className="flex justify-between gap-4"><dt className="font-bold text-darkgray">Monday–Friday</dt><dd>7:00am–3:00pm</dd></div>
+                  <div className="flex justify-between gap-4"><dt className="font-bold text-darkgray">Weekend & holidays</dt><dd>Closed</dd></div>
                 </dl>
                 <a href="https://www.google.com/maps/search/?api=1&query=Dankamf+Educational+Complex,+Accra,+Ghana" target="_blank" rel="noopener noreferrer" className="mt-5 inline-flex rounded-full bg-primary px-4 py-2 text-xs font-bold text-white hover:bg-primary-dark">Get Directions</a>
               </div>

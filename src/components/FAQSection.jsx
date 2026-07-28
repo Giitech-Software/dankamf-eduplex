@@ -41,7 +41,7 @@ const FAQSection = () => {
         <div className="mt-8 px-4 text-center sm:px-0">
           <Link
             to="/faqs"
-            className="inline-flex rounded-lg bg-primary px-6 py-3 text-sm font-bold text-white shadow-lg transition hover:bg-cta"
+            className="inline-flex rounded-full bg-primary px-5 py-2.5 text-sm font-bold text-white shadow-lg transition hover:bg-cta"
           >
                 View All FAQs
           </Link>
