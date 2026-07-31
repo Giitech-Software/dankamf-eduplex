@@ -81,15 +81,14 @@ export default function AdminLayout({ children }) {
         {role === 'superadmin' && <Link to="/admin/add-user" className={navLinkClass}><FaUserPlus /> Add User</Link>}
 
         <div className={sectionClass}>Services & Projects</div>
-        <Link to="/admin/services" className={navLinkClass}><FaTools /> Add Service</Link>
         <Link to="/admin/manage-services" className={navLinkClass}><FaCog /> Manage Services</Link>
         <Link to="/admin/enterprise-features" className={navLinkClass}><FaLayerGroup /> Enterprise Features</Link>
         <Link to="/admin/client-testimonials" className={navLinkClass}><FaQuoteLeft /> Client Testimonials</Link>
         <Link to="/admin/add-project" className={navLinkClass}><FaBriefcase /> Add Project</Link>
         <Link to="/admin/manage-projects" className={navLinkClass}><FaCog /> Manage Projects</Link>
         
-        <Link to="/admin/add-post" className={navLinkClass}><FaPenNib /> Add Post</Link>
-        <Link to="/admin/manage-posts" className={navLinkClass}><FaRegNewspaper /> Manage Posts</Link>
+        <Link to="/admin/add-post" className={navLinkClass}><FaPenNib /> Add News Article</Link>
+        <Link to="/admin/manage-posts" className={navLinkClass}><FaRegNewspaper /> Manage News &amp; Events</Link>
         <Link to="/admin/add-partner" className={navLinkClass}><FaHandshake /> Manage Partners</Link>
 
         <div className={sectionClass}>Support & Settings</div>
@@ -116,7 +115,7 @@ export default function AdminLayout({ children }) {
   );
 
   return (
-    <div className={`flex min-h-screen ${theme === 'dark' ? 'bg-gray-900 text-gray-100' : 'bg-gray-50 text-gray-900'}`}>
+    <div className={`admin-site flex min-h-screen ${theme === 'dark' ? 'bg-gray-900 text-gray-100' : 'bg-gray-50 text-gray-900'}`}>
       
       {/* Desktop Sidebar */}
       <div className="hidden lg:block w-64 bg-primary text-white fixed top-0 left-0 h-screen z-40 shadow-2xl">

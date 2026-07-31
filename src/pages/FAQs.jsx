@@ -32,10 +32,10 @@ export default function FAQs() {
   return (
     <>
       <Seo {...SeoConfig.faqs} />
-      <section className="bg-slate-950 px-4 py-14 text-white sm:px-8 sm:py-16">
+      <section className="bg-electric-blue px-4 py-6 text-primary sm:px-8 sm:py-8">
         <div className="mx-auto max-w-4xl text-center">
-          <p className="text-sm font-black uppercase tracking-[0.3em] text-warm">Helpful Answers</p>
-          <h1 className="mt-3 text-4xl font-black tracking-tight sm:text-5xl">
+          <p className="text-xs font-black uppercase tracking-[0.25em] text-cobalt">Helpful Answers</p>
+          <h1 className="mt-2 text-3xl font-black tracking-tight sm:text-4xl">
             Frequently Asked Questions
           </h1>
         </div>

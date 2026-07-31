@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 export default function AboutSection() {
   return (
-    <section className="bg-slate-50 px-0 py-16 sm:px-8">
+    <section className="bg-powder-blue/30 px-0 py-16 sm:px-8">
       <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
         <div className="px-4 sm:px-0">
           <p className="text-xs font-black uppercase tracking-[0.22em] text-accent sm:text-sm sm:tracking-[0.3em]">

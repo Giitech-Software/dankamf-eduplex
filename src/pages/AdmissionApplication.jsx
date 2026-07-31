@@ -17,7 +17,7 @@ export default function AdmissionApplication() {
     try {
       const applicationReference = `DKE-2026-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
       await addDoc(collection(db, 'admissionApplications'), { ...form, applicationReference, status: 'new', createdAt: serverTimestamp() });
-      setForm(initialForm); setReference(applicationReference); setStatus('Application received. Our admissions team will contact you shortly.');
+      setForm(initialForm); setReference(applicationReference); setStatus('Enrollment request received. Our admissions team will contact you shortly.');
     } catch (error) { console.error(error); setStatus('We could not submit your application. Please try again.'); } finally { setSaving(false); }
   };
   return <><Seo title="Apply for Admission | Dankamf Educational Complex" {...SeoConfig.careers} /><main className="min-h-screen bg-background-alt px-4 py-12 sm:px-8"><div className="mx-auto max-w-3xl"><div className="mb-8 text-center"><p className="text-xs font-black uppercase tracking-[0.25em] text-accent">Admissions 2026/2027</p><h1 className="mt-3 text-4xl font-black text-primary sm:text-5xl">Start Your Application</h1><p className="mx-auto mt-4 max-w-2xl text-text-light">Share your details with our admissions team and we will guide you through the next steps.</p></div><form onSubmit={submit} className="grid gap-5 rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:grid-cols-2 sm:p-8">

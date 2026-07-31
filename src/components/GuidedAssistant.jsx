@@ -12,7 +12,7 @@ import {
 
 const sessionKey = 'dankamf-guided-assistant-shown';
 const whatsappUrl =
-  'https://wa.me/233551234567?text=Hello%20Dankamf%20Eduplex%2C%20I%20would%20like%20to%20make%20an%20inquiry.';
+  'https://wa.me/233242172216?text=Hello%20Dankamf%20Eduplex%2C%20I%20would%20like%20to%20make%20an%20inquiry.';
 
 const options = [
   {
@@ -45,6 +45,7 @@ export default function GuidedAssistant() {
   const [isOpen, setIsOpen] = useState(false);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const dragRef = React.useRef(null);
+  const isNearTop = offset.y < -(window.innerHeight * 0.3);
 
   const handlePointerMove = (event) => {
     if (!dragRef.current) return;
@@ -99,13 +100,13 @@ export default function GuidedAssistant() {
 
   return (
     <div
-      className="fixed bottom-4 right-4 z-[60] flex flex-col items-end sm:bottom-6 sm:right-6"
+      className={`fixed bottom-4 right-4 z-[60] flex items-end sm:bottom-6 sm:right-6 ${isNearTop ? 'flex-col-reverse' : 'flex-col'}`}
       style={{ transform: `translate(${offset.x}px, ${offset.y}px)` }}
     >
       {isOpen && (
         <section
           aria-label="Dankamf guided assistant"
-          className="mb-2 w-[calc(100vw-2rem)] max-w-[17rem] overflow-hidden rounded-xl border border-slate-200 bg-white shadow-2xl shadow-slate-950/20"
+          className={`${isNearTop ? 'mt-2' : 'mb-2'} max-h-[min(70vh,25rem)] w-[calc(100vw-2rem)] max-w-[17rem] overflow-y-auto overflow-x-hidden rounded-xl border border-slate-200 bg-white shadow-2xl shadow-slate-950/20`}
         >
           <div className="flex items-start justify-between bg-gradient-to-r from-primary to-accent px-4 py-3 text-white">
               <div className="flex items-center gap-2">
@@ -180,7 +181,7 @@ export default function GuidedAssistant() {
           aria-label="Open Dankamf assistant"
           className="inline-flex h-10 cursor-grab touch-none items-center justify-center gap-1.5 rounded-full border border-slate-200/80 bg-primary/40 px-3 text-white shadow-lg shadow-slate-950/20 ring-1 ring-white/40 backdrop-blur-sm transition hover:-translate-y-0.5 hover:bg-primary/60 focus:outline-none focus:ring-4 focus:ring-slate-300/60 active:cursor-grabbing"
         >
-          <MessageCircle className="h-4 w-4 animate-bounce text-accent-yellow" aria-hidden="true" />
+          <MessageCircle className="h-5 w-5 animate-bounce text-red-600 drop-shadow-sm" aria-hidden="true" />
           <span className="text-[10px] font-black uppercase tracking-[0.1em]">Let's Chat</span>
         </button>
       )}

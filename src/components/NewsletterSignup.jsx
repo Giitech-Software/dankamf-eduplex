@@ -25,7 +25,7 @@ export default function NewsletterSignup() {
   };
 
   return (
-    <section className="mb-10 bg-accent px-4 py-6 text-center text-white sm:px-8 sm:py-7">
+    <section className="mb-10 bg-azure px-4 py-6 text-center text-white sm:px-8 sm:py-7">
       <h3 className="mb-3 text-2xl font-bold text-white">Stay Informed</h3>
       <p className="mx-auto mb-6 max-w-xl text-base leading-relaxed text-blue-50">
         Join our mailing list for school news, event announcements, and important updates.

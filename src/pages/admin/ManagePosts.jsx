@@ -52,7 +52,7 @@ export default function ManagePosts() {
 
   return (
     <AdminLayout>
-      <PageTitle>📰 Manage Posts</PageTitle>
+      <PageTitle>📰 Manage News &amp; Events</PageTitle>
 
       <div className="p-6">
         {msg && (

@@ -12,7 +12,7 @@ export default function CareerPreview() {
           <p className="text-xs font-black uppercase tracking-[0.22em] text-accent sm:text-sm sm:tracking-[0.3em]">Admissions Open</p>
           <h3 className="mt-2 text-2xl font-black tracking-tight text-primary-dark sm:text-4xl">Join Our Family</h3>
           <p className="mt-3 text-base leading-relaxed text-text-light">
-            We are accepting applications for the upcoming academic year. Discover the right path for your child's future.
+            We are accepting enrollments for the upcoming academic year. Discover the right path for your child's future.
           </p>
         </div>
 

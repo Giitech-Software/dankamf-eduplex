@@ -58,37 +58,37 @@ export default function Login() {
   return (
     <>
       <Seo title="Admin Login" description="Admin login page for Dankamf Eduplex" />
-      <div className="flex min-h-screen items-center justify-center bg-slate-100 dark:bg-slate-900 px-4">
+      <div className="login-shell flex min-h-screen items-center justify-center bg-white px-4">
         <form
           onSubmit={handleSubmit}
-          className="w-full max-w-sm space-y-6"
+          className="w-full max-w-sm space-y-4 rounded-2xl border border-blue-100 bg-white p-6 shadow-xl shadow-blue-950/10 sm:p-8"
         >
           <div className="text-center">
-            <img className="mx-auto h-20 w-auto" src={logo} alt="Dankamf Eduplex" />
-            <h2 className="mt-4 text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+            <img className="mx-auto h-24 w-auto object-contain" src={logo} alt="Dankamf Eduplex" />
+            <h2 className="mt-3 text-xl font-bold tracking-tight text-primary">
               Administrator Access
             </h2>
           </div>
 
-          <input
+          <label className="space-y-1.5"><span>Email address</span><input
             type="email"
             name="email"
             placeholder="Email"
             value={form.email}
             onChange={handleChange}
-            className="w-full p-3 border rounded-lg dark:bg-slate-800 dark:border-slate-700 dark:text-white focus:ring-primary focus:border-primary"
+            className="w-full rounded-md border p-2.5 text-sm dark:bg-slate-800 dark:border-slate-700 dark:text-white focus:ring-primary focus:border-primary"
             required
-          />
+          /></label>
 
           {/* ✅ Password Input Container */}
-          <div className="relative">
+          <label className="space-y-1.5"><span>Password</span><div className="relative">
             <input
               type={showPassword ? 'text' : 'password'} // ✅ Dynamic type
               name="password"
               placeholder="Password"
               value={form.password}
               onChange={handleChange}
-              className="w-full p-3 border rounded-lg dark:bg-slate-800 dark:border-slate-700 dark:text-white focus:ring-primary focus:border-primary pr-10"
+              className="w-full rounded-md border p-2.5 pr-10 text-sm dark:bg-slate-800 dark:border-slate-700 dark:text-white focus:ring-primary focus:border-primary"
               required
             />
             <button
@@ -102,12 +102,12 @@ export default function Login() {
                 <Eye size={20} />
               )}
             </button>
-          </div>
+          </div></label>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full justify-center rounded-lg bg-primary px-4 py-3 font-semibold text-white shadow-sm hover:bg-primary-dark disabled:opacity-50"
+            className="w-full justify-center rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-dark disabled:opacity-50"
           >
             {loading ? 'Signing in...' : 'Sign In'}
           </button>

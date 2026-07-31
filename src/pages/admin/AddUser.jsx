@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { db } from '../../firebase/config';
+import { db, firebaseConfig } from '../../firebase/config';
 import { useAuth } from '../../context/AuthContext';
 import { logActivity } from '../../utils/activityLog';
 import PageTitle from '../../components/PageTitle';
@@ -7,7 +7,9 @@ import AdminLayout from '../../components/AdminLayout';
 import {
   createUserWithEmailAndPassword,
   getAuth,
+  signOut,
 } from 'firebase/auth';
+import { initializeApp } from 'firebase/app';
 import {
   doc,
   setDoc,
@@ -16,21 +18,24 @@ import {
   query,
   orderBy,
 } from 'firebase/firestore';
+import { Eye, EyeOff } from 'lucide-react';
 
 export default function AddUser() {
   const [form, setForm] = useState({ email: '', password: '', role: 'admin' });
   const [status, setStatus] = useState('');
   const [users, setUsers] = useState([]);
+  const [showPassword, setShowPassword] = useState(false);
   const { user } = useAuth();
 
   const fetchUsers = async () => {
-    const q = query(collection(db, 'users'), orderBy('createdAt', 'desc'));
-    const snapshot = await getDocs(q);
-    const userList = snapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
-    setUsers(userList);
+    try {
+      const q = query(collection(db, 'users'), orderBy('createdAt', 'desc'));
+      const snapshot = await getDocs(q);
+      setUsers(snapshot.docs.map((item) => ({ id: item.id, ...item.data() })));
+    } catch (error) {
+      console.error('Unable to load users:', error);
+      setStatus('Unable to load existing users. Confirm superadmin permissions.');
+    }
   };
 
   useEffect(() => {
@@ -44,23 +49,31 @@ export default function AddUser() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus('');
-    const auth = getAuth();
-
     try {
+      // Use a secondary Auth instance so creating a user does not replace the
+      // currently signed-in superadmin session.
+      const secondaryApp = initializeApp(firebaseConfig, `user-creation-${Date.now()}`);
+      const secondaryAuth = getAuth(secondaryApp);
       const userCred = await createUserWithEmailAndPassword(
-        auth,
+        secondaryAuth,
         form.email,
         form.password
       );
       const userId = userCred.user.uid;
 
-      await setDoc(doc(db, 'users', userId), {
-        email: form.email,
-        role: form.role,
-        createdAt: new Date(),
-      });
+      try {
+        await setDoc(doc(db, 'users', userId), { email: form.email, role: form.role, createdAt: new Date() });
+      } catch (profileError) {
+        throw new Error(`Auth account created, but Firestore profile failed (${profileError.code || profileError.message}). Confirm superadmin permissions.`);
+      }
 
-      await logActivity(user, 'add_user', `Added user: ${form.email} (${form.role})`);
+      await signOut(secondaryAuth);
+
+      try {
+        await logActivity(user, 'add_user', `Added user: ${form.email} (${form.role})`);
+      } catch (activityError) {
+        console.warn('User created, but activity log failed:', activityError);
+      }
       setStatus('✅ User added successfully!');
       setForm({ email: '', password: '', role: 'admin' });
       fetchUsers();
@@ -92,15 +105,25 @@ export default function AddUser() {
             required
             className="w-full p-2.5 border rounded focus:outline-none bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600"
           />
-          <input
-            type="password"
-            name="password"
-            placeholder="Temporary Password"
-            value={form.password}
-            onChange={handleChange}
-            required
-            className="w-full p-2.5 border rounded focus:outline-none bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600"
-          />
+          <div className="relative">
+            <input
+              type={showPassword ? 'text' : 'password'}
+              name="password"
+              placeholder="Temporary Password"
+              value={form.password}
+              onChange={handleChange}
+              required
+              className="w-full rounded border border-gray-300 bg-white p-2.5 pr-10 text-gray-900 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((visible) => !visible)}
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
+              className="absolute right-2 top-1/2 -translate-y-1/2 rounded p-1 text-gray-500 transition hover:text-primary"
+            >
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
+          </div>
           <select
             name="role"
             value={form.role}

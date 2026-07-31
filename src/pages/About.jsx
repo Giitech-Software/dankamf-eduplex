@@ -7,10 +7,10 @@ import LeadershipSection from '../components/LeadershipSection';
 const AboutUs = () => (
   <>
     <Seo {...SeoConfig.about} />
-    <section className="bg-primary-dark px-4 py-12 text-white sm:px-8 sm:py-16">
+    <section className="bg-electric-blue px-4 py-6 text-primary sm:px-8 sm:py-8">
       <div className="mx-auto max-w-4xl text-center">
-        <h1 className="text-4xl font-black tracking-tight sm:text-5xl">About Dankamf Educational Complex</h1>
-        <p className="mt-4 text-lg leading-relaxed text-slate-300">
+        <h1 className="text-3xl font-black tracking-tight sm:text-4xl">About Dankamf Educational Complex</h1>
+        <p className="mt-2 text-sm leading-relaxed text-primary/80 sm:text-base">
           Changing lives through Godly principles and quality education.
         </p>
       </div>

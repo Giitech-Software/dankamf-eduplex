@@ -14,12 +14,12 @@ export default function MainLayout() {
 
     try {
       const alreadyVisited = localStorage.getItem("visited");
-      if (!alreadyVisited) {
-        localStorage.setItem("visited", "true");
-        shouldShowSplash = true;
-      } else if (location.pathname === "/") {
-        shouldShowSplash = true;
-      }
+    if (!alreadyVisited) {
+      localStorage.setItem("visited", "true");
+      shouldShowSplash = true;
+    } else if (location.pathname === "/") {
+      shouldShowSplash = true;
+    }
     } catch (err) {
       console.warn("localStorage not available:", err);
     }
@@ -36,7 +36,7 @@ export default function MainLayout() {
   }, [location.pathname]);
 
   return (
-    <div className="relative">
+    <div className="public-site relative">
       {/* Actual homepage layout */}
       <div>
         <PublicHeader />
@@ -50,16 +50,15 @@ export default function MainLayout() {
       {/* Splash overlay */}
       {loading && (
         <div
-          className="fixed inset-0 z-[100] flex flex-col items-center justify-center"
-          style={{ backgroundColor: "#1E2A78" }}
+          className="loading-shell fixed inset-0 z-[100] flex flex-col items-center justify-center bg-white"
         >
           <img
             key={location.pathname}
             src={logo}
             alt="Dankamf Eduplex Logo"
-            className="h-36 w-36 animate-bounce object-contain drop-shadow-xl sm:h-44 sm:w-44"
+            className="h-36 w-36 animate-pulse object-contain drop-shadow-xl sm:h-44 sm:w-44"
           />
-          <p className="mt-4 text-lg font-semibold text-white animate-pulse tracking-wider">
+          <p className="mt-4 text-lg font-semibold text-primary animate-pulse tracking-wider">
             Dankamf Educational Complex
           </p>
         </div>

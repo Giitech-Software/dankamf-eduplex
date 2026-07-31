@@ -54,44 +54,44 @@ export default function AddEvent() {
   return (
     <AdminLayout>
       <PageTitle>Manage Events</PageTitle>
-      <form onSubmit={handleSubmit} className="max-w-3xl space-y-5 rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-7">
+      <form onSubmit={handleSubmit} className="max-w-3xl space-y-5 rounded-xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-900 sm:p-7">
         <div className="grid gap-5 sm:grid-cols-2">
           <label className="space-y-2 sm:col-span-2">
-            <span className="text-sm font-bold text-slate-700">Event title</span>
-            <input name="title" value={form.title} onChange={handleChange} required className="w-full rounded-lg border border-slate-300 p-3 outline-none focus:ring-2 focus:ring-primary" />
+            <span className="text-sm font-bold text-slate-700 dark:text-slate-200">Event title</span>
+            <input name="title" value={form.title} onChange={handleChange} required className="w-full rounded-lg border border-slate-300 bg-white p-3 text-slate-900 outline-none placeholder:text-slate-400 focus:ring-2 focus:ring-primary dark:border-slate-600 dark:bg-slate-800 dark:text-white" />
           </label>
           <label className="space-y-2 sm:col-span-2">
-            <span className="text-sm font-bold text-slate-700">Registration URL (optional)</span>
-            <input type="url" name="registrationUrl" value={form.registrationUrl} onChange={handleChange} placeholder="https://..." className="w-full rounded-lg border border-slate-300 p-3 outline-none focus:ring-2 focus:ring-primary" />
+            <span className="text-sm font-bold text-slate-700 dark:text-slate-200">Registration URL (optional)</span>
+            <input type="url" name="registrationUrl" value={form.registrationUrl} onChange={handleChange} placeholder="https://..." className="w-full rounded-lg border border-slate-300 bg-white p-3 text-slate-900 outline-none placeholder:text-slate-400 focus:ring-2 focus:ring-primary dark:border-slate-600 dark:bg-slate-800 dark:text-white" />
           </label>
           <label className="space-y-2">
-            <span className="text-sm font-bold text-slate-700">Date</span>
-            <input type="date" name="date" value={form.date} onChange={handleChange} required className="w-full rounded-lg border border-slate-300 p-3 outline-none focus:ring-2 focus:ring-primary" />
+            <span className="text-sm font-bold text-slate-700 dark:text-slate-200">Date</span>
+            <input type="date" name="date" value={form.date} onChange={handleChange} required className="w-full rounded-lg border border-slate-300 bg-white p-3 text-slate-900 outline-none focus:ring-2 focus:ring-primary dark:border-slate-600 dark:bg-slate-800 dark:text-white" />
           </label>
           <label className="space-y-2">
-            <span className="text-sm font-bold text-slate-700">Time</span>
-            <input type="time" name="time" value={form.time} onChange={handleChange} className="w-full rounded-lg border border-slate-300 p-3 outline-none focus:ring-2 focus:ring-primary" />
+            <span className="text-sm font-bold text-slate-700 dark:text-slate-200">Time</span>
+            <input type="time" name="time" value={form.time} onChange={handleChange} className="w-full rounded-lg border border-slate-300 bg-white p-3 text-slate-900 outline-none focus:ring-2 focus:ring-primary dark:border-slate-600 dark:bg-slate-800 dark:text-white" />
           </label>
           <label className="space-y-2">
-            <span className="text-sm font-bold text-slate-700">Location</span>
-            <input name="location" value={form.location} onChange={handleChange} required className="w-full rounded-lg border border-slate-300 p-3 outline-none focus:ring-2 focus:ring-primary" />
+            <span className="text-sm font-bold text-slate-700 dark:text-slate-200">Location</span>
+            <input name="location" value={form.location} onChange={handleChange} required className="w-full rounded-lg border border-slate-300 bg-white p-3 text-slate-900 outline-none focus:ring-2 focus:ring-primary dark:border-slate-600 dark:bg-slate-800 dark:text-white" />
           </label>
           <label className="space-y-2">
-            <span className="text-sm font-bold text-slate-700">Category</span>
-            <select name="category" value={form.category} onChange={handleChange} className="w-full rounded-lg border border-slate-300 bg-white p-3 outline-none focus:ring-2 focus:ring-primary">
+            <span className="text-sm font-bold text-slate-700 dark:text-slate-200">Category</span>
+            <select name="category" value={form.category} onChange={handleChange} className="w-full rounded-lg border border-slate-300 bg-white p-3 text-slate-900 outline-none focus:ring-2 focus:ring-primary dark:border-slate-600 dark:bg-slate-800 dark:text-white">
               <option>School Event</option><option>Academic</option><option>Sports</option><option>Admissions</option><option>Community</option>
             </select>
           </label>
           <label className="space-y-2 sm:col-span-2">
-            <span className="text-sm font-bold text-slate-700">Image URL (optional)</span>
-            <input type="url" name="imageUrl" value={form.imageUrl} onChange={handleChange} placeholder="https://..." className="w-full rounded-lg border border-slate-300 p-3 outline-none focus:ring-2 focus:ring-primary" />
+            <span className="text-sm font-bold text-slate-700 dark:text-slate-200">Image URL (optional)</span>
+            <input type="url" name="imageUrl" value={form.imageUrl} onChange={handleChange} placeholder="https://..." className="w-full rounded-lg border border-slate-300 bg-white p-3 text-slate-900 outline-none placeholder:text-slate-400 focus:ring-2 focus:ring-primary dark:border-slate-600 dark:bg-slate-800 dark:text-white" />
           </label>
           <label className="space-y-2 sm:col-span-2">
-            <span className="text-sm font-bold text-slate-700">Description</span>
-            <textarea name="description" value={form.description} onChange={handleChange} required rows="5" className="w-full rounded-lg border border-slate-300 p-3 outline-none focus:ring-2 focus:ring-primary" />
+            <span className="text-sm font-bold text-slate-700 dark:text-slate-200">Description</span>
+            <textarea name="description" value={form.description} onChange={handleChange} required rows="5" className="w-full rounded-lg border border-slate-300 bg-white p-3 text-slate-900 outline-none focus:ring-2 focus:ring-primary dark:border-slate-600 dark:bg-slate-800 dark:text-white" />
           </label>
         </div>
-        <label className="flex items-center gap-3 text-sm font-semibold text-slate-700">
+        <label className="flex items-center gap-3 text-sm font-semibold text-slate-700 dark:text-slate-200">
           <input type="checkbox" name="published" checked={form.published} onChange={handleChange} className="h-4 w-4 accent-primary" />
           Publish on the public website
         </label>

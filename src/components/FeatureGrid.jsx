@@ -96,7 +96,7 @@ export default function FeatureGrid() {
           {features.map(({ id, icon, imageUrl, title, text }) => (
             <div
               key={id || title}
-                className={`group overflow-hidden rounded-xl border border-slate-200 bg-background-alt transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:bg-white hover:shadow-xl ${
+                className={`group overflow-hidden rounded-xl border border-powder-blue bg-arctic-blue/40 transition-all duration-300 hover:-translate-y-1 hover:border-cerulean/50 hover:bg-white hover:shadow-xl ${
                 imageUrl ? '' : 'p-3 sm:p-4'
               }`}
             >

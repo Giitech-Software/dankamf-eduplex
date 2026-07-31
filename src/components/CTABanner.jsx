@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 export default function CTABanner() {
   return (
-    <section className="bg-[#007BA7] px-0 py-8 text-white sm:px-8 sm:py-10">
+    <section className="bg-cerulean px-0 py-8 text-white sm:px-8 sm:py-10">
       <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 sm:px-0 md:flex-row md:items-center md:justify-between">
         <div className="max-w-3xl">
           <p className="text-xs font-black uppercase tracking-[0.22em] text-accent-light sm:text-sm sm:tracking-[0.3em]">

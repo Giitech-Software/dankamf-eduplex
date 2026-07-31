@@ -39,17 +39,21 @@ export default function Contact() {
     <>
       <Seo {...SeoConfig.contact} />
       <div className="min-h-screen bg-background text-text flex flex-col">
-        <main className="mx-auto w-full max-w-3xl flex-grow px-0 py-6 sm:p-8">
-          <h2 className="mb-4 px-4 text-center text-3xl font-bold text-primary sm:px-0 sm:text-4xl">Contact Us</h2>
-          <p className="text-center text-slate-600 mb-6 px-4 sm:px-0">We're here to help. Reach out for inquiries about admissions, curriculum, or visits.</p>
+        <main className="w-full flex-grow">
+          <section className="bg-electric-blue px-4 py-6 text-center text-primary sm:px-8 sm:py-8">
+            <p className="text-xs font-black uppercase tracking-[0.25em] text-cobalt">Get in Touch</p>
+            <h1 className="mt-2 text-3xl font-black sm:text-4xl">Contact Us</h1>
+            <p className="mx-auto mt-2 max-w-2xl text-sm leading-relaxed text-primary/80">We’re here to help with admissions, curriculum, visits, and general enquiries.</p>
+          </section>
+          <div className="mx-auto w-full max-w-3xl px-0 py-6 sm:p-8">
           <div className="mb-6 space-y-3 px-4 text-gray-700 sm:px-0">
             <div className="grid gap-3 sm:grid-cols-2">
               <a
-                href="mailto:info@dankamfeducationalcomplex.com"
+                href="mailto:dankamfeducationalcomplex2016@gmail.com"
                 className="flex min-h-14 items-center gap-3 rounded-lg border border-gray-200 bg-white p-3 text-primary shadow-sm transition hover:border-primary"
               >
                 <FaEnvelope className="shrink-0" />
-                <span className="min-w-0 truncate">info@dankamfeducationalcomplex.com</span>
+                <span className="min-w-0 truncate">dankamfeducationalcomplex2016@gmail.com</span>
               </a>
               <a
                 href="tel:+233242172216"
@@ -103,7 +107,6 @@ export default function Contact() {
               </div>
             </div>
           </div>
-
           <form onSubmit={handleSubmit} className="space-y-3 bg-white p-5 shadow sm:rounded-lg sm:p-6">
             <input
               type="text"
@@ -139,6 +142,7 @@ export default function Contact() {
             </button>
             {status && <p className="text-center mt-2">{status}</p>}
           </form>
+          </div>
         </main>
       </div>
     </>

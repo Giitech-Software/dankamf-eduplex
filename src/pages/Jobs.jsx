@@ -36,13 +36,13 @@ export default function Jobs() {
     <>
       <Seo {...SeoConfig.careers} />
       <div className="min-h-screen bg-background-alt text-text">
-        <section className="bg-primary-dark px-4 py-14 text-white sm:px-8 sm:py-16">
+        <section className="bg-electric-blue px-4 py-6 text-primary sm:px-8 sm:py-8">
           <div className="mx-auto max-w-5xl text-center">
-            <p className="text-sm font-black uppercase tracking-[0.3em] text-accent-light">Admissions</p>
-            <h1 className="mt-3 text-4xl font-black tracking-tight sm:text-5xl">
+            <p className="text-xs font-black uppercase tracking-[0.25em] text-primary">Admissions</p>
+            <h1 className="mt-2 text-3xl font-black tracking-tight sm:text-4xl">
               Join the Dankamf Family
             </h1>
-            <p className="mx-auto mt-4 max-w-3xl text-base leading-relaxed text-slate-300 sm:text-lg">
+            <p className="mx-auto mt-2 max-w-3xl text-sm leading-relaxed text-primary/80 sm:text-base">
               Discover our admission process and take the first step towards securing a bright future for your child.
             </p>
           </div>
@@ -77,7 +77,7 @@ export default function Jobs() {
                 </table>
               </div>
               <p className="text-sm text-text-light mt-4"><strong>Transport Fees:</strong> Rates are calculated based on your residence location (12.00 - 14.00 per day). Please contact the administration office for a specific quote.</p>
-              <Link to="/admissions/apply" className="mt-6 inline-flex rounded-full bg-accent-yellow px-6 py-3 text-sm font-bold text-darkgray hover:bg-accent-yellow-dark">Apply Online</Link>
+              <Link to="/admissions/apply" className="mt-6 inline-flex rounded-full bg-accent-yellow px-6 py-3 text-sm font-bold text-darkgray hover:bg-accent-yellow-dark">Enroll Online</Link>
               <Link to="/admissions/interview" className="ml-3 mt-6 inline-flex rounded-full border border-primary px-6 py-3 text-sm font-bold text-primary hover:bg-primary hover:text-white">Book Interview</Link>
               <Link to="/admissions/status" className="mt-4 inline-flex rounded-full text-sm font-bold text-accent hover:text-primary">Check Application Status →</Link>
               <Link to="/admissions/fees" className="mt-4 ml-4 inline-flex rounded-full text-sm font-bold text-accent hover:text-primary">View Fees & Scholarships →</Link>

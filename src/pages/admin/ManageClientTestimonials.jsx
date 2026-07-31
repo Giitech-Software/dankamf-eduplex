@@ -301,7 +301,7 @@ export default function ManageClientTestimonials() {
             <LoadingSpinner label="Loading testimonials" />
           ) : testimonials.length === 0 ? (
             <div className="p-6 text-center text-sm text-slate-400">
-              No custom testimonials yet. The public homepage will use the default ASTEM testimonials.
+              No custom testimonials yet. The public homepage will use the default Dankamf testimonials.
             </div>
           ) : (
             <div className="grid gap-4 p-4 md:grid-cols-2 xl:grid-cols-3">

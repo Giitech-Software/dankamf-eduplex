@@ -188,7 +188,7 @@ export default function ManageEnterpriseFeatures() {
           <div>
             <h2 className="flex items-center gap-2 text-base font-black text-slate-900 dark:text-white">
               {editingFeature ? <FaEdit className="text-primary" /> : <FaPlus className="text-primary" />}
-              {editingFeature ? 'Edit Why Choose ASTEM Card' : 'Add Why Choose ASTEM Card'}
+              {editingFeature ? 'Edit Homepage Feature Card' : 'Add Homepage Feature Card'}
             </h2>
             <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
               These cards appear under Enterprise Engineering on the homepage.
@@ -289,7 +289,7 @@ export default function ManageEnterpriseFeatures() {
             <LoadingSpinner label="Loading enterprise features" />
           ) : features.length === 0 ? (
             <div className="p-6 text-center text-sm text-slate-400">
-              No custom features yet. The public homepage will use the default ASTEM cards.
+              No custom features yet. The public homepage will use the default Dankamf feature cards.
             </div>
           ) : (
             <div className="grid gap-4 p-4 md:grid-cols-2 xl:grid-cols-3">

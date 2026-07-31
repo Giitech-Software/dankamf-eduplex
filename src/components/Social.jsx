@@ -6,27 +6,27 @@ import { FaXTwitter } from 'react-icons/fa6';
 const socialLinks = [
   {
     icon: <FaFacebook />,
-    href: 'https://facebook.com',
+    href: 'https://www.facebook.com/share/1Bp8KYhmvn/?mibextid=wwXIfr',
     label: 'Facebook',
   },
   {
     icon: <FaXTwitter />,
     href: 'https://x.com',
-    label: 'X (formerly Twitter)',
+    label: 'X',
   },
   {
     icon: <FaInstagram />,
-    href: 'https://instagram.com',
+    href: 'https://www.instagram.com/dankamf_educational?utm_source=qr',
     label: 'Instagram',
   },
   {
     icon: <FaTiktok />,
-    href: 'https://www.tiktok.com',
+    href: 'https://www.tiktok.com/@dankamf_16?_r=1&_t=ZS-98PLpmRODAu',
     label: 'TikTok',
   },
   {
     icon: <FaWhatsapp />,
-    href: 'https://wa.me/233551234567?text=Hello%20Dankamf%20Eduplex%2C%20I%20would%20like%20to%20make%20an%20inquiry.',
+    href: 'https://wa.me/233242172216?text=Hello%20Dankamf%20Eduplex%2C%20I%20would%20like%20to%20make%20an%20inquiry.',
     label: 'WhatsApp',
   },
 ];

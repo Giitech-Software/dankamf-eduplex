@@ -30,3 +30,181 @@
   background: #cbd5e1;
   border-radius: 10px;
 }
+
+/* Enterprise CTA treatment: blue fill with layered blue / white / blue outlines. */
+.bg-accent-yellow {
+  background-color: #007ba7 !important;
+  color: #ffffff !important;
+  border: 1px solid #b0e0e6;
+  box-shadow:
+    0 0 0 1px #000080,
+    0 0 0 3px #ffffff,
+    0 0 0 4px #4169e1;
+}
+
+.bg-accent-yellow:hover {
+  background-color: #0047ab !important;
+}
+
+/* White content cards: crisp blue edge with a restrained enterprise glow. */
+.bg-white.border-slate-200 {
+  border-color: #b0e0e6 !important;
+  box-shadow: 0 0 0 1px #ffffff, 0 6px 18px rgba(0, 71, 171, 0.08);
+  transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.bg-white.border-slate-200:hover {
+  border-color: #4682b4 !important;
+  box-shadow: 0 0 0 1px #ffffff, 0 10px 24px rgba(0, 123, 167, 0.16);
+}
+
+main.min-h-screen.bg-background-alt > section.bg-primary-dark {
+  background: #7df9ff;
+  color: #000080;
+  border-bottom: 1px solid #4682b4;
+}
+
+main.min-h-screen.bg-background-alt > section.bg-primary-dark .text-white,
+main.min-h-screen.bg-background-alt > section.bg-primary-dark .text-slate-300 {
+  color: #000080 !important;
+}
+
+main.min-h-screen.bg-background-alt > section.bg-primary-dark p:first-child {
+  color: #0047ab !important;
+}
+
+main.min-h-screen.bg-background-alt > section.bg-primary-dark p:last-child {
+  color: #334155 !important;
+}
+
+main.min-h-screen.bg-background-alt > section.bg-primary-dark h1 {
+  color: #000080 !important;
+}
+
+main.min-h-screen.bg-background-alt > section.bg-primary-dark {
+  padding-top: 1.25rem !important;
+  padding-bottom: 1.25rem !important;
+}
+
+@media (min-width: 640px) {
+  main.min-h-screen.bg-background-alt > section.bg-primary-dark {
+    padding-top: 1.75rem !important;
+    padding-bottom: 1.75rem !important;
+  }
+}
+
+main.min-h-screen.bg-background-alt > section.bg-primary-dark h1 {
+  margin-top: 0.35rem !important;
+  font-size: 2rem !important;
+  line-height: 1.1 !important;
+}
+
+.public-site main button,
+.public-site main a[class*="rounded"] {
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.public-site main button:not([class*="w-full"]),
+.public-site main a[class*="rounded"]:not([class*="w-full"]) {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.public-site main .hero-control-button {
+  padding: 0;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.public-site form input:not([type="checkbox"]):not([type="radio"]),
+.public-site form select,
+.public-site form textarea {
+  min-height: 2.5rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.625rem;
+  background: #ffffff;
+  color: #1e293b;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  padding: 0.625rem 0.75rem;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.public-site form textarea {
+  min-height: 6rem;
+}
+
+.public-site form input:not([type="checkbox"]):not([type="radio"]):focus,
+.public-site form select:focus,
+.public-site form textarea:focus {
+  border-color: #007ba7;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 123, 167, 0.14);
+}
+
+.public-site form label > span {
+  display: block;
+  color: #334155;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+}
+
+.admin-site form input:not([type="checkbox"]):not([type="radio"]),
+.admin-site form select,
+.admin-site form textarea {
+  min-height: 2.5rem;
+  border-radius: 0.625rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  padding: 0.625rem 0.75rem;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.admin-site form textarea {
+  min-height: 6rem;
+}
+
+.admin-site form input:not([type="checkbox"]):not([type="radio"]):focus,
+.admin-site form select:focus,
+.admin-site form textarea:focus {
+  border-color: #007ba7;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 123, 167, 0.16);
+}
+
+.admin-site form label > span {
+  display: block;
+  margin-bottom: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+}
+
+.loading-shell,
+.login-shell {
+  background: radial-gradient(circle at 12% 12%, rgba(0, 150, 255, 0.08), transparent 30%), radial-gradient(circle at 88% 88%, rgba(70, 130, 180, 0.08), transparent 32%), #ffffff;
+}
+
+.loading-shell::before,
+.login-shell::before {
+  content: '';
+  position: absolute;
+  inset: 1.5rem;
+  border: 1px solid rgba(0, 123, 167, 0.12);
+  border-radius: 1.5rem;
+  pointer-events: none;
+}
+
+.login-shell > form {
+  position: relative;
+  z-index: 1;
+}
+
+main.min-h-screen.bg-background-alt > section.bg-primary-dark p:last-child {
+  margin-top: 0.5rem !important;
+}

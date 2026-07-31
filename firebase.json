@@ -6,6 +6,7 @@
                     "rules":  "storage.rules"
                 },
     "hosting":  {
+                    "site": "dankamf-eduplex",
                     "public":  "build",
                     "ignore":  [
                                    "firebase.json",

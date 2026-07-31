@@ -4,31 +4,36 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Disclosure } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useAuth } from '../context/AuthContext';
 import logo from '../assets/logo.png'; // Add your logo in src/assets
 import { Search } from 'lucide-react';
 
 const animatedTexts = [
-  { text: 'Excellence in Learning', color: 'text-white' },
-  { text: 'A Modern Approach', color: 'text-accent' },
-  { text: 'Building Future Leaders', color: 'text-highlight' },
-  { text: 'Nurturing Bright Minds', color: 'text-white' },
-  { text: 'Godly Principles', color: 'text-accent' },
-  { text: 'Quality Education', color: 'text-highlight' },
-  { text: 'Innovation in Teaching', color: 'text-white' },
-  { text: 'Character & Integrity', color: 'text-accent' },
-  { text: 'A Global Perspective', color: 'text-highlight' },
-  { text: 'Your Future Starts Here', color: 'text-white' },
+  { text: '📚 Excellence in Learning', style: 'bg-primary text-white' },
+  { text: '✨ A Modern Approach', style: 'bg-electric-blue text-primary' },
+  { text: '🚀 Building Future Leaders', style: 'bg-sky-blue text-primary' },
+  { text: '🌟 Nurturing Bright Minds', style: 'bg-slate-100 text-primary' },
+  { text: '🙏 Godly Principles', style: 'bg-blue-100 text-primary' },
+  { text: '🎓 Quality Education', style: 'bg-cerulean text-white' },
+  { text: '💡 Innovation in Teaching', style: 'bg-slate-100 text-primary' },
+  { text: '🛡️ Character & Integrity', style: 'bg-blue-100 text-primary' },
+  { text: '🌍 A Global Perspective', style: 'bg-sky-blue text-primary' },
+  { text: '🔑 Your Future Starts Here', style: 'bg-primary text-white' },
+  { text: '🌱 Growing With Purpose', style: 'bg-ice-blue text-primary' },
+  { text: '🏆 Inspiring Excellence', style: 'bg-electric-blue text-primary' },
+  { text: '🤝 Learning Together', style: 'bg-slate-100 text-primary' },
+  { text: '🎯 Focused on Success', style: 'bg-sky-blue text-primary' },
+  { text: '❤️ Shaping Good Character', style: 'bg-blue-100 text-primary' },
 ];
 
 export default function PublicHeader() {
-  const { user } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
   const currentPath = location.pathname;
+  const isHome = currentPath.replace(/\/+$/, '') === '';
   const [index, setIndex] = useState(0);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [mobileMoreOpen, setMobileMoreOpen] = useState(false);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -60,14 +65,14 @@ export default function PublicHeader() {
   };
 
   return (
-    <Disclosure as="nav" className="sticky top-0 z-50 bg-primary text-white shadow-md">
-      {({ open }) => (
+    <Disclosure as="nav" className="sticky top-0 z-50 w-full border-b-2 border-electric-blue bg-primary text-white shadow-md">
+      {({ open, close }) => (
         <>
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center h-16">
               {/* Logo + Brand */}
-              <div className="flex min-w-0 items-center gap-2">
-                <img src={logo} alt="Dankamf Eduplex logo" className="h-9 w-9 shrink-0 object-contain" />
+              <div className="flex min-w-0 flex-1 items-center gap-2">
+                <img src={logo} alt="Dankamf Eduplex logo" className="h-11 w-11 shrink-0 rounded-full bg-white p-1 object-contain" />
                 <div className="relative h-6 w-56 overflow-hidden">
                   <AnimatePresence mode="wait">
                     <motion.span
@@ -76,7 +81,7 @@ export default function PublicHeader() {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -10 }}
                       transition={{ duration: 0.5 }}
-                      className={`absolute inset-0 flex items-center text-base font-bold tracking-wide sm:text-lg ${animatedTexts[index].color}`}
+                      className={`absolute left-0 top-0 inline-flex h-6 w-max max-w-full items-center whitespace-nowrap rounded-full px-2.5 text-xs font-black tracking-wide shadow-md sm:text-sm ${animatedTexts[index].style}`}
                     >
                       {animatedTexts[index].text}
                     </motion.span>
@@ -85,13 +90,13 @@ export default function PublicHeader() {
               </div>
 
               {/* Desktop Navigation */}
-              <div className="hidden md:flex items-center space-x-6 text-sm">
+              <div className="hidden md:flex items-center space-x-2 text-sm">
                 {navLinks.map(({ label, to }) => (
                   <Link
                     key={to}
                     to={to}
-                    className={`hover:text-accent transition ${
-                      isActive(to) ? 'text-accent font-semibold' : 'text-white'
+                    className={`rounded-full px-2.5 py-1.5 text-xs font-bold transition ${
+                      isActive(to) ? 'bg-white/20 text-white ring-1 ring-electric-blue' : 'text-white/90 hover:bg-white/15 hover:text-white'
                     }`}
                   >
                     {label}
@@ -99,14 +104,14 @@ export default function PublicHeader() {
                 ))}
 
                 <div className="group relative">
-                  <button type="button" className="inline-flex items-center gap-1 text-white transition hover:text-accent-yellow">
+                  <button type="button" className="inline-flex items-center gap-1 rounded-full border border-sky-blue/70 bg-white/10 px-2.5 py-1.5 text-xs font-bold text-white transition hover:bg-white/20 hover:text-electric-blue">
                     More <span className="text-xs" aria-hidden="true">⌄</span>
                   </button>
                   <div className="invisible absolute right-0 top-full z-50 mt-4 w-72 translate-y-2 rounded-xl border border-slate-100 bg-white p-3 text-darkgray opacity-0 shadow-2xl transition-all group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
                     <p className="px-3 pb-2 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Explore Dankamf</p>
                     <div className="grid grid-cols-2 gap-1">
                       {[
-                        ['About Us', '/about'], ['Apply Online', '/admissions/apply'],
+                        ['About Us', '/about'], ['Enroll Online', '/admissions/apply'],
                         ['FAQs', '/faqs'], ['Calendar', '/calendar'], ['Check Status', '/admissions/status'], ['Downloads', '/downloads'],
                         ['Testimonials', '/client-confidence'], ['Alumni', '/alumni'], ['Contact Us', '/contact'],
                       ].map(([label, to]) => (
@@ -118,7 +123,7 @@ export default function PublicHeader() {
                   </div>
                 </div>
 
-                <form onSubmit={handleSearch} className={`relative ml-6 flex items-center transition-all ${searchOpen ? 'w-36' : 'w-8'}`}>
+                <form onSubmit={handleSearch} className={`relative ml-2 flex items-center transition-all ${searchOpen ? 'w-36' : 'w-8'}`}>
                   {searchOpen && (
                     <input
                       autoFocus
@@ -133,23 +138,18 @@ export default function PublicHeader() {
                     type={searchOpen ? 'submit' : 'button'}
                     onClick={() => setSearchOpen(true)}
                     aria-label="Search website"
-                    className="absolute right-1 inline-flex h-7 w-7 items-center justify-center rounded-full text-white transition hover:bg-white/10 hover:text-accent-yellow"
+                    className="absolute right-1 inline-flex h-7 w-7 items-center justify-center rounded-full text-white transition hover:bg-white/15 hover:text-electric-blue"
                   >
                     <Search className="h-4 w-4" />
                   </button>
                 </form>
 
-                {user && (
-                  <Link to="/dashboard" className="bg-white text-primary px-4 py-2 rounded hover:bg-accent hover:text-white">
-                    Dashboard
-                  </Link>
-                )}
               </div>
 
               {/* Mobile menu button */}
-              <div className="md:hidden flex items-center">
+              <div className="relative z-10 ml-3 flex shrink-0 items-center md:hidden">
                 <Disclosure.Button
-                  className="inline-flex h-11 w-11 items-center justify-center rounded-lg text-white transition hover:bg-white/10 hover:text-accent focus:outline-none focus:ring-2 focus:ring-white/60"
+                  className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/30 bg-white/10 text-white transition hover:bg-white/20 hover:text-electric-blue focus:outline-none focus:ring-2 focus:ring-electric-blue"
                   aria-label={open ? 'Close navigation menu' : 'Open navigation menu'}
                 >
                   {open ? <XMarkIcon className="h-6 w-6" /> : <Bars3Icon className="h-6 w-6" />}
@@ -159,7 +159,7 @@ export default function PublicHeader() {
           </div>
 
           {/* Mobile Navigation */}
-          <Disclosure.Panel className="md:hidden max-h-[calc(100dvh-4rem)] overflow-y-auto overscroll-contain border-t border-white/10 bg-primary px-3 pb-4 pt-3 shadow-xl">
+          <Disclosure.Panel className="md:hidden max-h-[calc(100dvh-4rem)] overflow-y-auto overscroll-contain border-t border-white/15 bg-primary px-3 pb-4 pt-3 text-white shadow-xl">
             <form onSubmit={handleSearch} className="mb-3 flex gap-2">
               <input
                 value={searchTerm}
@@ -176,34 +176,32 @@ export default function PublicHeader() {
               <Link
                 key={to}
                 to={to}
+                onClick={close}
                 className={`block rounded-lg px-3 py-3 text-base font-semibold transition ${
-                  isActive(to) ? 'bg-accent text-white' : 'text-white hover:bg-white hover:text-primary'
+                  isActive(to) ? 'bg-white/20 text-white' : 'text-white hover:bg-white/15 hover:text-white'
                 }`}
               >
                 {label}
               </Link>
             ))}
             <div className="mt-2 border-t border-white/10 pt-3">
-              <p className="px-3 pb-2 text-xs font-black uppercase tracking-[0.2em] text-accent-yellow">Explore More</p>
-              <div className="grid grid-cols-2 gap-1">
+              <button type="button" onClick={() => setMobileMoreOpen((value) => !value)} className="flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-xs font-black uppercase tracking-[0.2em] text-electric-blue">
+                <span>Explore More</span><span aria-hidden="true">{mobileMoreOpen ? '−' : '+'}</span>
+              </button>
+              {mobileMoreOpen && <div className="grid grid-cols-2 gap-1">
                 {[
-                  ['About Us', '/about'], ['Apply Online', '/admissions/apply'],
+                  ['About Us', '/about'], ['Enroll Online', '/admissions/apply'],
                   ['FAQs', '/faqs'], ['Calendar', '/calendar'],
                   ['Check Status', '/admissions/status'], ['Downloads', '/downloads'],
                   ['Testimonials', '/client-confidence'], ['Alumni', '/alumni'],
                   ['Contact Us', '/contact'],
                 ].map(([label, to]) => (
-                  <Link key={to} to={to} className="rounded-lg px-3 py-3 text-sm font-semibold text-white transition hover:bg-white hover:text-primary">
+                  <Link key={to} to={to} onClick={close} className="rounded-lg px-3 py-3 text-sm font-semibold text-white transition hover:bg-white/15 hover:text-white">
                     {label}
                   </Link>
                 ))}
-              </div>
+              </div>}
             </div>
-            {user && (
-              <Link to="/dashboard" className="mt-2 block rounded-lg bg-white px-3 py-3 text-center text-base font-bold text-primary">
-                Dashboard
-              </Link>
-            )}
           </Disclosure.Panel>
         </>
       )}

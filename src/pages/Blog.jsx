@@ -46,15 +46,15 @@ const Blog = () => {
   return (
     <>
       <Seo {...SeoConfig.blog} />
-      <div className="min-h-screen bg-white px-0 py-8 text-slate-900 sm:px-5 lg:px-12">
+      <div className="min-h-screen bg-white px-0 text-slate-900 sm:px-5 lg:px-12">
         <div className="max-w-7xl mx-auto">
-          <div className="mb-8 px-4 text-left sm:px-0 max-w-2xl">
-            <h1 className="text-3xl font-black tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
+          <section className="bg-electric-blue px-4 py-6 text-primary text-center sm:px-8 sm:py-8">
+            <p className="text-xs font-black uppercase tracking-[0.25em] text-cobalt">Stay Informed</p>
+            <h1 className="mt-2 text-3xl font-black tracking-tight sm:text-4xl">
               News & Events
             </h1>
-            <div className="w-20 h-1.5 bg-warm mt-3 rounded-full"></div>
-            <p className="mt-3 text-slate-600 text-base leading-relaxed">Stay updated with the latest happenings, announcements, and stories from our school community.</p>
-          </div>
+            <p className="mx-auto mt-2 max-w-2xl text-sm leading-relaxed text-primary/80">Stay updated with the latest happenings, announcements, and stories from our school community.</p>
+          </section>
 
           {loading ? (
             <LoadingSpinner label="Loading insights" />

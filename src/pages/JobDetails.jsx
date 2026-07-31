@@ -124,7 +124,7 @@ export default function JobDetails() {
         </section>
 
         <section className="border-y border-slate-200 bg-slate-50 p-5 sm:rounded-lg sm:border sm:p-6">
-          <h2 className="text-2xl font-black text-primary">Apply Now</h2>
+          <h2 className="text-2xl font-black text-primary">Enroll Online</h2>
           <p className="mt-2 text-sm leading-relaxed text-slate-500">
             Share your details and attach a PDF resume. We will review your application carefully.
           </p>

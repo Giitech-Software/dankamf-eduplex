@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import AcademicProgramDetails from './pages/AcademicProgramDetails';
 
 import Home from './pages/Home';
@@ -110,7 +110,7 @@ export default function App() {
             <Route path="/terms" element={<Terms />} />
             <Route path="/client-confidence" element={<ClientConfidence />} />
             <Route path="/faqs" element={<FAQs />} />
-            <Route path="/admin/add-partner" element={<AddPartner />} />
+            <Route path="/admin/add-partner" element={<ProtectedRoute allowedRoles={['admin', 'superadmin']}><AddPartner /></ProtectedRoute>} />
           </Route>
 
           {/* Standalone login route */}
@@ -328,9 +328,7 @@ export default function App() {
             path="/admin/blog"
             element={
               <ProtectedRoute allowedRoles={['admin', 'superadmin']}>
-                <AdminLayout>
-                  <Blog />
-                </AdminLayout>
+                <Navigate to="/admin/manage-posts" replace />
               </ProtectedRoute>
             }
           />

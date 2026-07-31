@@ -12,15 +12,15 @@ import {
 import { FaXTwitter } from 'react-icons/fa6';
 
 const socialLinks = [
-  { icon: <FaFacebookF />, label: 'Facebook', url: 'https://facebook.com' },
+  { icon: <FaFacebookF />, label: 'Facebook', url: 'https://www.facebook.com/share/1Bp8KYhmvn/?mibextid=wwXIfr' },
   { icon: <FaXTwitter />, label: 'X', url: 'https://x.com' },
-  { icon: <FaInstagram />, label: 'Instagram', url: 'https://instagram.com' },
+  { icon: <FaInstagram />, label: 'Instagram', url: 'https://www.instagram.com/dankamf_educational?utm_source=qr' },
   { icon: <FaLinkedin />, label: 'LinkedIn', url: 'https://linkedin.com' },
-  { icon: <FaTiktok />, label: 'TikTok', url: 'https://tiktok.com' },
+  { icon: <FaTiktok />, label: 'TikTok', url: 'https://www.tiktok.com/@dankamf_16?_r=1&_t=ZS-98PLpmRODAu' },
   {
     icon: <FaWhatsapp />,
     label: 'WhatsApp',
-    url: 'https://wa.me/233551234567?text=Hello%20Dankamf%20Eduplex%2C%20I%20would%20like%20to%20make%20an%20inquiry.',
+    url: 'https://wa.me/233242172216?text=Hello%20Dankamf%20Eduplex%2C%20I%20would%20like%20to%20make%20an%20inquiry.',
   },
 ];
 
@@ -47,22 +47,22 @@ const PublicFooter = () => {
   };
 
   return (
-    <footer className="bg-primary text-white px-4 sm:px-6 py-8 mt-10 text-sm">
+    <footer className="mt-10 bg-prussian px-4 py-6 text-sm text-white sm:px-6">
       <div className="max-w-7xl mx-auto grid gap-6 sm:grid-cols-2 md:grid-cols-4">
         <div>
-          <h3 className="text-xl font-bold mb-1">Dankamf Eduplex</h3>
-          <p className="text-accent mb-4">Changing lives through Godly principles and quality education</p>
+          <h3 className="mb-1 text-xl font-black">Dankamf Educational Complex</h3>
+          <p className="mb-4 text-sky-blue">Excellence in learning, character, and future-ready education.</p>
           <div className="space-y-1 text-xs">
             <p><strong>Location:</strong> Oyibi–Accra, near SDA Church</p>
-            <p><strong>Hours:</strong> Mon - Fri, 7:00 AM - 3:00 PM</p>
-            <p><strong>Email:</strong> info@dankamfeducationalcomplex.com</p>
+            <p><strong>Office hours:</strong> Monday–Friday, 7:00 AM–3:00 PM</p>
+            <p><strong>Email:</strong> dankamfeducationalcomplex2016@gmail.com</p>
             <p className="flex items-center gap-1">
               <FaMapMarkerAlt className="text-accent" />
               <a
                 href="https://maps.google.com/?q=Dankamf+Educational+Complex,+Accra,+Ghana"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-accent underline hover:text-white"
+                className="text-sky-blue underline hover:text-white"
               >
                 View on Google Maps
               </a>
@@ -71,16 +71,19 @@ const PublicFooter = () => {
         </div>
 
         <div>
-          <h4 className="text-lg font-semibold mb-3">Quick Links</h4>
+          <h4 className="mb-3 text-lg font-black">Explore Dankamf</h4>
           <ul className="space-y-1">
             <li><Link to="/about" className="hover:text-accent">About Us</Link></li>
+            <li><Link to="/academics" className="hover:text-sky-blue">Academics</Link></li>
+            <li><Link to="/admissions/apply" className="hover:text-sky-blue">Enroll Online</Link></li>
+            <li><Link to="/contact" className="hover:text-sky-blue">Contact Us</Link></li>
             <li><Link to="/privacy" className="hover:text-accent">Privacy Policy</Link></li>
             <li><Link to="/terms" className="hover:text-accent">Terms of Service</Link></li>
           </ul>
         </div>
 
         <div>
-          <h4 className="text-lg font-semibold mb-3">Connect With Us</h4>
+          <h4 className="mb-3 text-lg font-black">Connect With Our School</h4>
           <ul className="space-y-1">
             {socialLinks.map(({ icon, label, url }) => (
               <li key={label}>
@@ -88,9 +91,9 @@ const PublicFooter = () => {
                   href={url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 hover:text-accent"
+                  className="flex items-center gap-2 hover:text-sky-blue"
                 >
-                  {icon} {label}
+                  <span className="text-lg text-sky-blue">{icon}</span> {label}
                 </a>
               </li>
             ))}
@@ -98,8 +101,8 @@ const PublicFooter = () => {
         </div>
 
         <div>
-          <h4 className="text-lg font-semibold mb-3">Newsletter</h4>
-          <p className="text-sm mb-3">Get updates straight to your inbox.</p>
+          <h4 className="mb-3 text-lg font-black">Stay Informed</h4>
+          <p className="mb-3 text-sm text-slate-200">Receive school news, announcements, and key dates by email.</p>
           <form onSubmit={handleSubscribe} className="space-y-2">
             <input
               type="email"
@@ -115,7 +118,7 @@ const PublicFooter = () => {
             <button
               type="submit"
               disabled={status === 'submitting'}
-              className="rounded-full bg-accent px-4 py-2 text-sm font-medium text-white transition hover:bg-white hover:text-primary disabled:cursor-not-allowed disabled:opacity-70 w-full sm:w-auto"
+              className="w-full rounded-full bg-sky-blue px-4 py-2 text-sm font-bold text-prussian transition hover:bg-white hover:text-prussian disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto"
             >
               {status === 'submitting' ? 'Subscribing...' : 'Subscribe'}
             </button>
