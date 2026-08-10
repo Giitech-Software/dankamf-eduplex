@@ -9,8 +9,8 @@ export default function CampusGallery() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getDocs(query(collection(db, 'projects'), orderBy('timestamp', 'desc'), limit(6)))
-      .then((snapshot) => setImages(snapshot.docs.map((item) => ({ id: item.id, ...item.data() })).filter((item) => item.imageUrl)))
+    getDocs(query(collection(db, 'gallery'), orderBy('order', 'asc'), limit(12)))
+      .then((snapshot) => setImages(snapshot.docs.map((item) => ({ id: item.id, ...item.data() })).filter((item) => item.imageUrl && item.published !== false)))
       .catch((error) => console.error('Error loading campus gallery:', error))
       .finally(() => setLoading(false));
   }, []);

@@ -10,7 +10,7 @@ export default function SchoolAlerts() {
       .then((snap) => {
         const items = snap.docs.map((item) => ({ id: item.id, ...item.data() }));
         items.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
-        setAlerts(items.slice(0, 3));
+        setAlerts(items.slice(0, 1));
       })
       .catch((error) => console.error('Unable to load school alerts:', error));
   }, []);

@@ -45,7 +45,7 @@ export default function Testimonials() {
             </h3>
           </div>
           <p className="max-w-md text-base leading-relaxed text-text-light">
-            Hear from parents, students, and staff about their experience at Dankamf Eduplex.
+            Hear from parents, students, and staff about their experience at Dankamf Educational Complex.
           </p>
         </div>
 
@@ -53,7 +53,7 @@ export default function Testimonials() {
           <LoadingSpinner label="Loading client testimonials" />
         ) : (
         <div className="grid gap-3 px-4 sm:gap-5 sm:px-0 md:grid-cols-2 lg:grid-cols-4">
-          {testimonials.slice(0, 4).map(({ id, quote, description, imageUrl, name, role }, index) => (
+          {testimonials.slice(0, 3).map(({ id, quote, description, imageUrl, name, role }, index) => (
             <figure key={id || name} className="rounded-lg border border-slate-200 bg-slate-50 p-4 sm:p-5">
               {imageUrl && (
                 <div className="-mx-4 -mt-4 mb-4 h-56 overflow-hidden bg-white ring-1 ring-slate-200 sm:mx-0 sm:mt-0 sm:h-60 sm:rounded-lg">
@@ -64,7 +64,7 @@ export default function Testimonials() {
                   />
                 </div>
               )}
-              <blockquote className="text-base leading-relaxed text-text-light">
+              <blockquote className="line-clamp-4 text-base leading-relaxed text-text-light">
                 "{description || quote}"
               </blockquote>
               <figcaption className="mt-4 border-t border-slate-200 pt-3">

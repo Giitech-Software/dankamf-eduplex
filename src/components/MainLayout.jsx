@@ -7,7 +7,10 @@ import logo from "../assets/logo.png";
 
 export default function MainLayout() {
   const [loading, setLoading] = useState(true);
+  const [showPreparingSpinner, setShowPreparingSpinner] = useState(true);
+  const [contentVisible, setContentVisible] = useState(false);
   const location = useLocation();
+  const loadingLabel = location.pathname === '/' ? 'Loading homepage' : location.pathname.startsWith('/admin') ? 'Loading admin dashboard' : location.pathname.startsWith('/student-life') ? 'Loading school life' : location.pathname.startsWith('/gallery') ? 'Loading gallery' : location.pathname.startsWith('/about') ? 'Loading About page' : location.pathname.startsWith('/admissions') ? 'Loading admissions' : location.pathname.startsWith('/jobs') || location.pathname.startsWith('/careers') ? 'Loading vacancies' : 'Loading page';
 
   useEffect(() => {
     let shouldShowSplash = false;
@@ -26,19 +29,25 @@ export default function MainLayout() {
 
     if (shouldShowSplash) {
       setLoading(true);
-      const timer = setTimeout(() => {
+      setContentVisible(false);
+      setShowPreparingSpinner(true);
+      const logoTimer = setTimeout(() => setShowPreparingSpinner(false), 700);
+      const removeTimer = setTimeout(() => {
         setLoading(false);
-      }, 2800); // time splash is visible
-      return () => clearTimeout(timer);
+        window.setTimeout(() => setContentVisible(true), 30);
+      }, 3300);
+      return () => { clearTimeout(logoTimer); clearTimeout(removeTimer); };
     } else {
       setLoading(false);
+      setShowPreparingSpinner(false);
+      setContentVisible(true);
     }
   }, [location.pathname]);
 
   return (
     <div className="public-site relative">
       {/* Actual homepage layout */}
-      <div>
+      <div className={`transition-opacity duration-500 ease-out ${contentVisible ? 'opacity-100' : 'opacity-0'}`}>
         <PublicHeader />
         <main>
           <Outlet />
@@ -50,17 +59,10 @@ export default function MainLayout() {
       {/* Splash overlay */}
       {loading && (
         <div
-          className="loading-shell fixed inset-0 z-[100] flex flex-col items-center justify-center bg-white"
+          className="loading-shell fixed inset-0 z-[100] flex flex-col items-center justify-center"
         >
-          <img
-            key={location.pathname}
-            src={logo}
-            alt="Dankamf Eduplex Logo"
-            className="h-36 w-36 animate-pulse object-contain drop-shadow-xl sm:h-44 sm:w-44"
-          />
-          <p className="mt-4 text-lg font-semibold text-primary animate-pulse tracking-wider">
-            Dankamf Educational Complex
-          </p>
+          {showPreparingSpinner ? <div className="loading-dots" aria-label={loadingLabel}><span /><span /><span /><span /><span /></div> : <img key={location.pathname} src={logo} alt="Dankamf Eduplex Logo" className="h-36 w-36 rounded-full bg-white p-2 animate-pulse object-contain drop-shadow-xl sm:h-44 sm:w-44" />}
+          <p className="mt-5 text-sm font-black uppercase tracking-[0.22em] text-sky-100">{loadingLabel}</p>
         </div>
       )}
     </div>

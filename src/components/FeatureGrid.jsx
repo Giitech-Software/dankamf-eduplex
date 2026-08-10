@@ -12,6 +12,8 @@ import { GiTeacher, GiBookshelf, GiPodiumWinner } from 'react-icons/gi';
 import { MdOutlineComputer, MdSportsBasketball } from 'react-icons/md';
 import { db } from '../firebase/config';
 import LoadingSpinner from './LoadingSpinner';
+import ReactMarkdown from 'react-markdown';
+import { Link } from 'react-router-dom';
 
 const iconClass = 'text-3xl text-accent-yellow';
 
@@ -75,7 +77,7 @@ export default function FeatureGrid() {
   }, []);
 
   return (
-    <section className="bg-white px-0 py-16 sm:px-8">
+    <section className="bg-gradient-to-b from-[#f8fcff] to-[#eaf6ff] px-0 py-16 sm:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="mx-auto mb-8 max-w-3xl px-4 text-center sm:px-0">
           <p className="text-xs font-black uppercase tracking-[0.22em] text-accent sm:text-sm sm:tracking-[0.3em]">
@@ -93,10 +95,10 @@ export default function FeatureGrid() {
           <LoadingSpinner label="Loading enterprise features" />
         ) : (
         <div className="grid gap-3 px-4 sm:gap-4 sm:px-0 md:grid-cols-2 lg:grid-cols-4">
-          {features.map(({ id, icon, imageUrl, title, text }) => (
+          {features.slice(0, 6).map(({ id, icon, imageUrl, title, text }) => (
             <div
               key={id || title}
-                className={`group overflow-hidden rounded-xl border border-powder-blue bg-arctic-blue/40 transition-all duration-300 hover:-translate-y-1 hover:border-cerulean/50 hover:bg-white hover:shadow-xl ${
+                className={`group overflow-hidden rounded-2xl border border-white/80 bg-white/55 shadow-lg shadow-[#003153]/10 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-cerulean/60 hover:bg-white/80 hover:shadow-xl ${
                 imageUrl ? '' : 'p-3 sm:p-4'
               }`}
             >
@@ -109,13 +111,14 @@ export default function FeatureGrid() {
                   />
                 </div>
               ) : (
-                <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-lg bg-white shadow-sm ring-1 ring-slate-200 group-hover:ring-highlight/40">
+                <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-[#e0f7ff] to-white shadow-sm ring-1 ring-cerulean/20 group-hover:ring-cerulean/50">
                   {icon}
                 </div>
               )}
               <div className={imageUrl ? 'p-3 sm:p-4' : ''}>
                 <h4 className="mb-2 text-base font-bold text-slate-950 sm:text-lg">{title}</h4>
-                <p className="text-sm leading-relaxed text-text-light sm:text-base">{text}</p>
+                    <div className="prose prose-sm line-clamp-3 max-w-none leading-relaxed text-text-light sm:prose-base"><ReactMarkdown>{text}</ReactMarkdown></div>
+                    <Link to={`/school-capabilities#feature-${id}`} className="mt-3 inline-flex text-sm font-black text-accent hover:text-primary">Read More →</Link>
               </div>
             </div>
           ))}

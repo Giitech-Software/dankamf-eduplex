@@ -21,6 +21,7 @@ import UpcomingEvents from '../components/UpcomingEvents';
 import CampusGallery from '../components/CampusGallery';
 import DownloadCenter from '../components/DownloadCenter';
 import SchoolAlerts from '../components/SchoolAlerts';
+import VacancyPreview from '../components/VacancyPreview';
 import SocialConnect from '../components/SocialConnect';
 import LoadingSpinner from '../components/LoadingSpinner';
 
@@ -30,7 +31,7 @@ export default function Home() {
   }, []);
 
   const { settings, loading } = useSiteSettings();
-  if (loading) return <LoadingSpinner label="Loading homepage" fullPage />;
+  if (loading) return <LoadingSpinner fullPage label="Loading homepage" />;
 
   const siteName = settings?.siteName || 'Dankamf Educational Complex';
   const tagline = settings?.tagline || 'Excellence in Learning & Character';
@@ -42,18 +43,19 @@ export default function Home() {
         <main className="flex-grow">
           <SchoolAlerts />
           <HeroSection siteName={siteName} tagline={tagline} />
+          <AboutSection />
           <StatsBanner />
           <TrustedLogos />
           <FeatureGrid />
           <ServiceGrid />
           <Testimonials />
           <ProjectsPreview />
-          <AboutSection />
           <BlogPreview />
           <UpcomingEvents />
           <CampusGallery />
           <DownloadCenter />
           <SocialConnect />
+          <VacancyPreview />
           <CareerPreview />
           <FAQSection />
           <NewsletterSignup />

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { doc, getDoc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, getDoc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import { useAuth } from '../../context/AuthContext';
 import { logActivity } from '../../utils/activityLog';
@@ -12,7 +12,7 @@ export default function EditFAQ() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [faq, setFaq] = useState({ question: '', answer: '', icon: '' });
+  const [faq, setFaq] = useState({ question: '', answer: '', icon: '', order: '' });
   const [msg, setMsg] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -32,10 +32,9 @@ export default function EditFAQ() {
     setMsg('');
     setLoading(true);
     try {
-      await updateDoc(doc(db, 'faqs', id), {
-        ...faq,
-        timestamp: serverTimestamp(),
-      });
+      // Keep the original timestamp so editing an FAQ does not change its
+      // public position or distort the numbered presentation.
+      await updateDoc(doc(db, 'faqs', id), { ...faq });
 
       await logActivity(user, 'update_faq', `Updated FAQ: ${faq.question}`);
       setMsg('✅ FAQ updated successfully!');
@@ -78,6 +77,7 @@ export default function EditFAQ() {
           required
           className="w-full p-3 border rounded bg-white dark:bg-gray-900 dark:border-gray-700 dark:text-white"
         />
+        <label className="block text-sm font-bold text-slate-700 dark:text-slate-200">Homepage display number<input type="number" min="1" value={faq.order || ''} onChange={(e) => setFaq({ ...faq, order: Number(e.target.value) || '' })} className="mt-1 w-full rounded-lg border p-3 dark:border-gray-700 dark:bg-gray-900 dark:text-white" /><span className="mt-1 block text-xs font-normal text-slate-500">Lower numbers appear first.</span></label>
         <textarea
           name="answer"
           value={faq.answer}

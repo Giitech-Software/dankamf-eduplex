@@ -10,6 +10,7 @@ export default function AddProject() {
   const [form, setForm] = useState({
     title: '',
     description: '',
+    category: 'Clubs',
     image: null,
   });
   const [preview, setPreview] = useState(null); // Step 1: Add Preview State
@@ -40,6 +41,11 @@ export default function AddProject() {
     e.preventDefault();
     setMsg('');
     setUploading(true);
+    if (form.image && form.image.size > 180 * 1024) {
+      setMsg('Gallery images must be 180 KB or smaller. Recommended range: 120–180 KB.');
+      setUploading(false);
+      return;
+    }
 
     if (!form.image) {
       setMsg('❌ Please choose an image file');
@@ -61,12 +67,13 @@ export default function AddProject() {
       await addDoc(collection(db, 'projects'), {
         title: form.title,
         description: form.description,
+        category: form.category,
         imageUrl,
         timestamp: serverTimestamp(),
       });
 
       setMsg('✅ Project added successfully!');
-      setForm({ title: '', description: '', image: null });
+      setForm({ title: '', description: '', category: 'Clubs', image: null });
       setPreview(null);
     } catch (err) {
       setMsg('❌ Failed: ' + err.message);
@@ -78,7 +85,7 @@ export default function AddProject() {
   return (
     <AdminLayout>
       <>
-        <PageTitle>➕ Add New Project</PageTitle>
+        <PageTitle>➕ Add Campus Activity</PageTitle>
         <form onSubmit={handleSubmit} className="space-y-6 max-w-xl">
           {/* Title Input */}
           <input
@@ -99,6 +106,12 @@ export default function AddProject() {
             required
             className="w-full p-3 border rounded h-48 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-warm outline-none"
           />
+
+          <label className="block text-sm font-bold text-gray-700 dark:text-gray-200">Student Life Category
+            <select name="category" value={form.category} onChange={handleChange} className="mt-2 w-full rounded border border-gray-300 bg-white p-3 text-gray-900 dark:border-gray-600 dark:bg-gray-800 dark:text-white">
+              <option>Clubs</option><option>Sports</option><option>STEM</option><option>Arts</option><option>Leadership</option>
+            </select>
+          </label>
 
           {/* Modern Image Upload Zone */}
           <div className="space-y-2">

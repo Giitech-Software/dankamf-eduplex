@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { collection, getDocs, orderBy, query } from 'firebase/firestore';
 import { db } from '../firebase/config';
-import { FaTimes, FaExternalLinkAlt, FaFilter } from 'react-icons/fa';
+import { FaTimes, FaExternalLinkAlt } from 'react-icons/fa';
 import ReactMarkdown from 'react-markdown';
 import { useLocation } from 'react-router-dom';
 import Seo from '../components/Seo';
@@ -12,9 +12,8 @@ import LoadingSpinner from '../components/LoadingSpinner';
 export default function Projects() {
   const location = useLocation();
   const [projects, setProjects] = useState([]);
-  const [filteredProjects, setFilteredProjects] = useState([]);
   const [activeProject, setActiveProject] = useState(null);
-  const [activeFilter, setActiveFilter] = useState('All');
+  const [highlightedProjectId, setHighlightedProjectId] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -27,21 +26,12 @@ export default function Projects() {
           .filter(p => p.title && p.description);
 
         setProjects(projectData);
-        setFilteredProjects(projectData);
       } finally {
         setLoading(false);
       }
     };
     fetchProjects();
   }, []);
-
-  useEffect(() => {
-    if (activeFilter === 'All') {
-      setFilteredProjects(projects);
-    } else {
-      setFilteredProjects(projects.filter(p => p.category === activeFilter));
-    }
-  }, [activeFilter, projects]);
 
   useEffect(() => {
     if (!location.hash || projects.length === 0) return;
@@ -51,69 +41,50 @@ export default function Projects() {
     const targetProject = projects.find(project => project.id === projectId);
 
     if (targetProject) {
-      setActiveFilter('All');
-      setActiveProject(targetProject);
+      setHighlightedProjectId(targetProject.id);
       requestAnimationFrame(() => {
         document.getElementById(targetId)?.scrollIntoView({ behavior: 'auto', block: 'start' });
       });
+      const timer = setTimeout(() => setHighlightedProjectId(null), 3500);
+      return () => clearTimeout(timer);
     }
   }, [location.hash, projects]);
-
-  const categories = ['All', ...new Set(projects.map(p => p.category).filter(Boolean))];
 
   return (
     <>
       <Seo {...SeoConfig.projects} />
-
       <div className="min-h-screen bg-white px-0 py-8 text-slate-900 sm:px-5 lg:px-12">
         <div className="max-w-7xl mx-auto">
 
-          <div className="mb-8 flex flex-col justify-between gap-5 px-4 text-left sm:px-0 md:flex-row md:items-end">
+          <div className="mb-8 px-4 text-left sm:px-0">
             <div className="max-w-2xl">
               <h1 className="text-3xl font-black tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
                 Vibrant School Life
               </h1>
               <div className="w-20 h-1.5 bg-warm mt-3 rounded-full"></div>
               <p className="mt-3 text-slate-600 text-base leading-relaxed">
-                Explore the rich tapestry of student life at Dankamf Eduplex, from exciting clubs and sports to cultural events and academic competitions.
+                Explore the rich experiences of student life at Dankamf Educational Complex, from exciting clubs and sports to cultural events and academic competitions.
               </p>
             </div>
 
-            <div className="flex w-full flex-wrap items-center gap-2 rounded-xl border border-slate-100 bg-slate-50 p-2 md:w-auto">
-              <span className="text-slate-400 px-3 flex items-center gap-2 text-xs font-bold uppercase tracking-wider">
-                <FaFilter size={10} /> Filter:
-              </span>
-              {categories.map(cat => (
-                <button
-                  key={cat}
-                  onClick={() => setActiveFilter(cat)}
-                  className={`min-h-10 rounded-lg px-4 py-2 text-sm font-bold transition-all ${
-                    activeFilter === cat
-                    ? 'bg-slate-900 text-white shadow-md'
-                    : 'text-slate-500 hover:bg-slate-200'
-                  }`}
-                >
-                  {cat}
-                </button>
-              ))}
-            </div>
           </div>
 
           {loading ? (
             <LoadingSpinner label="Loading projects" />
-          ) : filteredProjects.length === 0 ? (
+          ) : projects.length === 0 ? (
             <div className="py-12 text-center border-2 border-dashed border-slate-100 rounded-lg">
-              <p className="text-slate-400 font-medium">No {activeFilter} projects found.</p>
+              <p className="text-slate-400 font-medium">School-life activities will be published soon.</p>
             </div>
           ) : (
             <div className="grid gap-3 px-4 sm:grid-cols-2 sm:gap-6 sm:px-0 lg:grid-cols-3">
-              {filteredProjects.map((p, index) => (
+              {projects.map((p, index) => (
                 <ProjectCard
                   key={p.id}
                   id={`project-${p.id}`}
                   project={p}
                   index={index}
                   onClick={setActiveProject}
+                  className={highlightedProjectId === p.id ? 'ring-4 ring-accent ring-offset-4' : ''}
                 />
               ))}
             </div>
@@ -147,9 +118,6 @@ export default function Projects() {
                   )}
                 </div>
                 <div className="w-12 h-1 bg-warm/30 rounded-full mb-4"></div>
-                <div className="text-slate-500 text-xs leading-relaxed border-t border-slate-800/50 pt-4">
-                  Project documentation and technical architecture overview.
-                </div>
               </div>
 
               <div className="md:w-[70%] overflow-y-auto bg-white flex flex-col">
@@ -163,7 +131,7 @@ export default function Projects() {
                   </div>
                 </div>
 
-                <div className="p-6 lg:p-8 prose prose-slate max-w-none text-slate-700 leading-relaxed flex-1 prose-headings:text-slate-900 prose-p:text-base">
+                <div className="p-4 lg:p-6 prose prose-slate max-w-none text-slate-700 leading-relaxed flex-1 prose-headings:text-slate-900 prose-p:text-base">
                   <ReactMarkdown>{activeProject.description}</ReactMarkdown>
                 </div>
 

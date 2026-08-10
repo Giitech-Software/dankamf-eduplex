@@ -42,12 +42,19 @@ export default function Login() {
       // The useEffect above will handle the redirect automatically.
     } catch (err) {
       console.error(err);
-      const errorMessage = err.code === 'auth/invalid-credential' 
-        ? 'Invalid email or password.' 
-        : 'An error occurred during login.';
+      const errorMessages = {
+        'auth/invalid-credential': 'The email or password is incorrect. Please check your details and try again.',
+        'auth/user-not-found': 'No administrator account was found with this email address.',
+        'auth/wrong-password': 'The password is incorrect. Please try again.',
+        'auth/user-disabled': 'This administrator account has been disabled. Please contact the superadmin.',
+        'auth/too-many-requests': 'Too many unsuccessful attempts. Please wait a few minutes and try again.',
+        'auth/invalid-email': 'Please enter a valid email address.',
+      };
+      const errorMessage = errorMessages[err.code] || 'We could not sign you in right now. Please try again.';
       if (err.code === 'auth/network-request-failed' || !navigator.onLine) {
-        toast.error('No internet connection. Please check your network.');
+        setError('No internet connection. Please check your network and try again.');
       } else {
+        setError(errorMessage);
         toast.error(errorMessage);
       }
     } finally {
@@ -58,43 +65,43 @@ export default function Login() {
   return (
     <>
       <Seo title="Admin Login" description="Admin login page for Dankamf Eduplex" />
-      <div className="login-shell flex min-h-screen items-center justify-center bg-white px-4">
+      <div className="login-shell flex min-h-screen items-center justify-center overflow-y-auto px-4 py-5 sm:py-8">
         <form
           onSubmit={handleSubmit}
-          className="w-full max-w-sm space-y-4 rounded-2xl border border-blue-100 bg-white p-6 shadow-xl shadow-blue-950/10 sm:p-8"
+          className="w-full min-w-0 max-w-[21rem] space-y-2 rounded-2xl border border-sky-100 bg-white p-3 shadow-2xl shadow-slate-950/20 sm:p-4"
         >
           <div className="text-center">
-            <img className="mx-auto h-24 w-auto object-contain" src={logo} alt="Dankamf Eduplex" />
-            <h2 className="mt-3 text-xl font-bold tracking-tight text-primary">
+            <img className="mx-auto h-24 w-24 rounded-full bg-white p-2 object-contain" src={logo} alt="Dankamf Eduplex" />
+            <h2 className="mt-2 text-lg font-black tracking-tight text-[#003153] sm:text-xl">
               Administrator Access
             </h2>
           </div>
 
-          <label className="space-y-1.5"><span>Email address</span><input
+          <label className="block min-w-0 space-y-1"><span className="text-xs font-bold uppercase tracking-wide text-slate-600">Email address</span><input
             type="email"
             name="email"
-            placeholder="Email"
+            placeholder="you@example.com"
             value={form.email}
             onChange={handleChange}
-            className="w-full rounded-md border p-2.5 text-sm dark:bg-slate-800 dark:border-slate-700 dark:text-white focus:ring-primary focus:border-primary"
+            className="block w-full max-w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-[#007BA7] focus:bg-white focus:ring-2 focus:ring-[#007BA7]/20"
             required
           /></label>
 
           {/* ✅ Password Input Container */}
-          <label className="space-y-1.5"><span>Password</span><div className="relative">
+          <label className="block min-w-0 space-y-1"><span className="text-xs font-bold uppercase tracking-wide text-slate-600">Password</span><div className="relative min-w-0">
             <input
               type={showPassword ? 'text' : 'password'} // ✅ Dynamic type
               name="password"
-              placeholder="Password"
+              placeholder="Enter your password"
               value={form.password}
               onChange={handleChange}
-              className="w-full rounded-md border p-2.5 pr-10 text-sm dark:bg-slate-800 dark:border-slate-700 dark:text-white focus:ring-primary focus:border-primary"
+              className="block w-full max-w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 pr-10 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-[#007BA7] focus:bg-white focus:ring-2 focus:ring-[#007BA7]/20"
               required
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-primary transition-colors"
+              className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md p-1 text-slate-500 transition-colors hover:bg-sky-50 hover:text-[#007BA7]"
             >
               {showPassword ? (
                 <EyeOff size={20} />
@@ -107,16 +114,17 @@ export default function Login() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full justify-center rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-dark disabled:opacity-50"
+            className="w-full justify-center rounded-lg bg-gradient-to-r from-[#003153] to-[#007BA7] px-4 py-2 text-sm font-black text-white shadow-lg shadow-sky-900/20 transition hover:-translate-y-0.5 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
           >
             {loading ? 'Signing in...' : 'Sign In'}
           </button>
 
+          {error && <p role="alert" className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm font-medium text-red-700">{error}</p>}
+
           <Link
             to="/"
-            className="block pt-4 text-center text-sm text-slate-600 dark:text-slate-400 hover:underline"
+            className="block pt-2 text-center text-sm text-slate-600 dark:text-slate-400 hover:underline"
           >
-            ← Back to Homepage
           </Link>
         </form>
       </div>

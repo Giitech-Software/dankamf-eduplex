@@ -13,6 +13,7 @@ export default function AddFAQ() {
     question: '',
     answer: '',
     icon: '',
+    order: '',
   });
 
   const [msg, setMsg] = useState('');
@@ -30,12 +31,13 @@ export default function AddFAQ() {
     try {
       await addDoc(collection(db, 'faqs'), {
         ...form,
+        order: Number(form.order) || 9999,
         timestamp: serverTimestamp(),
       });
 
       await logActivity(user, 'add_faq', `Question: ${form.question}`);
       setMsg('✅ FAQ added successfully!');
-      setForm({ question: '', answer: '', icon: '' });
+      setForm({ question: '', answer: '', icon: '', order: '' });
     } catch (err) {
       setMsg('❌ ' + err.message);
     } finally {
@@ -57,6 +59,8 @@ export default function AddFAQ() {
           required
           className="w-full p-3 border rounded bg-white dark:bg-gray-900 dark:border-gray-700 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
         />
+
+        <label className="block text-sm font-bold text-slate-700 dark:text-slate-200">Homepage display number<input type="number" min="1" name="order" placeholder="e.g. 1" value={form.order} onChange={handleChange} className="mt-1 w-full rounded-lg border p-3 dark:border-gray-700 dark:bg-gray-900 dark:text-white" /><span className="mt-1 block text-xs font-normal text-slate-500">Lower numbers appear first.</span></label>
 
         <textarea
           name="answer"

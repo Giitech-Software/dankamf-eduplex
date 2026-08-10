@@ -1,12 +1,12 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 
-export default function ProjectCard({ project, onClick, index, id }) {
+export default function ProjectCard({ project, onClick, index, id, className = '' }) {
   return (
     <div
       id={id}
       onClick={() => onClick(project)}
-      className="group flex cursor-pointer flex-col overflow-hidden border border-slate-200 bg-white transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl sm:rounded-lg"
+      className={`group flex cursor-pointer flex-col overflow-hidden border border-slate-200 bg-white transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl sm:rounded-lg ${className}`}
       style={{ transitionDelay: `${index * 50}ms` }}
     >
       <div className="relative h-52 w-full overflow-hidden bg-slate-100 sm:h-60">
@@ -20,7 +20,7 @@ export default function ProjectCard({ project, onClick, index, id }) {
           <div className="w-full h-full flex items-center justify-center text-slate-300">No Preview</div>
         )}
         <div className="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full shadow-sm text-xs font-black uppercase text-slate-900">
-          {project.category || 'System'}
+          {project.category || 'School Life'}
         </div>
       </div>
 
@@ -29,8 +29,8 @@ export default function ProjectCard({ project, onClick, index, id }) {
           {project.title}
         </h3>
         
-        <div className="text-slate-600 line-clamp-3 text-base leading-relaxed prose max-w-none">
-          <ReactMarkdown allowedElements={['p', 'strong', 'em', 'text']}>
+        <div className="prose prose-sm line-clamp-3 max-h-[5.5rem] max-w-none overflow-hidden text-base leading-relaxed text-slate-600 sm:prose-base">
+          <ReactMarkdown>
             {project.description}
           </ReactMarkdown>
         </div>

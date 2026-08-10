@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { collection, getDocs, query, orderBy } from 'firebase/firestore';
+import { collection, getDocs, query } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import { motion } from 'framer-motion';
 import LoadingSpinner from './LoadingSpinner';
@@ -11,9 +11,9 @@ export default function TrustedLogos() {
   useEffect(() => {
     const fetchLogos = async () => {
       try {
-        const q = query(collection(db, 'partners'), orderBy('timestamp', 'desc'));
+        const q = query(collection(db, 'partners'));
         const snap = await getDocs(q);
-        setLogos(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+        setLogos(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })).sort((a, b) => (Number(a.order) || 9999) - (Number(b.order) || 9999)));
       } catch (error) {
         console.error("Error fetching logos:", error);
       } finally {
@@ -26,7 +26,7 @@ export default function TrustedLogos() {
   if (!loading && logos.length === 0) return null;
 
   return (
-    <section className="bg-white px-0 py-8 sm:px-5">
+    <section className="bg-[#f8fcff] px-0 py-10 sm:px-5">
       <div className="max-w-7xl mx-auto">
         {/* Header: Centered, Clean, and Authoritative */}
         <div className="mb-6 flex flex-col items-center px-4 sm:px-0">
@@ -44,13 +44,13 @@ export default function TrustedLogos() {
         ) : (
         /* Grid: Balanced spacing with high-resolution rendering */
         <div className="grid grid-cols-2 gap-2 px-4 sm:gap-3 sm:px-0 md:grid-cols-4">
-          {logos.map((logo) => (
+          {logos.map((logo, index) => (
             <motion.div
               key={logo.id}
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
-              className="group flex h-24 items-center justify-center rounded-lg border border-slate-200 bg-slate-50 p-2 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:bg-white hover:shadow-lg md:h-28"
+              className={`group relative flex h-24 items-center justify-center rounded-2xl border-2 bg-white/60 p-2 shadow-lg shadow-[#003153]/10 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:bg-white/85 hover:shadow-xl md:h-28 ${['border-[#003153]', 'border-[#007BA7]', 'border-[#4169E1]', 'border-[#0096FF]'][index % 4]}`}
             >
               {logo.imageUrl ? (
                 <img

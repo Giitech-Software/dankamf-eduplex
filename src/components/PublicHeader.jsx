@@ -29,7 +29,6 @@ export default function PublicHeader() {
   const location = useLocation();
   const navigate = useNavigate();
   const currentPath = location.pathname;
-  const isHome = currentPath.replace(/\/+$/, '') === '';
   const [index, setIndex] = useState(0);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -48,7 +47,7 @@ export default function PublicHeader() {
     { label: 'School Life', to: '/student-life' },
     { label: 'Gallery', to: '/gallery' },
     { label: 'News', to: '/blog' },
-    { label: 'Admissions', to: '/jobs' },
+    { label: 'Admissions', to: '/admissions' },
     { label: 'Contact', to: '/contact' },
   ];
 
@@ -65,7 +64,7 @@ export default function PublicHeader() {
   };
 
   return (
-    <Disclosure as="nav" className="sticky top-0 z-50 w-full border-b-2 border-electric-blue bg-primary text-white shadow-md">
+    <Disclosure as="nav" className="sticky top-0 z-50 w-full border-b-2 border-electric-blue bg-midnight text-white shadow-md">
       {({ open, close }) => (
         <>
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -111,9 +110,9 @@ export default function PublicHeader() {
                     <p className="px-3 pb-2 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Explore Dankamf</p>
                     <div className="grid grid-cols-2 gap-1">
                       {[
-                        ['About Us', '/about'], ['Enroll Online', '/admissions/apply'],
+                        ['About Us', '/about'], ['Our Staff', '/staff'], ['Enroll Online', '/admissions/apply'],
                         ['FAQs', '/faqs'], ['Calendar', '/calendar'], ['Check Status', '/admissions/status'], ['Downloads', '/downloads'],
-                        ['Testimonials', '/client-confidence'], ['Alumni', '/alumni'], ['Contact Us', '/contact'],
+                        ['Testimonials', '/client-confidence'], ['Alumni', '/alumni'], ['Careers & Vacancies', '/jobs'], ['Contact Us', '/contact'],
                       ].map(([label, to]) => (
                         <Link key={to} to={to} className="rounded-lg px-3 py-2 text-sm font-semibold transition hover:bg-accent-light hover:text-primary">
                           {label}
@@ -159,7 +158,7 @@ export default function PublicHeader() {
           </div>
 
           {/* Mobile Navigation */}
-          <Disclosure.Panel className="md:hidden max-h-[calc(100dvh-4rem)] overflow-y-auto overscroll-contain border-t border-white/15 bg-primary px-3 pb-4 pt-3 text-white shadow-xl">
+          <Disclosure.Panel className="md:hidden max-h-[calc(100dvh-4rem)] overflow-y-auto overscroll-contain border-t border-white/15 bg-midnight px-3 pb-4 pt-3 text-white shadow-xl">
             <form onSubmit={handleSearch} className="mb-3 flex gap-2">
               <input
                 value={searchTerm}
@@ -190,7 +189,7 @@ export default function PublicHeader() {
               </button>
               {mobileMoreOpen && <div className="grid grid-cols-2 gap-1">
                 {[
-                  ['About Us', '/about'], ['Enroll Online', '/admissions/apply'],
+                  ['About Us', '/about'], ['Our Staff', '/staff'], ['Enroll Online', '/admissions/apply'],
                   ['FAQs', '/faqs'], ['Calendar', '/calendar'],
                   ['Check Status', '/admissions/status'], ['Downloads', '/downloads'],
                   ['Testimonials', '/client-confidence'], ['Alumni', '/alumni'],

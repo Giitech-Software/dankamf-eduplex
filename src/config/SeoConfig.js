@@ -8,8 +8,8 @@ const sitePublisher = 'Dankamf Educational Complex';
 // Static Pages
 const staticPages = {
   home: {
-    title: siteName,
-    description: 'A premier educational institution committed to excellence in learning and character development.',
+    title: `${siteName} | Private School in Oyibi, Greater Accra`,
+    description: 'Dankamf Educational Complex is a trusted private school in Oyibi, Kpone-Katamanso, Greater Accra, Ghana, committed to quality education and strong moral foundations.',
     path: '/',
     url: `${baseUrl}/`,
     author: siteAuthor,
@@ -47,11 +47,27 @@ const staticPages = {
     author: siteAuthor,
     publisher: sitePublisher,
   },
+  about: {
+    title: `About Us | ${siteName}`,
+    description: 'Learn about Dankamf Educational Complex, a private school serving families in Oyibi, Kpone-Katamanso and Greater Accra through excellence in learning and character.',
+    path: '/about',
+    url: `${baseUrl}/about`,
+    author: siteAuthor,
+    publisher: sitePublisher,
+  },
+  admissions: {
+    title: `Admissions | ${siteName}`,
+    description: 'Learn about the admission process and join the Dankamf Educational Complex family.',
+    path: '/admissions',
+    url: `${baseUrl}/admissions`,
+    author: siteAuthor,
+    publisher: sitePublisher,
+  },
   careers: {
     title: `Admissions | ${siteName}`,
     description: 'Learn about the admission process and join the Dankamf Educational Complex family.',
-    path: '/jobs',
-    url: `${baseUrl}/jobs`,
+    path: '/admissions',
+    url: `${baseUrl}/admissions`,
     author: siteAuthor,
     publisher: sitePublisher,
   },

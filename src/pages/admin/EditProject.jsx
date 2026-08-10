@@ -62,6 +62,11 @@ export default function EditProject() {
 
       // Only upload if a new file was selected
       if (image) {
+        if (image.size > 180 * 1024) {
+          toast.error('Gallery images must be 180 KB or smaller. Recommended range: 120–180 KB.');
+          setLoading(false);
+          return;
+        }
         const imageRef = ref(storage, `projects/${Date.now()}-${image.name}`);
         await uploadBytes(imageRef, image);
         finalImageUrl = await getDownloadURL(imageRef);

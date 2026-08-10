@@ -55,7 +55,7 @@ export default function JobsAdmin() {
   return (
     <AdminLayout>
       <div className="flex justify-between items-center mb-6">
-        <PageTitle>💼 Manage Jobs</PageTitle>
+        <PageTitle>💼 Manage Vacancies</PageTitle>
         <Link
           to="/admin/add-job"
           className="bg-primary text-white px-4 py-2 rounded hover:bg-cta transition"

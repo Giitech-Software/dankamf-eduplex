@@ -45,15 +45,19 @@ export default function GuidedAssistant() {
   const [isOpen, setIsOpen] = useState(false);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const dragRef = React.useRef(null);
+  const didDragRef = React.useRef(false);
   const isNearTop = offset.y < -(window.innerHeight * 0.3);
 
   const handlePointerMove = (event) => {
     if (!dragRef.current) return;
-    const nextX = dragRef.current.startX - event.clientX + dragRef.current.originX;
-    const nextY = dragRef.current.startY - event.clientY + dragRef.current.originY;
+    const deltaX = event.clientX - dragRef.current.startX;
+    const deltaY = event.clientY - dragRef.current.startY;
+    if (Math.abs(deltaX) > 3 || Math.abs(deltaY) > 3) didDragRef.current = true;
+    const nextX = dragRef.current.originX + deltaX;
+    const nextY = dragRef.current.originY + deltaY;
     setOffset({
       x: Math.max(-window.innerWidth + 90, Math.min(0, nextX)),
-      y: Math.max(-window.innerHeight + 90, Math.min(0, nextY)),
+      y: Math.max(-(window.innerHeight - 136), Math.min(0, nextY)),
     });
   };
 
@@ -64,9 +68,16 @@ export default function GuidedAssistant() {
   };
 
   const handlePointerDown = (event) => {
+    event.preventDefault();
+    didDragRef.current = false;
     dragRef.current = { startX: event.clientX, startY: event.clientY, originX: offset.x, originY: offset.y };
     window.addEventListener('pointermove', handlePointerMove);
     window.addEventListener('pointerup', handlePointerUp, { once: true });
+  };
+
+  const openAssistant = () => {
+    setOffset((current) => ({ ...current, x: 0, y: 0 }));
+    setIsOpen(true);
   };
 
   useEffect(() => {
@@ -106,9 +117,9 @@ export default function GuidedAssistant() {
       {isOpen && (
         <section
           aria-label="Dankamf guided assistant"
-          className={`${isNearTop ? 'mt-2' : 'mb-2'} max-h-[min(70vh,25rem)] w-[calc(100vw-2rem)] max-w-[17rem] overflow-y-auto overflow-x-hidden rounded-xl border border-slate-200 bg-white shadow-2xl shadow-slate-950/20`}
+          className={`${isNearTop ? 'mt-2' : 'mb-2'} w-[calc(100vw-2rem)] max-w-[15rem] overflow-hidden rounded-xl border border-slate-200 bg-white shadow-2xl shadow-slate-950/20`}
         >
-          <div className="flex items-start justify-between bg-gradient-to-r from-primary to-accent px-4 py-3 text-white">
+          <div className="flex items-start justify-between bg-gradient-to-r from-primary to-accent px-3 py-2 text-white">
               <div className="flex items-center gap-2">
               <div className="rounded-lg bg-white/10 p-1 text-white ring-1 ring-white/20">
                 <Sparkles className="h-4 w-4" aria-hidden="true" />
@@ -122,7 +133,10 @@ export default function GuidedAssistant() {
             </div>
             <button
               type="button"
-              onClick={() => setIsOpen(false)}
+              onClick={() => {
+                setIsOpen(false);
+                setOffset((current) => ({ ...current, x: 0 }));
+              }}
               className="rounded-md p-1 text-slate-300 transition hover:bg-white/10 hover:text-white"
               aria-label="Close assistant"
             >
@@ -130,8 +144,8 @@ export default function GuidedAssistant() {
             </button>
           </div>
 
-            <div className="p-2">
-            <p className="px-1 pb-1.5 text-[11px] font-bold leading-relaxed text-slate-600">
+            <div className="p-1.5">
+            <p className="px-1 pb-1 text-[10px] font-bold leading-snug text-slate-600">
               Explore our site or start a conversation with our team.
             </p>
 
@@ -144,14 +158,14 @@ export default function GuidedAssistant() {
                     key={option.label}
                     to={option.to}
                     onClick={() => setIsOpen(false)}
-                    className="group flex items-center gap-2 rounded-lg border border-transparent px-1.5 py-1.5 transition hover:border-slate-200 hover:bg-slate-50"
+                    className="group flex items-center gap-1.5 rounded-lg border border-transparent px-1 py-1 transition hover:border-slate-200 hover:bg-slate-50"
                   >
                     <span className="rounded-md bg-accent-light p-1.5 text-accent transition group-hover:bg-accent group-hover:text-white">
-                      <Icon className="h-4 w-4" aria-hidden="true" />
+                      <Icon className="h-3.5 w-3.5" aria-hidden="true" />
                     </span>
                     <span className="min-w-0">
-                      <span className="block text-[11px] font-black text-slate-900">{option.label}</span>
-                      <span className="mt-0.5 block text-[11px] leading-snug text-slate-500">
+                      <span className="block text-[10px] font-black text-slate-900">{option.label}</span>
+                      <span className="mt-0.5 block text-[10px] leading-tight text-slate-500">
                         {option.description}
                       </span>
                     </span>
@@ -164,7 +178,7 @@ export default function GuidedAssistant() {
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-1.5 flex items-center justify-center gap-2 rounded-lg bg-green-500 px-2.5 py-1.5 text-[11px] font-black uppercase tracking-[0.12em] text-white transition hover:bg-green-600"
+              className="mt-1 flex items-center justify-center gap-1.5 rounded-lg bg-green-500 px-2 py-1.5 text-[10px] font-black uppercase tracking-[0.08em] text-white transition hover:bg-green-600"
             >
               <MessageCircle className="h-4 w-4" aria-hidden="true" />
               Chat on WhatsApp
@@ -176,7 +190,13 @@ export default function GuidedAssistant() {
       {!isOpen && (
         <button
           type="button"
-          onClick={() => setIsOpen(true)}
+          onClick={() => {
+            if (didDragRef.current) {
+              didDragRef.current = false;
+              return;
+            }
+            openAssistant();
+          }}
           onPointerDown={handlePointerDown}
           aria-label="Open Dankamf assistant"
           className="inline-flex h-10 cursor-grab touch-none items-center justify-center gap-1.5 rounded-full border border-slate-200/80 bg-primary/40 px-3 text-white shadow-lg shadow-slate-950/20 ring-1 ring-white/40 backdrop-blur-sm transition hover:-translate-y-0.5 hover:bg-primary/60 focus:outline-none focus:ring-4 focus:ring-slate-300/60 active:cursor-grabbing"

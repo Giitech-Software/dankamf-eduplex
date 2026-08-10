@@ -13,6 +13,7 @@ const Blog = () => {
   const location = useLocation();
   const [posts, setPosts] = useState([]);
   const [activePost, setActivePost] = useState(null);
+  const [highlightedPostId, setHighlightedPostId] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -36,10 +37,12 @@ const Blog = () => {
     const targetPost = posts.find(post => post.id === postId);
 
     if (targetPost) {
-      setActivePost(targetPost);
+      setHighlightedPostId(targetPost.id);
       requestAnimationFrame(() => {
         document.getElementById(targetId)?.scrollIntoView({ behavior: 'auto', block: 'start' });
       });
+      const timer = setTimeout(() => setHighlightedPostId(null), 3500);
+      return () => clearTimeout(timer);
     }
   }, [location.hash, posts]);
 
@@ -71,6 +74,7 @@ const Blog = () => {
                 post={post}
                 index={idx}
                 onClick={setActivePost}
+                className={highlightedPostId === post.id ? 'ring-4 ring-accent ring-offset-4' : ''}
               />
             ))}
           </div>

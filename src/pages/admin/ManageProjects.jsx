@@ -43,7 +43,7 @@ export default function ManageProjects() {
   return (
     <AdminLayout>
       <div className="flex justify-between items-center mb-5">
-        <h1 className="text-2xl font-bold">Manage Portfolio</h1>
+        <h1 className="text-2xl font-bold">Manage Campus Activities</h1>
         <Link to="/admin/add-project" className="bg-blue-600 text-white px-4 py-2 rounded flex items-center gap-2 hover:bg-blue-700">
           <FaPlus size={14} /> Add New Project
         </Link>

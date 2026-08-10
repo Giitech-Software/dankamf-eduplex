@@ -18,6 +18,8 @@ import Users from './pages/admin/Users';
 import ContactForms from './pages/admin/ContactForms';
 import ActivityLogs from './pages/admin/ActivityLogs';
 import Jobs from './pages/Jobs';
+import Careers from './pages/Careers';
+import SchoolCapabilities from './pages/SchoolCapabilities';
 import JobDetails from './pages/JobDetails';
 import JobsAdmin from './pages/admin/JobsAdmin';
 import AddJob from './pages/admin/AddJob';
@@ -27,6 +29,8 @@ import Settings from './pages/admin/Settings';
 import AdminProfile from './pages/admin/AdminProfile';
 import JobApplications from './pages/admin/JobApplications';
 import About from './pages/About';
+import ManageAbout from './pages/admin/ManageAbout';
+import StaffDirectory from './pages/StaffDirectory';
 import Privacy from './pages/Privacy';
 import Terms from './pages/Terms';
 import NotFound from './pages/NotFound';
@@ -72,6 +76,8 @@ import ManageFees from './pages/admin/ManageFees';
 import Fees from './pages/Fees';
 import AdmissionStatus from './pages/AdmissionStatus';
 import ApplicationDocuments from './pages/admin/ApplicationDocuments';
+import ManageHeroImages from './pages/admin/ManageHeroImages';
+import ManageGallery from './pages/admin/ManageGallery';
 import Calendar from './pages/Calendar';
 import { ThemeProvider } from './context/ThemeContext';
 import './index.css';
@@ -97,7 +103,10 @@ export default function App() {
             <Route path="/downloads" element={<Downloads />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/blog" element={<Blog />} />
-            <Route path="/jobs" element={<Jobs />} />
+            <Route path="/admissions" element={<Jobs />} />
+            <Route path="/jobs" element={<Careers />} />
+            <Route path="/careers" element={<Navigate to="/jobs" replace />} />
+            <Route path="/school-capabilities" element={<SchoolCapabilities />} />
             <Route path="/admissions/apply" element={<AdmissionApplication />} />
             <Route path="/book-a-tour" element={<BookTour />} />
             <Route path="/admissions/interview" element={<InterviewBooking />} />
@@ -106,6 +115,7 @@ export default function App() {
             <Route path="/admissions/fees" element={<Fees />} />
             <Route path="/jobs/:id" element={<JobDetails />} />
             <Route path="/about" element={<About />} />
+            <Route path="/staff" element={<StaffDirectory />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/terms" element={<Terms />} />
             <Route path="/client-confidence" element={<ClientConfidence />} />
@@ -223,7 +233,9 @@ export default function App() {
           />
           <Route path="/admin/downloads" element={<ProtectedRoute allowedRoles={['admin', 'superadmin']}><ManageDownloads /></ProtectedRoute>} />
           <Route path="/admin/alerts" element={<ProtectedRoute allowedRoles={['admin', 'superadmin']}><ManageAlerts /></ProtectedRoute>} />
+          <Route path="/admin/gallery" element={<ProtectedRoute allowedRoles={['admin', 'superadmin']}><ManageGallery /></ProtectedRoute>} />
           <Route path="/admin/leadership" element={<ProtectedRoute allowedRoles={['admin', 'superadmin']}><ManageLeadership /></ProtectedRoute>} />
+          <Route path="/admin/about" element={<ProtectedRoute allowedRoles={['admin', 'superadmin']}><ManageAbout /></ProtectedRoute>} />
           <Route path="/admin/alumni" element={<ProtectedRoute allowedRoles={['admin', 'superadmin']}><ManageAlumni /></ProtectedRoute>} />
           <Route path="/admin/interviews" element={<ProtectedRoute allowedRoles={['admin', 'superadmin']}><InterviewRequests /></ProtectedRoute>} />
           <Route path="/admin/fees" element={<ProtectedRoute allowedRoles={['admin', 'superadmin']}><ManageFees /></ProtectedRoute>} />
@@ -281,6 +293,14 @@ export default function App() {
             element={
               <ProtectedRoute allowedRoles={['superadmin']}>
                 <AddUser />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/hero-images"
+            element={
+              <ProtectedRoute allowedRoles={['superadmin']}>
+                <ManageHeroImages />
               </ProtectedRoute>
             }
           />

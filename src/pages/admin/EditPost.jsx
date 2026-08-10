@@ -75,7 +75,7 @@ export default function EditPost() {
 
   return (
     <AdminLayout>
-      <PageTitle>✏️ Edit Blog Post</PageTitle>
+      <PageTitle>✏️ Edit News Article</PageTitle>
       <form
         onSubmit={handleUpdate}
         className="space-y-4 bg-white dark:bg-gray-900 p-6 rounded shadow"

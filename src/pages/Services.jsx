@@ -7,6 +7,7 @@ import { db } from '../firebase/config';
 import Seo from '../components/Seo';
 import SeoConfig from '../config/SeoConfig';
 import LoadingSpinner from '../components/LoadingSpinner';
+import ReactMarkdown from 'react-markdown';
 
 const getServiceSlug = (title = '') => title
   .toLowerCase()
@@ -21,7 +22,7 @@ const Services = () => {
     const fetchData = async () => {
       try {
         const snapshot = await getDocs(collection(db, 'services'));
-        setServices(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+        setServices(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })).sort((a, b) => (Number(a.order) || 9999) - (Number(b.order) || 9999)));
       } finally {
         setLoading(false);
       }
@@ -37,7 +38,6 @@ const Services = () => {
   return (
     <>
       <Seo {...SeoConfig.services} />
-      
       <div className="min-h-screen bg-white px-0 py-8 text-slate-900 sm:px-5 lg:px-12">
         <div className="max-w-7xl mx-auto">
           <div className="mb-8 px-4 sm:px-0">
@@ -65,7 +65,7 @@ const Services = () => {
                     {service.title}
                   </h2>
                   <p className="text-[1rem] text-text-light leading-relaxed flex-1">
-                    {previewText}
+                    <ReactMarkdown>{previewText}</ReactMarkdown>
                   </p>
                   <div className="mt-4 flex min-h-11 items-center gap-2 text-sm font-black uppercase tracking-widest text-accent transition-all">
                     View Program <span className="text-xs transition-transform group-hover:translate-x-1">-&gt;</span>

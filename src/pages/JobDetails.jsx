@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useLocation } from 'react-router-dom';
 import { doc, getDoc, collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { MapPin } from 'lucide-react';
@@ -12,6 +12,8 @@ import { findAdmissionProgram } from '../data/careerOpenings';
 
 export default function JobDetails() {
   const { id } = useParams();
+  const location = useLocation();
+  const backLabel = location.pathname.startsWith('/jobs/') ? 'Back to Jobs & Vacancies' : 'Back to Admissions';
   const [job, setJob] = useState(null);
   const [form, setForm] = useState({ name: '', email: '', cover: '', cv: null });
   const [msg, setMsg] = useState('');
@@ -82,7 +84,7 @@ export default function JobDetails() {
       <main className="mx-auto max-w-3xl px-4 py-16 text-center">
         <h1 className="text-3xl font-black text-primary">Program Not Found</h1>
         <Link to="/jobs" className="mt-6 inline-flex text-accent hover:underline">
-          &larr; Back to Admissions
+          &larr; {backLabel}
         </Link>
       </main>
     );
@@ -97,7 +99,7 @@ export default function JobDetails() {
       <section className="bg-slate-950 px-4 py-12 text-white sm:px-8 sm:py-16">
         <div className="mx-auto max-w-4xl">
           <Link to="/jobs" className="text-sm font-bold text-highlight transition hover:text-white">
-            &larr; Back to Admissions
+            &larr; {backLabel}
           </Link>
           <FaSchool className="mt-8 h-8 w-8 text-highlight" aria-hidden="true" />
           <h1 className="mt-4 text-4xl font-black tracking-tight sm:text-5xl">{job.title}</h1>

@@ -17,6 +17,7 @@ export default function EditService() {
 
   const [service, setService] = useState({
     title: '',
+    order: '',
     description: '',
     curriculum: '',
     assessment: '',
@@ -38,6 +39,7 @@ export default function EditService() {
           const data = snap.data();
           setService({
             title: data.title || '',
+            order: data.order || '',
             description: data.description || '',
             curriculum: data.curriculum || '',
             assessment: data.assessment || '',
@@ -72,6 +74,7 @@ export default function EditService() {
 
       await updateDoc(doc(db, 'services', id), {
         title: service.title,
+        order: Number(service.order) || 9999,
         description: service.description,
         curriculum: service.curriculum,
         assessment: service.assessment,
@@ -109,7 +112,7 @@ export default function EditService() {
 
   return (
     <AdminLayout>
-      <PageTitle>✏️ Edit Service</PageTitle>
+      <PageTitle>✏️ Edit Academic Programme</PageTitle>
 
       <form onSubmit={handleUpdate} className="space-y-4 max-w-xl">
         <input
@@ -130,6 +133,7 @@ export default function EditService() {
           required
           className="w-full p-3 border rounded h-40 bg-white dark:bg-gray-900 dark:border-gray-700 dark:text-white"
         />
+        <label className="block text-sm font-bold text-slate-700 dark:text-slate-200">Homepage display number<input type="number" min="1" value={service.order || ''} onChange={(e) => setService({ ...service, order: e.target.value })} className="mt-1 w-full rounded-lg border p-3 dark:border-gray-700 dark:bg-gray-900 dark:text-white" /><span className="mt-1 block text-xs font-normal text-slate-500">Lower numbers appear first in Our Academics.</span></label>
 
         <textarea name="curriculum" value={service.curriculum} onChange={(e) => setService({ ...service, curriculum: e.target.value })} placeholder="Curriculum overview (Markdown supported)" className="w-full h-32 p-3 border rounded bg-white dark:bg-gray-900 dark:border-gray-700 dark:text-white" />
         <textarea name="assessment" value={service.assessment} onChange={(e) => setService({ ...service, assessment: e.target.value })} placeholder="Assessment approach (Markdown supported)" className="w-full h-32 p-3 border rounded bg-white dark:bg-gray-900 dark:border-gray-700 dark:text-white" />

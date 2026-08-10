@@ -11,7 +11,7 @@ const FAQSection = () => {
       try {
         const q = query(collection(db, 'faqs'), orderBy('timestamp', 'desc'));
         const snapshot = await getDocs(q);
-        setFaqs(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+        setFaqs(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })).sort((a, b) => (Number(a.order) || 9999) - (Number(b.order) || 9999)));
       } catch (error) {
         console.error('Error fetching FAQ preview:', error);
       }
@@ -27,12 +27,12 @@ const FAQSection = () => {
       </h2>
 
       <div className="mx-auto max-w-4xl space-y-3 px-4 sm:space-y-4 sm:px-0">
-        {faqs.slice(0, 3).map(faq => (
+        {faqs.slice(0, 3).map((faq, index) => (
           <div
             key={faq.id}
             className="rounded border-l-4 border-primary bg-gray-50 p-4 shadow"
           >
-            <h3 className="text-xl font-semibold">{faq.question}</h3>
+            <h3 className="text-xl font-semibold">{index + 1}. {faq.question.replace(/^\s*\d+[.)]\s*/, '')}</h3>
           </div>
         ))}
       </div>

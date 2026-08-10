@@ -13,10 +13,11 @@ const staticRoutes = [
   "/student-life",
   "/gallery",
   "/blog",
+  "/admissions",
   "/jobs",
+  "/school-capabilities",
   "/admissions/apply",
   "/admissions/interview",
-  "/admissions/status",
   "/admissions/fees",
   "/calendar",
   "/downloads",
@@ -24,6 +25,7 @@ const staticRoutes = [
   "/book-a-tour",
   "/contact",
   "/about",
+  "/staff",
   "/privacy",
   "/terms",
   "/client-confidence",
@@ -68,7 +70,7 @@ function generateSitemapXml(routes) {
     <loc>${SITE_URL}${route}</loc>
     <lastmod>${timestamp}</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>${route === "/" ? "1.0" : "0.7"}</priority>${imageXml}
+    <priority>${route === "/" ? "1.0" : ["/about", "/academics", "/admissions/apply", "/contact"].includes(route) ? "0.9" : "0.7"}</priority>${imageXml}
   </url>`;
   });
 

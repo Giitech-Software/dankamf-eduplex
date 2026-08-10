@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   addDoc,
   collection,
@@ -37,6 +37,8 @@ export default function ManageEnterpriseFeatures() {
   const [fileInputKey, setFileInputKey] = useState(0);
   const [status, setStatus] = useState(null);
   const [editingFeature, setEditingFeature] = useState(null);
+  const [expandedFeatureId, setExpandedFeatureId] = useState(null);
+  const formRef = useRef(null);
 
   const fetchFeatures = async () => {
     try {
@@ -44,8 +46,8 @@ export default function ManageEnterpriseFeatures() {
       const snap = await getDocs(q);
       setFeatures(snap.docs.map(item => ({ id: item.id, ...item.data() })));
     } catch (error) {
-      console.error('Error loading enterprise features:', error);
-      toast.error('Failed to load enterprise features');
+      console.error('Error loading school capabilities:', error);
+      toast.error('Failed to load school capabilities');
     } finally {
       setLoading(false);
     }
@@ -96,6 +98,10 @@ export default function ManageEnterpriseFeatures() {
       image: null,
     });
     setFileInputKey(prev => prev + 1);
+    requestAnimationFrame(() => {
+      formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      formRef.current?.querySelector('input[name="title"]')?.focus();
+    });
   };
 
   const handleSubmit = async (event) => {
@@ -132,16 +138,16 @@ export default function ManageEnterpriseFeatures() {
           updatedAt: serverTimestamp(),
         });
         await logActivity(user, 'edit_enterprise_feature', `Updated enterprise feature: "${form.title}"`);
-        toast.success('Enterprise feature updated');
-        setStatus({ type: 'success', message: 'Feature updated successfully.' });
+        toast.success('School capability updated');
+        setStatus({ type: 'success', message: 'School capability updated successfully.' });
       } else {
         await addDoc(collection(db, 'enterpriseFeatures'), {
           ...payload,
           createdAt: serverTimestamp(),
         });
         await logActivity(user, 'add_enterprise_feature', `Added enterprise feature: "${form.title}"`);
-        toast.success('Enterprise feature added');
-        setStatus({ type: 'success', message: 'Feature saved successfully.' });
+        toast.success('School capability added');
+        setStatus({ type: 'success', message: 'School capability saved successfully.' });
       }
 
       resetForm();
@@ -149,14 +155,14 @@ export default function ManageEnterpriseFeatures() {
     } catch (error) {
       console.error('Error saving enterprise feature:', error);
       setStatus({ type: 'error', message: error.message || 'Failed to save feature.' });
-      toast.error(error.message || 'Failed to save enterprise feature');
+      toast.error(error.message || 'Failed to save school capability');
     } finally {
       setSaving(false);
     }
   };
 
   const handleDelete = async (feature) => {
-    if (!window.confirm(`Delete "${feature.title}" from Enterprise Engineering?`)) return;
+    if (!window.confirm(`Remove "${feature.title}" from the homepage school highlights?`)) return;
 
     try {
       await deleteDoc(doc(db, 'enterpriseFeatures', feature.id));
@@ -166,22 +172,23 @@ export default function ManageEnterpriseFeatures() {
       }
 
       await logActivity(user, 'delete_enterprise_feature', `Deleted enterprise feature: "${feature.title}"`);
-      toast.success('Enterprise feature deleted');
-      setStatus({ type: 'success', message: 'Feature deleted successfully.' });
+      toast.success('School capability removed');
+      setStatus({ type: 'success', message: 'School capability removed successfully.' });
       setFeatures(prev => prev.filter(item => item.id !== feature.id));
     } catch (error) {
       console.error('Error deleting enterprise feature:', error);
       setStatus({ type: 'error', message: 'Failed to delete feature.' });
-      toast.error('Failed to delete enterprise feature');
+      toast.error('Failed to remove school capability');
     }
   };
 
   return (
     <AdminLayout>
-      <PageTitle>Enterprise Engineering Features</PageTitle>
+      <PageTitle>School Capabilities &amp; Highlights</PageTitle>
 
       <div className="grid gap-5 lg:grid-cols-[360px_1fr]">
         <form
+          ref={formRef}
           onSubmit={handleSubmit}
           className="space-y-4 rounded-lg border border-slate-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-900"
         >
@@ -191,7 +198,7 @@ export default function ManageEnterpriseFeatures() {
               {editingFeature ? 'Edit Homepage Feature Card' : 'Add Homepage Feature Card'}
             </h2>
             <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-              These cards appear under Enterprise Engineering on the homepage.
+              These cards power the homepage “Why Choose Us” section. Use Markdown for bold text, lists, and links.
             </p>
           </div>
 
@@ -221,7 +228,7 @@ export default function ManageEnterpriseFeatures() {
             name="text"
             value={form.text}
             onChange={handleChange}
-            placeholder="Short supporting text"
+            placeholder="Rich supporting text (Markdown supported)"
             required
             className="h-28 w-full resize-none rounded border border-slate-300 bg-white p-3 text-sm outline-none focus:ring-2 focus:ring-primary/30 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
@@ -281,15 +288,15 @@ export default function ManageEnterpriseFeatures() {
         <div className="rounded-lg border border-slate-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
           <div className="border-b border-slate-100 p-4 dark:border-gray-700">
             <h2 className="font-black text-slate-900 dark:text-white">
-              Current Enterprise Features ({features.length})
+              Current School Highlights ({features.length})
             </h2>
           </div>
 
           {loading ? (
-            <LoadingSpinner label="Loading enterprise features" />
+            <LoadingSpinner label="Loading school highlights" />
           ) : features.length === 0 ? (
             <div className="p-6 text-center text-sm text-slate-400">
-              No custom features yet. The public homepage will use the default Dankamf feature cards.
+              No custom school highlights yet. The public homepage will use the default Dankamf highlights.
             </div>
           ) : (
             <div className="grid gap-4 p-4 md:grid-cols-2 xl:grid-cols-3">
@@ -331,9 +338,16 @@ export default function ManageEnterpriseFeatures() {
                       </button>
                     </div>
                   </div>
-                  <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+                  <p className={`mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300 ${expandedFeatureId === feature.id ? '' : 'line-clamp-2'}`}>
                     {feature.text}
                   </p>
+                  <button
+                    type="button"
+                    onClick={() => setExpandedFeatureId(prev => prev === feature.id ? null : feature.id)}
+                    className="mt-2 text-xs font-black uppercase tracking-wider text-primary hover:text-cta"
+                  >
+                    {expandedFeatureId === feature.id ? 'Hide content' : 'Open content'}
+                  </button>
                 </article>
               ))}
             </div>

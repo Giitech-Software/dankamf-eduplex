@@ -36,7 +36,6 @@ const Terms = () => (
         to="/"
         className="inline-block bg-primary text-white px-5 py-2 rounded hover:bg-cta transition"
       >
-        ← Back to Homepage
       </Link>
     </div>
   </div>

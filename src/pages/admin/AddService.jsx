@@ -11,6 +11,7 @@ export default function AddService() {
   const { user } = useAuth();
   const [form, setForm] = useState({
     title: '',
+    order: '',
     description: '',
     curriculum: '',
     assessment: '',
@@ -45,6 +46,7 @@ export default function AddService() {
 
       await addDoc(collection(db, 'services'), {
         title: form.title,
+        order: Number(form.order) || 9999,
         description: form.description,
         curriculum: form.curriculum,
         assessment: form.assessment,
@@ -56,7 +58,7 @@ export default function AddService() {
       await logActivity(user, 'add_service', `Added service: "${form.title}"`);
 
       setMsg('✅ Service added successfully!');
-      setForm({ title: '', description: '', curriculum: '', assessment: '', timetable: '', iconImage: null });
+      setForm({ title: '', order: '', description: '', curriculum: '', assessment: '', timetable: '', iconImage: null });
     } catch (err) {
       setMsg('❌ ' + err.message);
     } finally {
@@ -66,7 +68,7 @@ export default function AddService() {
 
   return (
     <AdminLayout>
-      <PageTitle>➕ Add New Service</PageTitle>
+      <PageTitle>➕ Add Academic Programme</PageTitle>
 
       <form onSubmit={handleSubmit} className="space-y-4 max-w-xl">
         <input
@@ -77,6 +79,8 @@ export default function AddService() {
           required
           className="w-full p-3 border rounded bg-white dark:bg-gray-900 dark:border-gray-700 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
         />
+
+        <label className="block text-sm font-bold text-slate-700 dark:text-slate-200">Homepage display number<input type="number" min="1" name="order" placeholder="e.g. 1" value={form.order} onChange={handleChange} className="mt-1 w-full rounded-lg border p-3 dark:border-gray-700 dark:bg-gray-900 dark:text-white" /><span className="mt-1 block text-xs font-normal text-slate-500">Lower numbers appear first in Our Academics.</span></label>
 
         <textarea name="curriculum" value={form.curriculum} onChange={handleChange} placeholder="Curriculum overview (Markdown supported)" className="w-full h-32 p-3 border rounded bg-white dark:bg-gray-900 dark:border-gray-700 dark:text-white placeholder-gray-500 dark:placeholder-gray-400" />
         <textarea name="assessment" value={form.assessment} onChange={handleChange} placeholder="Assessment approach (Markdown supported)" className="w-full h-32 p-3 border rounded bg-white dark:bg-gray-900 dark:border-gray-700 dark:text-white placeholder-gray-500 dark:placeholder-gray-400" />
@@ -104,7 +108,7 @@ export default function AddService() {
           disabled={uploading}
           className="bg-primary text-white px-6 py-3 rounded hover:bg-cta transition disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {uploading ? 'Uploading…' : 'Add Service'}
+          {uploading ? 'Publishing…' : 'Add Programme'}
         </button>
 
         {msg && <p className="text-sm text-gray-700 dark:text-gray-300">{msg}</p>}

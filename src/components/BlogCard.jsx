@@ -1,17 +1,12 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 
-export default function BlogCard({ post, onClick, index, id }) {
-  const truncateText = (text, limit) => {
-    if (!text) return '';
-    return text.length > limit ? text.substring(0, limit) + '...' : text;
-  };
-
+export default function BlogCard({ post, onClick, index, id, className = '' }) {
   return (
     <div
       id={id}
       onClick={() => onClick(post)}
-      className="group flex cursor-pointer flex-col overflow-hidden border border-slate-200 bg-white shadow-sm transition-all duration-500 hover:border-warm hover:shadow-xl sm:rounded-lg"
+      className={`group flex cursor-pointer flex-col overflow-hidden border border-slate-200 bg-white shadow-sm transition-all duration-500 hover:border-warm hover:shadow-xl sm:rounded-lg ${className}`}
       style={{ transitionDelay: `${index * 50}ms` }}
     >
       {post.image && (
@@ -32,9 +27,9 @@ export default function BlogCard({ post, onClick, index, id }) {
           {post.title}
         </h2>
         
-        <div className="text-slate-600 text-base leading-relaxed flex-1 prose max-w-none">
-          <ReactMarkdown allowedElements={['p', 'text']}>
-            {truncateText(post.content, 130)}
+        <div className="prose prose-sm line-clamp-3 max-h-[5.5rem] flex-1 overflow-hidden text-base leading-relaxed text-slate-600 sm:prose-base">
+          <ReactMarkdown>
+            {post.content || 'Read the latest news and updates from Dankamf Educational Complex.'}
           </ReactMarkdown>
         </div>
 

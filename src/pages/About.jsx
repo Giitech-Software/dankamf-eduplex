@@ -1,61 +1,78 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Seo from '../components/Seo';
 import SeoConfig from '../config/SeoConfig';
 import LeadershipSection from '../components/LeadershipSection';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../firebase/config';
+import ReactMarkdown from 'react-markdown';
 
-const AboutUs = () => (
+const defaults = {
+  history: 'Dankamf Educational Complex was established on 11th January 2016 by Elder Daniel Attrams and Dcn Mrs Florence Attrams with the vision of transforming lives through quality education. Since its inception, the school has remained committed to nurturing academically excellent, morally upright, and socially responsible learners.',
+  headteacherMessage: 'It is my great pleasure to welcome you to Dankamf Educational Complex, a school dedicated to nurturing excellence in academics, character, creativity, and leadership. Together, let us inspire young minds, build strong character, and prepare our children for a bright future.',
+  vision: 'To be a leader in private education by empowering students with Godly principles and values to become productive, caring, and results-oriented leaders.',
+  mission: 'We provide the highest quality education in Christ-centred principles and values so that students are empowered to lead productive and fulfilling lives as lifelong learners and responsible citizens.',
+  values: 'Excellence, Integrity, Equity, and Citizenship, all rooted in the fear of God.',
+  achievements: '',
+  educationalPhilosophy: '',
+  schoolIntroduction: '',
+};
+
+const AboutUs = () => {
+  const [about, setAbout] = useState(defaults);
+  useEffect(() => { getDoc(doc(db, 'about', 'schoolProfile')).then((snap) => { if (snap.exists()) setAbout((prev) => ({ ...prev, ...snap.data() })); }).catch(console.error); }, []);
+  return (
   <>
     <Seo {...SeoConfig.about} />
     <section className="bg-electric-blue px-4 py-6 text-primary sm:px-8 sm:py-8">
-      <div className="mx-auto max-w-4xl text-center">
+      <div className="mx-auto max-w-4xl text-left">
+        <div className="text-center">
         <h1 className="text-3xl font-black tracking-tight sm:text-4xl">About Dankamf Educational Complex</h1>
         <p className="mt-2 text-sm leading-relaxed text-primary/80 sm:text-base">
           Changing lives through Godly principles and quality education.
         </p>
+        </div>
       </div>
     </section>
 
     <main className="mx-auto max-w-4xl px-4 py-10 text-text sm:px-6 sm:py-12">
-      <div className="prose prose-lg max-w-none prose-h2:text-primary prose-h2:font-bold prose-h3:font-semibold">
+      {about.schoolIntroduction && <section className="mb-6 rounded-xl border border-powder-blue bg-white p-5 shadow-sm sm:p-6"><div className="prose prose-lg max-w-none"><ReactMarkdown>{about.schoolIntroduction}</ReactMarkdown></div></section>}
+      <div className="about-content prose prose-lg max-w-none prose-h2:text-primary prose-h2:font-bold prose-h3:font-semibold">
         <section>
           <h2>Our History</h2>
-          <p>Dankamf Educational Complex was established on 11th January 2016 by Elder. Daniel Attrams and Dcns Mrs. Florence Attrams with the vision of transforming lives through quality education. The founders firmly believe that education is the most powerful tool for changing the world and empowering individuals to make meaningful contributions to society.</p>
-          <p>The establishment of the school was inspired by the extensive professional experience of Elder Daniel Attrams in the field of education. He holds a Master of Science (MSc.) Degree in Development Policy and Planning from the Kwame Nkrumah University of Science and Technology (KNUST), a Bachelor of Arts Degree in Political Science from the University of Ghana, Legon, and a Certificate in Education from SDA Training College, Asokore-Koforidua.</p>
-          <p>Drawing on these rich experiences, Mr. and Mrs. Attrams established Dankamf Educational Complex to provide high-quality, holistic, and inclusive education to children from all backgrounds. Since its inception, the school has remained committed to nurturing academically excellent, morally upright, and socially responsible learners who are equipped with the knowledge, skills, and values needed to succeed in an ever-changing world.</p>
+          <ReactMarkdown>{about.history}</ReactMarkdown>
         </section>
 
-        <section className="mt-10">
+        <section className="mt-6">
           <h2>Message from the Headmaster</h2>
-          <p>Dear Parents, Guardians, Students, and Esteemed Visitors,</p>
-          <p>It is my great pleasure to welcome you to Dankamf Educational Complex, a school dedicated to nurturing excellence in academics, character, creativity, and leadership. We believe that every child has unique talents and the potential to succeed when provided with the right guidance, opportunities, and supportive learning environment.</p>
-          <p>At Dankamf Educational Complex, we are committed to delivering quality education through dedicated and highly qualified teachers, innovative teaching methods, and a curriculum that equips our learners with the knowledge, skills, and values needed to thrive in an ever-changing world. Beyond academic achievement, we emphasize discipline, integrity, respect, responsibility, and teamwork, ensuring that our learners grow into confident and responsible citizens.</p>
-          <p>I warmly invite you to become part of the Dankamf Educational Complex family. Together, let us inspire young minds, build strong character, and prepare our children for a bright and successful future.</p>
+          {about.headteacherImage && <img src={about.headteacherImage} alt={about.headteacherName || 'Headteacher'} className="mb-5 h-48 w-40 rounded-xl object-cover shadow-md" />}
+          {about.headteacherName && <p className="font-bold text-primary">{about.headteacherName} · {about.headteacherRole || 'Headteacher'}</p>}
+          <ReactMarkdown>{about.headteacherMessage}</ReactMarkdown>
+          {about.proprietorImage && <div className="mt-6 flex items-center gap-4"><img src={about.proprietorImage} alt={about.proprietorName || 'Proprietor'} className="h-24 w-24 rounded-full object-cover" /><p className="font-bold text-primary">{about.proprietorName} · {about.proprietorRole || 'Proprietor'}</p></div>}
         </section>
 
         <LeadershipSection />
 
-        <section className="mt-10">
+        <section className="mt-6">
           <h2>Our Vision & Mission</h2>
           <h3>Vision</h3>
-          <p>To be a leader in private Education in the World by empowering our students with Godly principles and values to become productive, caring, and results-oriented leaders of the world.</p>
+          <ReactMarkdown>{about.vision}</ReactMarkdown>
           <h3>Mission</h3>
-          <p>We provide the highest quality education in Christ-centered principles and values so that all our students are empowered to lead productive and fulfilling lives as lifelong learners and responsible citizens of the world.</p>
+          <ReactMarkdown>{about.mission}</ReactMarkdown>
         </section>
 
-        <section className="mt-10">
+        {about.educationalPhilosophy && <section className="mt-6">
+          <h2>Educational Philosophy</h2>
+          <ReactMarkdown>{about.educationalPhilosophy}</ReactMarkdown>
+        </section>}
+
+        <section className="mt-6">
           <h2>Our Core Values</h2>
-          <h4>Excellence</h4>
-          <p>We pursue the highest standards in academic achievement and organizational performance in the fear of God.</p>
-          <h4>Integrity</h4>
-          <p>We build Godly and positive relationships through honesty, respect and compassion, which enhance the self-esteem, safety, and well-being of our students, families and staff.</p>
-          <h4>Equity</h4>
-          <p>We foster Godly environment that serves all students and aspires to eliminate the achievement gap.</p>
-          <h4>Citizenship</h4>
-          <p>We honor God through diversity of our community by working as a team to ensure the educational success of all our students, and recognize that our obligations go beyond our professional responsibilities.</p>
+          <div className="prose prose-lg max-w-none"><ReactMarkdown>{about.values}</ReactMarkdown></div>
         </section>
 
-        <section className="mt-10">
+        {about.achievements && <section className="mt-10"><ReactMarkdown>{about.achievements}</ReactMarkdown></section>}
+        <section className={`mt-6 ${about.achievements ? 'hidden' : ''}`}>
           <h2>School Achievements</h2>
           <p>At Dankamf Educational Complex, we take pride in our continuous pursuit of excellence in education and the holistic development of our learners. Through the commitment of our dedicated staff, supportive parents, and hardworking students, we have achieved remarkable milestones in academics, character building, and talent development.</p>
           <ul>
@@ -79,6 +96,7 @@ const AboutUs = () => (
       </div>
     </main>
   </>
-);
+  );
+};
 
 export default AboutUs;

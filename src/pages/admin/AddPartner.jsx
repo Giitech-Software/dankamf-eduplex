@@ -13,7 +13,7 @@ import LoadingSpinner from '../../components/LoadingSpinner';
 export default function AddPartner() {
   const { user } = useAuth();
   const [partners, setPartners] = useState([]);
-  const [form, setForm] = useState({ name: '', image: null });
+  const [form, setForm] = useState({ name: '', order: '', image: null });
   const [previewUrl, setPreviewUrl] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [loadingPartners, setLoadingPartners] = useState(true);
@@ -25,7 +25,7 @@ export default function AddPartner() {
     try {
       const q = query(collection(db, 'partners'), orderBy('timestamp', 'desc'));
       const snap = await getDocs(q);
-      setPartners(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+      setPartners(snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (Number(a.order) || 9999) - (Number(b.order) || 9999)));
     } finally {
       setLoadingPartners(false);
     }
@@ -76,6 +76,7 @@ export default function AddPartner() {
 
       const payload = {
         name: form.name,
+        order: Number(form.order) || partners.length + 1,
         imageUrl,
         imagePath,
       };
@@ -110,7 +111,7 @@ export default function AddPartner() {
 
   const resetForm = () => {
     if (previewUrl) URL.revokeObjectURL(previewUrl);
-    setForm({ name: '', image: null });
+    setForm({ name: '', order: '', image: null });
     setPreviewUrl(null);
     setEditingPartner(null);
   };
@@ -118,7 +119,7 @@ export default function AddPartner() {
   const handleEdit = (partner) => {
     if (previewUrl) URL.revokeObjectURL(previewUrl);
     setEditingPartner(partner);
-    setForm({ name: partner.name || '', image: null });
+    setForm({ name: partner.name || '', order: partner.order || '', image: null });
     setPreviewUrl(null);
     setStatus(null);
   };
@@ -170,16 +171,30 @@ export default function AddPartner() {
           <div className="space-y-2">
             <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Institution Name</label>
             <div className="relative">
-              <FaBuilding className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-300" />
+              <FaBuilding className="pointer-events-none absolute left-3 top-1/2 z-10 -translate-y-1/2 text-slate-400" aria-hidden="true" />
               <input
                 name="name"
                 value={form.name}
                 onChange={handleChange}
                 placeholder="e.g. M'Salem School"
                 required
-                className="w-full pl-10 pr-4 py-3 border rounded-lg bg-slate-50 dark:bg-gray-900 dark:border-gray-700 dark:text-white outline-none focus:ring-2 focus:ring-primary/20 transition"
+                className="w-full rounded-lg border bg-slate-50 py-3 !pl-11 pr-4 outline-none transition focus:ring-2 focus:ring-primary/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
               />
             </div>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Homepage Display Number</label>
+            <input
+              name="order"
+              type="number"
+              min="1"
+              value={form.order}
+              onChange={handleChange}
+              placeholder={`e.g. ${partners.length + 1}`}
+              className="w-full rounded-lg border bg-slate-50 px-3 py-2.5 outline-none transition focus:ring-2 focus:ring-primary/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+            />
+            <p className="text-xs text-slate-500 dark:text-slate-400">Lower numbers appear first on the public homepage.</p>
           </div>
 
           <div className="space-y-2">
@@ -211,7 +226,7 @@ export default function AddPartner() {
 
           <button
             disabled={uploading}
-            className="w-full bg-slate-900 text-white py-3 rounded-lg font-black text-xs uppercase tracking-widest hover:bg-warm transition shadow-lg disabled:opacity-50"
+            className="w-full rounded-lg bg-gradient-to-r from-[#003153] to-[#007BA7] py-3 text-xs font-black uppercase tracking-widest text-white shadow-lg transition hover:from-[#001b36] hover:to-[#005f82] disabled:opacity-50"
           >
             {uploading ? 'Uploading...' : editingPartner ? 'Update Partner' : 'Save Partner'}
           </button>
@@ -235,9 +250,10 @@ export default function AddPartner() {
           <div className="divide-y divide-slate-50 dark:divide-gray-700">
             {loadingPartners ? (
               <LoadingSpinner label="Loading partners" />
-            ) : partners.map((p) => (
-              <div key={p.id} className="p-4 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-gray-900/50 transition">
+            ) : partners.map((p, index) => (
+              <div key={p.id} className={`flex items-center justify-between border-l-4 p-4 transition hover:bg-slate-50 dark:hover:bg-gray-900/50 ${['border-[#003153]', 'border-[#007BA7]', 'border-[#4169E1]', 'border-[#0096FF]'][index % 4]}`}>
                 <div className="flex items-center gap-4">
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#003153] text-xs font-black text-white">{p.order || index + 1}</span>
                   <div className="w-16 h-10 bg-slate-100 rounded flex items-center justify-center p-2">
                     <img src={p.imageUrl} alt="" className="max-w-full max-h-full object-contain grayscale" />
                   </div>

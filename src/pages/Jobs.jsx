@@ -8,10 +8,12 @@ import Seo from '../components/Seo';
 import SeoConfig from '../config/SeoConfig';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { admissionPrograms } from '../data/careerOpenings';
+import useSiteSettings from '../hooks/useSiteSettings';
 
 export default function Jobs() {
   const [programs, setPrograms] = useState(admissionPrograms);
   const [loading, setLoading] = useState(true);
+  const { settings } = useSiteSettings();
 
   useEffect(() => {
     const fetchJobs = async () => {
@@ -34,16 +36,16 @@ export default function Jobs() {
 
   return (
     <>
-      <Seo {...SeoConfig.careers} />
+      <Seo {...SeoConfig.admissions} />
       <div className="min-h-screen bg-background-alt text-text">
         <section className="bg-electric-blue px-4 py-6 text-primary sm:px-8 sm:py-8">
           <div className="mx-auto max-w-5xl text-center">
             <p className="text-xs font-black uppercase tracking-[0.25em] text-primary">Admissions</p>
             <h1 className="mt-2 text-3xl font-black tracking-tight sm:text-4xl">
-              Join the Dankamf Family
+              {settings?.admissionsTitle || 'Join the Dankamf Family'}
             </h1>
             <p className="mx-auto mt-2 max-w-3xl text-sm leading-relaxed text-primary/80 sm:text-base">
-              Discover our admission process and take the first step towards securing a bright future for your child.
+              {settings?.admissionsSubtitle || 'Discover our admission process and take the first step towards securing a bright future for your child.'}
             </p>
           </div>
         </section>
@@ -110,10 +112,10 @@ export default function Jobs() {
                     {program.description}
                   </p>
                   <Link
-                    to={`/jobs/${program.id}`}
+                    to="/admissions/apply"
                     className="mt-auto inline-flex items-center gap-1 pt-5 text-sm font-bold text-accent transition hover:text-primary"
                   >
-                    View Details <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                    Enroll for this programme <ArrowRight className="h-4 w-4" aria-hidden="true" />
                   </Link>
                 </article>
               ))}

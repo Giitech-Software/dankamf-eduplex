@@ -7,6 +7,11 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import Seo from '../components/Seo';
 import SeoConfig from '../config/SeoConfig';
 
+const linkPhoneNumbers = (answer = '') => answer.replace(/(024\s*217\s*2216|\+233\s*24\s*217\s*2216)/g, (phone) => {
+  const dialNumber = phone.replace(/\s+/g, '').replace(/^0/, '+233');
+  return `[${phone}](tel:${dialNumber})`;
+});
+
 export default function FAQs() {
   const [faqs, setFaqs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -17,7 +22,7 @@ export default function FAQs() {
       try {
         const q = query(collection(db, 'faqs'), orderBy('timestamp', 'desc'));
         const snapshot = await getDocs(q);
-        setFaqs(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+        setFaqs(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })).sort((a, b) => (Number(a.order) || 9999) - (Number(b.order) || 9999)));
       } catch (fetchError) {
         console.error('Error fetching FAQs:', fetchError);
         setError('Unable to load the FAQs right now. Please try again shortly.');
@@ -31,7 +36,7 @@ export default function FAQs() {
 
   return (
     <>
-      <Seo {...SeoConfig.faqs} />
+      <Seo {...SeoConfig.faqs} faqItems={faqs} />
       <section className="bg-electric-blue px-4 py-6 text-primary sm:px-8 sm:py-8">
         <div className="mx-auto max-w-4xl text-center">
           <p className="text-xs font-black uppercase tracking-[0.25em] text-cobalt">Helpful Answers</p>
@@ -51,14 +56,14 @@ export default function FAQs() {
             <p className="px-4 text-center text-slate-500 sm:px-0">No FAQs are available yet.</p>
           ) : (
             <div className="space-y-3 sm:space-y-4">
-              {faqs.map(faq => (
+              {faqs.map((faq, index) => (
                 <article
                   key={faq.id}
                   className="border-l-4 border-primary bg-slate-50 p-5 shadow-sm sm:rounded-lg"
                 >
-                  <h2 className="text-xl font-bold text-slate-900">{faq.question}</h2>
+                  <h2 className="text-xl font-bold text-slate-900">{index + 1}. {faq.question.replace(/^\s*\d+[.)]\s*/, '')}</h2>
                   <div className="prose prose-slate mt-3 max-w-none text-slate-700">
-                    <ReactMarkdown>{faq.answer}</ReactMarkdown>
+                    <ReactMarkdown>{linkPhoneNumbers(faq.answer)}</ReactMarkdown>
                   </div>
                 </article>
               ))}
@@ -70,7 +75,6 @@ export default function FAQs() {
               to="/#faqs"
               className="inline-flex rounded-lg bg-primary px-6 py-3 text-sm font-bold text-white shadow-lg transition hover:bg-cta"
             >
-              Back to Homepage FAQs
             </Link>
           </div>
         </div>

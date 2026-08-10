@@ -2,6 +2,72 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Keep public Markdown content readable without excessive vertical gaps. */
+.public-site .prose > section,
+.public-site .prose > div > section {
+  margin-top: 1.5rem;
+}
+
+.public-site .prose > section:first-child,
+.public-site .prose > div > section:first-child {
+  margin-top: 0;
+}
+
+.public-site .prose h1,
+.public-site .prose h2,
+.public-site .prose h3,
+.public-site .prose h4 {
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.public-site .prose p,
+.public-site .prose ul,
+.public-site .prose ol {
+  margin-top: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+/* Consistent About-page hierarchy for JSX headings and admin Markdown. */
+.about-content .prose h1,
+.about-content h1 {
+  font-size: 1.875rem;
+  line-height: 1.2;
+  font-weight: 900;
+  color: #003153;
+}
+
+.about-content .prose h2,
+.about-content h2 {
+  font-size: 1.5rem;
+  line-height: 1.25;
+  font-weight: 900;
+  color: #003153;
+}
+
+.about-content .prose h3,
+.about-content h3 {
+  font-size: 1.125rem;
+  line-height: 1.35;
+  font-weight: 800;
+  color: #0047ab;
+}
+
+.about-content .prose h4,
+.about-content h4 {
+  margin-top: 1rem;
+  margin-bottom: 0.35rem;
+  font-size: 1rem;
+  line-height: 1.4;
+  font-weight: 800;
+  color: #007ba7;
+}
+
+.about-content .prose strong {
+  color: #0047ab;
+  font-weight: 800;
+}
+
 @layer base {
   html,
   body,
@@ -185,9 +251,15 @@ main.min-h-screen.bg-background-alt > section.bg-primary-dark h1 {
   letter-spacing: 0.01em;
 }
 
+@media (max-height: 520px) and (orientation: landscape) {
+  .hero-controls {
+    bottom: 34% !important;
+  }
+}
+
 .loading-shell,
 .login-shell {
-  background: radial-gradient(circle at 12% 12%, rgba(0, 150, 255, 0.08), transparent 30%), radial-gradient(circle at 88% 88%, rgba(70, 130, 180, 0.08), transparent 32%), #ffffff;
+  background: radial-gradient(circle at 15% 10%, rgba(0, 150, 255, 0.32), transparent 32%), radial-gradient(circle at 88% 86%, rgba(65, 105, 225, 0.25), transparent 35%), linear-gradient(135deg, #003153 0%, #001b36 52%, #0047ab 100%);
 }
 
 .loading-shell::before,
@@ -195,10 +267,66 @@ main.min-h-screen.bg-background-alt > section.bg-primary-dark h1 {
   content: '';
   position: absolute;
   inset: 1.5rem;
-  border: 1px solid rgba(0, 123, 167, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.22);
   border-radius: 1.5rem;
   pointer-events: none;
 }
+
+.loading-flower {
+  position: relative;
+  border-radius: 9999px;
+  background-color: #0047ab;
+  background:
+    radial-gradient(ellipse 27% 47% at 50% 10%, #ffffff 0 65%, transparent 66%),
+    radial-gradient(ellipse 27% 47% at 78% 22%, #003153 0 65%, transparent 66%),
+    radial-gradient(ellipse 27% 47% at 90% 50%, #ffffff 0 65%, transparent 66%),
+    radial-gradient(ellipse 27% 47% at 78% 78%, #003153 0 65%, transparent 66%),
+    radial-gradient(ellipse 27% 47% at 50% 90%, #ffffff 0 65%, transparent 66%),
+    radial-gradient(ellipse 27% 47% at 22% 78%, #003153 0 65%, transparent 66%),
+    radial-gradient(ellipse 27% 47% at 10% 50%, #ffffff 0 65%, transparent 66%),
+    radial-gradient(ellipse 27% 47% at 22% 22%, #003153 0 65%, transparent 66%),
+    #0047ab;
+  animation: loading-flower-spin 1100ms linear infinite;
+}
+
+.loading-flower::after {
+  content: '';
+  position: absolute;
+  inset: 38%;
+  border-radius: 9999px;
+  background: #ffffff;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.7);
+}
+
+.loading-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  min-height: 2rem;
+}
+
+.loading-dots span {
+  display: block;
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 9999px;
+  background: #ffffff;
+  box-shadow: 0 0 0 2px rgba(0, 49, 83, 0.3), 0 2px 8px rgba(0, 49, 83, 0.35);
+  animation: loading-dot-oscillate 900ms ease-in-out infinite;
+}
+
+.loading-dots span:nth-child(2) { animation-delay: 120ms; background: #007ba7; }
+.loading-dots span:nth-child(3) { animation-delay: 240ms; background: #ffffff; }
+.loading-dots span:nth-child(4) { animation-delay: 360ms; background: #003153; }
+.loading-dots span:nth-child(5) { animation-delay: 480ms; background: #ffffff; }
+
+@keyframes loading-dot-oscillate {
+  0%, 100% { transform: translateY(0) scale(0.8); opacity: 0.6; }
+  50% { transform: translateY(-0.55rem) scale(1); opacity: 1; }
+}
+
+@keyframes loading-flower-spin { to { transform: rotate(360deg); } }
 
 .login-shell > form {
   position: relative;
@@ -207,4 +335,131 @@ main.min-h-screen.bg-background-alt > section.bg-primary-dark h1 {
 
 main.min-h-screen.bg-background-alt > section.bg-primary-dark p:last-child {
   margin-top: 0.5rem !important;
+}
+
+/* Consistent contrast for legacy and modern admin forms in dark mode. */
+.dark .admin-site input,
+.dark .admin-site textarea,
+.dark .admin-site select {
+  color: #f8fafc;
+  background-color: #1f2937;
+  border-color: #475569;
+}
+
+.dark .admin-site input::placeholder,
+.dark .admin-site textarea::placeholder {
+  color: #94a3b8;
+  opacity: 1;
+}
+
+.dark .admin-site select option {
+  color: #f8fafc;
+  background-color: #1f2937;
+}
+
+.dark .admin-site label,
+.dark .admin-site h1,
+.dark .admin-site h2,
+.dark .admin-site h3,
+.dark .admin-site h4 {
+  color: #f8fafc;
+}
+
+.dark .admin-site .text-primary,
+.dark .admin-site .text-blue-500,
+.dark .admin-site .text-blue-600,
+.dark .admin-site .text-blue-700,
+.dark .admin-site .text-primary-dark {
+  color: #7dd3fc;
+}
+
+/* Enterprise-wide dark-mode contrast for admin tables, cards and legacy pages. */
+.dark .admin-site .bg-white,
+.dark .admin-site .bg-gray-50,
+.dark .admin-site .bg-slate-50 {
+  background-color: #111827 !important;
+}
+
+.dark .admin-site .bg-blue-50 {
+  background-color: #172554 !important;
+}
+
+.dark .admin-site .text-gray-900,
+.dark .admin-site .text-slate-900,
+.dark .admin-site .text-slate-800,
+.dark .admin-site .text-slate-700,
+.dark .admin-site .text-darkgray,
+.dark .admin-site .text-gray-700,
+.dark .admin-site .text-slate-600 {
+  color: #e5e7eb !important;
+}
+
+.dark .admin-site .text-gray-500,
+.dark .admin-site .text-slate-500,
+.dark .admin-site .text-slate-400 {
+  color: #cbd5e1 !important;
+}
+
+.dark .admin-site .border-slate-200,
+.dark .admin-site .border-slate-300,
+.dark .admin-site .border-gray-200,
+.dark .admin-site .border-gray-300,
+.dark .admin-site .divide-slate-100 > :not([hidden]) ~ :not([hidden]),
+.dark .admin-site .divide-slate-200 > :not([hidden]) ~ :not([hidden]) {
+  border-color: #334155 !important;
+}
+
+.dark .admin-site thead {
+  background-color: #1e293b !important;
+}
+
+.dark .admin-site tbody tr:hover {
+  background-color: #1e293b !important;
+}
+
+.dark .admin-site a.text-primary,
+.dark .admin-site a.text-blue-600,
+.dark .admin-site a.text-blue-700 {
+  color: #7dd3fc !important;
+}
+
+/* Shared enterprise treatment for legacy admin controls. */
+.admin-site .bg-primary {
+  background-image: linear-gradient(135deg, #003153, #007ba7);
+}
+
+.admin-site .bg-primary:hover,
+.admin-site .hover\:bg-primary-dark:hover {
+  background-image: linear-gradient(135deg, #001b36, #005f82);
+}
+
+/* Public inner-page banners follow the clean enrolment-page treatment. */
+.public-site main.min-h-screen.bg-background-alt > section.bg-primary-dark,
+.public-site section.bg-electric-blue {
+  background: #ffffff !important;
+  color: #003153 !important;
+  border-bottom: 1px solid #d6f0ff;
+}
+
+.public-site main.min-h-screen.bg-background-alt > section.bg-primary-dark .text-white,
+.public-site main.min-h-screen.bg-background-alt > section.bg-primary-dark .text-slate-300,
+.public-site section.bg-electric-blue .text-primary\/80 {
+  color: #64748b !important;
+}
+
+.public-site main.min-h-screen.bg-background-alt > section.bg-primary-dark h1,
+.public-site section.bg-electric-blue h1 {
+  color: #003153 !important;
+}
+
+.public-site section.bg-electric-blue p:first-child,
+.public-site main.min-h-screen.bg-background-alt > section.bg-primary-dark p:first-child {
+  color: #007ba7 !important;
+}
+
+.admin-site main > div > form,
+.admin-site main > div > section,
+.admin-site main > div > div.rounded-xl {
+  border-color: rgba(70, 130, 180, 0.22);
+  box-shadow: 0 12px 30px rgba(0, 49, 83, 0.07);
 }

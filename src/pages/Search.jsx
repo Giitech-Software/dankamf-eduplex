@@ -8,7 +8,7 @@ import LoadingSpinner from '../components/LoadingSpinner';
 const staticPages = [
   { title: 'About Us', description: 'Our history, mission, vision, and values.', path: '/about', type: 'Page' },
   { title: 'Academics', description: 'Explore our programmes and curriculum.', path: '/services', type: 'Page' },
-  { title: 'Admissions', description: 'Apply to Dankamf Educational Complex.', path: '/jobs', type: 'Page' },
+  { title: 'Admissions', description: 'Apply to Dankamf Educational Complex.', path: '/admissions', type: 'Page' },
   { title: 'Contact Us', description: 'Get in touch with our school team.', path: '/contact', type: 'Page' },
   { title: 'Campus Gallery', description: 'Explore life and learning at Dankamf.', path: '/gallery', type: 'Page' },
 ];

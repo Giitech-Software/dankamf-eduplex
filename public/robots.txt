@@ -4,5 +4,8 @@ Disallow: /admin/
 Disallow: /dashboard
 Disallow: /login
 Disallow: /admissions/status
+Disallow: /search
+Disallow: /admin
+Disallow: /api/
 
 Sitemap: https://dankamf-eduplex.web.app/sitemap.xml

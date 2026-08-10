@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { collection, getDocs, orderBy, query, where, limit } from 'firebase/firestore';
+import { collection, getDocs, query, where, limit } from 'firebase/firestore';
 import { CalendarDays, MapPin } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { db } from '../firebase/config';
 import LoadingSpinner from './LoadingSpinner';
 
@@ -17,12 +18,15 @@ export default function UpcomingEvents() {
         const eventsQuery = query(
           collection(db, 'events'),
           where('published', '==', true),
-          where('date', '>=', today),
-          orderBy('date', 'asc'),
-          limit(3)
+          limit(20)
         );
         const snapshot = await getDocs(eventsQuery);
-        setEvents(snapshot.docs.map((event) => ({ id: event.id, ...event.data() })));
+        const upcoming = snapshot.docs
+          .map((event) => ({ id: event.id, ...event.data() }))
+          .filter((event) => event.date >= today)
+          .sort((a, b) => a.date.localeCompare(b.date))
+          .slice(0, 3);
+        setEvents(upcoming);
       } catch (error) {
         console.error('Error fetching upcoming events:', error);
       } finally {
@@ -44,11 +48,16 @@ export default function UpcomingEvents() {
           </div>
           <p className="max-w-md text-sm leading-relaxed text-text-light">Important dates, activities, and opportunities for our school community.</p>
         </div>
+        <div className="mt-8 text-center">
+          <Link to="/calendar" className="inline-flex rounded-full border border-primary px-4 py-2 text-sm font-bold text-primary transition hover:bg-primary hover:text-white">
+            View all events →
+          </Link>
+        </div>
         {loading ? <LoadingSpinner label="Loading upcoming events" /> : (
           <div className="grid gap-5 md:grid-cols-3">
             {events.map((event) => (
               <article key={event.id} className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
-                {event.imageUrl && <img src={event.imageUrl} alt="" className="h-40 w-full object-cover" loading="lazy" />}
+                {event.imageUrl && <img src={event.imageUrl} alt="" className="h-40 w-full object-cover" loading="lazy" decoding="async" />}
                 <div className="p-5">
                   <p className="text-xs font-bold uppercase tracking-wider text-accent">{event.category}</p>
                   <h3 className="mt-2 text-xl font-black text-primary">{event.title}</h3>

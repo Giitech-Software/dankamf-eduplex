@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
-import { ref, deleteObject } from 'firebase/storage';
-import { db, storage } from '../../firebase/config';
+import { collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
+import { deleteObject, ref } from 'firebase/storage';
 import { Link } from 'react-router-dom';
+import { db, storage } from '../../firebase/config';
 import { useAuth } from '../../context/AuthContext';
 import { logActivity } from '../../utils/activityLog';
 import AdminLayout from '../../components/AdminLayout';
@@ -16,92 +16,55 @@ export default function ManageServices() {
   const { currentUser } = useAuth();
 
   useEffect(() => {
-    (async () => {
-      try {
-        const snapshot = await getDocs(collection(db, 'services'));
-        const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        setServices(data);
-      } catch (error) {
-        console.error('Error fetching services:', error);
-      } finally {
-        setLoading(false);
-      }
-    })();
+    getDocs(collection(db, 'services'))
+      .then((snapshot) => setServices(snapshot.docs.map((serviceDoc) => ({ id: serviceDoc.id, ...serviceDoc.data() })).sort((a, b) => (Number(a.order) || 9999) - (Number(b.order) || 9999))))
+      .catch((error) => console.error('Error fetching academic programmes:', error))
+      .finally(() => setLoading(false));
   }, []);
 
   const handleDelete = async (id, imageUrl, title) => {
     try {
-      // Delete from Firestore
       await deleteDoc(doc(db, 'services', id));
-
-      // Delete image from Firebase Storage
-      if (imageUrl) {
-        const storageRef = ref(storage, imageUrl);
-        await deleteObject(storageRef);
-      }
-
-      // Update local state
-      setServices(prev => prev.filter(service => service.id !== id));
-
-      // Log activity
-      await logActivity(currentUser?.email, `Deleted service: ${title}`);
-
-      setMsg(`✅ "${title}" deleted successfully.`);
-      setTimeout(() => setMsg(''), 3000);
+      if (imageUrl) await deleteObject(ref(storage, imageUrl));
+      setServices((previous) => previous.filter((service) => service.id !== id));
+      await logActivity(currentUser?.email, `Deleted academic programme: ${title}`);
+      setMsg(`Programme "${title}" deleted successfully.`);
     } catch (error) {
-      console.error('Error deleting service:', error);
-      setMsg('❌ Failed to delete service.');
-      setTimeout(() => setMsg(''), 3000);
+      console.error('Error deleting academic programme:', error);
+      setMsg('Unable to delete this programme. Please try again.');
     }
+    setTimeout(() => setMsg(''), 3000);
   };
 
   return (
     <AdminLayout>
-      <PageTitle>🛠️ Manage Services</PageTitle>
-
-      {msg && (
-        <div className="mb-4 px-4 py-2 rounded bg-green-100 dark:bg-green-800 text-green-800 dark:text-green-100 border border-green-300 dark:border-green-600">
-          {msg}
-        </div>
-      )}
-
-      {loading ? (
-        <LoadingSpinner label="Loading services" />
-      ) : (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {services.map(service => (
-          <div
-            key={service.id}
-            className="border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-4 rounded"
-          >
-            {service.imageUrl && (
-              <img
-                src={service.imageUrl}
-                alt={service.title}
-                className="w-full h-40 object-cover rounded mb-3"
-              />
-            )}
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{service.title}</h3>
-            <p className="text-sm text-gray-700 dark:text-gray-300 mt-1 line-clamp-3">
-              {service.description}
-            </p>
-            <div className="mt-3 flex justify-between items-center">
-              <Link
-                to={`/admin/edit-service/${service.id}`}
-                className="text-sm text-blue-600 dark:text-blue-400 underline"
-              >
-                Edit
-              </Link>
-              <button
-                onClick={() => handleDelete(service.id, service.imageUrl, service.title)}
-                className="text-sm text-red-600 dark:text-red-400 underline"
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        ))}
+      <div className="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+        <PageTitle>Academic Programmes</PageTitle>
+        <Link to="/admin/services" className="inline-flex w-fit rounded-full bg-primary px-4 py-2 text-sm font-bold text-white shadow-sm transition hover:bg-primary-dark">
+          + Add Academic Programme
+        </Link>
       </div>
+      {msg && <div className="mb-4 rounded border border-green-300 bg-green-50 px-4 py-2 text-green-800">{msg}</div>}
+      {loading ? <LoadingSpinner label="Loading academic programmes" /> : services.length === 0 ? (
+        <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50 p-8 text-center">
+          <h3 className="text-lg font-bold text-darkgray">No academic programmes yet</h3>
+          <p className="mt-2 text-sm text-slate-600">Add Preschool, Primary, JHS, or another programme to publish it on the Academics page.</p>
+          <Link to="/admin/services" className="mt-4 inline-flex rounded-full bg-primary px-4 py-2 text-sm font-bold text-white hover:bg-primary-dark">Add the first programme</Link>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {services.map((service, index) => (
+            <div key={service.id} className="rounded border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+              {service.imageUrl && <img src={service.imageUrl} alt={service.title} className="mb-3 h-40 w-full rounded object-cover" />}
+              <div className="flex items-start justify-between gap-3"><h3 className="text-lg font-semibold text-gray-900 dark:text-white">{service.title}</h3><span className="rounded-full bg-primary px-2.5 py-1 text-xs font-black text-white">{service.order || index + 1}</span></div>
+              <p className="mt-1 line-clamp-3 text-sm text-gray-700 dark:text-gray-300">{service.description}</p>
+              <div className="mt-3 flex items-center justify-between">
+                <Link to={`/admin/edit-service/${service.id}`} className="text-sm font-bold text-blue-600 underline dark:text-blue-400">Edit</Link>
+                <button onClick={() => handleDelete(service.id, service.imageUrl, service.title)} className="text-sm font-bold text-red-600 underline dark:text-red-400">Delete</button>
+              </div>
+            </div>
+          ))}
+        </div>
       )}
     </AdminLayout>
   );

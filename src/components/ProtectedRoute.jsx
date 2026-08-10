@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import LoadingSpinner from './LoadingSpinner';
 
 export default function ProtectedRoute({ children, allowedRoles }) {
   const { user, role, loading } = useAuth();
+  const location = useLocation();
   const [timeoutReached, setTimeoutReached] = useState(false);
 
   useEffect(() => {
@@ -14,7 +15,7 @@ export default function ProtectedRoute({ children, allowedRoles }) {
     return () => clearTimeout(timer);
   }, []);
 
-  if (loading) return <LoadingSpinner label="Loading user info" fullPage />;
+  if (loading) return <LoadingSpinner label={location.pathname.startsWith('/admin') ? 'Loading admin dashboard' : 'Loading account'} fullPage />;
 
   if (!user) return <Navigate to="/login" replace />;
 

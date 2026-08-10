@@ -31,6 +31,10 @@ service cloud.firestore {
     match /jobs/{docId} { allow read: if true; allow write: if isAdmin(); }
     match /enterpriseFeatures/{docId} { allow read: if true; allow write: if isAdmin(); }
     match /config/{docId} { allow read: if true; allow write: if isAdmin(); }
+    // Public About page content; administrators may update the school profile.
+    match /about/{docId} { allow read: if true; allow write: if isAdmin(); }
+    // Hero media is public, but only superadmins may publish or remove slides.
+    match /heroSlides/{docId} { allow read: if true; allow write: if isSuperAdmin(); }
 
     // Contact Forms & Applications: Anyone can create, only admins can read/delete.
     match /contactForms/{docId} {
@@ -49,8 +53,10 @@ service cloud.firestore {
       allow read, write: if isAdmin();
     }
     match /downloads/{docId} { allow read: if true; allow write: if isAdmin(); }
+    match /gallery/{docId} { allow read: if true; allow write: if isAdmin(); }
     match /schoolAlerts/{docId} { allow read: if true; allow write: if isAdmin(); }
     match /leadership/{docId} { allow read: if true; allow write: if isAdmin(); }
+    match /about/{docId} { allow read: if true; allow write: if isAdmin(); }
     match /alumniRegistrations/{docId} { allow create: if true; allow read, update, delete: if isAdmin(); }
     match /interviewRequests/{docId} { allow create: if true; allow read, update, delete: if isAdmin(); }
     match /admissionFees/{docId} { allow read: if true; allow write: if isAdmin(); }
@@ -66,7 +72,7 @@ service cloud.firestore {
       allow read, update, delete: if isAdmin();
     }
     match /newsletterCampaigns/{docId} {
-      allow read: if isAdmin();
+      allow read: if true;
       allow write: if false; // Only backend can write
     }
 
@@ -81,6 +87,15 @@ service cloud.firestore {
       allow read: if true; // Anyone can read the count
       allow create: if request.resource.data.count == 1; // Allow creation if count is 1
       allow update: if request.resource.data.count == resource.data.count + 1; // Allow incrementing
+    }
+
+    match /siteStats/visits/periods/{periodId} {
+      allow read: if true;
+      allow create: if request.resource.data.keys().hasOnly(['period', 'key', 'count'])
+        && request.resource.data.count == 1;
+      allow update: if request.resource.data.keys().hasOnly(['period', 'key', 'count'])
+        && request.resource.data.count == resource.data.count + 1;
+      allow delete: if isAdmin();
     }
 
     // Default Deny: Deny all access to any other collection by default.

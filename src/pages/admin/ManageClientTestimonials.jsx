@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   addDoc,
   collection,
@@ -38,6 +38,8 @@ export default function ManageClientTestimonials() {
   const [status, setStatus] = useState(null);
   const [fileInputKey, setFileInputKey] = useState(0);
   const [editingTestimonial, setEditingTestimonial] = useState(null);
+  const [expandedTestimonialId, setExpandedTestimonialId] = useState(null);
+  const formRef = useRef(null);
 
   const fetchTestimonials = async () => {
     try {
@@ -83,6 +85,10 @@ export default function ManageClientTestimonials() {
     setPreviewUrl('');
     setEditingTestimonial(null);
     setFileInputKey(prev => prev + 1);
+    requestAnimationFrame(() => {
+      formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      formRef.current?.querySelector('input[name="name"]')?.focus();
+    });
   };
 
   const handleEdit = (testimonial) => {
@@ -185,6 +191,7 @@ export default function ManageClientTestimonials() {
 
       <div className="grid gap-5 lg:grid-cols-[360px_1fr]">
         <form
+          ref={formRef}
           onSubmit={handleSubmit}
           className="space-y-4 rounded-lg border border-slate-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-900"
         >
@@ -344,9 +351,12 @@ export default function ManageClientTestimonials() {
                       </button>
                     </div>
                   </div>
-                  <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+                  <p className={`mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300 ${expandedTestimonialId === testimonial.id ? '' : 'line-clamp-2'}`}>
                     {testimonial.description}
                   </p>
+                  <button type="button" onClick={() => setExpandedTestimonialId(prev => prev === testimonial.id ? null : testimonial.id)} className="mt-2 text-xs font-black uppercase tracking-wider text-primary hover:text-cta">
+                    {expandedTestimonialId === testimonial.id ? 'Hide testimonial' : 'Open testimonial'}
+                  </button>
                 </article>
               ))}
             </div>
