@@ -1,0 +1,428 @@
+﻿{\rtf1\ansi\deff0{\fonttbl{\f0 Aptos;}}\viewkind4\uc1\f0\fs24\sa120\sl276\slmult1 \fs36\b Dankamf Educational Complex\b0\fs24\par
+\fs30\b Enterprise Public Website & Administration Platform User Manual\b0\fs24\par
+\par
+â€¢ *Version:** 1.0  \par
+â€¢ *Platform:** Dankamf Educational Complex  \par
+â€¢ *Live website:** https://dankamf-eduplex.web.app  \par
+â€¢ *Audience:** School leadership, admissions officers, content managers, administrators and support staff\par
+\par
+\brdrb\brdrs\brdrw10\brsp20\par
+\par
+\fs30\b 1. Purpose of this manual\b0\fs24\par
+\par
+This manual explains how to use the Dankamf public website and its protected administration platform. It covers:\par
+\par
+â€¢ How visitors navigate the website and submit enquiries.\par
+â€¢ How authorised staff review admissions, applications and messages.\par
+â€¢ How superadmins manage school content, users, images and settings.\par
+â€¢ How to format Markdown content professionally.\par
+â€¢ How to troubleshoot common access, upload and display issues.\par
+\par
+This is an operating guide. Technical deployment instructions remain in the repository [README.md](../README.md).\par
+\par
+\fs30\b 2. Platform overview\b0\fs24\par
+\par
+The platform has two connected areas:\par
+\par
+\fs26\b Public website\b0\fs24\par
+\par
+The public area presents the school to prospective families, current families, learners, alumni and the wider community. Content is displayed from Firebase where the relevant section is dynamic.\par
+\par
+\fs26\b Administration platform\b0\fs24\par
+\par
+The admin area provides secure tools for managing school content and operational submissions. Access requires Firebase Authentication and a matching profile in the Firestore `users` collection.\par
+\par
+The canonical roles are:\par
+\par
+â€¢ `superadmin` â€” full content, user, upload, settings and security-management authority.\par
+â€¢ `admin` â€” operational viewing and approved response/status workflows. Content publishing and file-management writes are restricted by the deployed rules.\par
+\par
+\fs30\b 3. Public website guide\b0\fs24\par
+\par
+\fs26\b Main public navigation\b0\fs24\par
+\par
+| Area | URL | Purpose |\par
+|---|---|---|\par
+| Home | `/` | Hero carousel, school introduction, highlights, academics, news, events, testimonials, gallery and calls to action. |\par
+| About | `/about` | History, leadership, vision, mission, values, achievements and educational philosophy. |\par
+| Academics | `/academics` and `/services` | Academic programmes and curriculum information. |\par
+| Programme details | `/academics/:slug` | Full programme description, image, curriculum, assessment and timetable information. |\par
+| School capabilities | `/school-capabilities` | Why families choose Dankamf and the schoolâ€™s capabilities. |\par
+| Student Life | `/student-life` | Clubs, sports, STEM, arts, leadership and activities. |\par
+| Campus Gallery | `/gallery` | Published campus images and visual content. |\par
+| Staff Directory | `/staff` | Staff and leadership profiles. |\par
+| News & Events | `/blog`, `/calendar` | News, announcements, articles and event information. |\par
+| Admissions | `/admissions`, `/admissions/apply` | Admissions information and online application. |\par
+| Fees | `/admissions/fees` | Published fee information. |\par
+| Interview booking | `/admissions/interview` | Request an admissions interview. |\par
+| Application status | `/admissions/status` | Check an admission application status where configured. |\par
+| Jobs | `/jobs`, `/jobs/:id` | Vacancies and job application details. |\par
+| Alumni | `/alumni` | Alumni registration and community information. |\par
+| Downloads | `/downloads` | Prospectuses, forms, policies, calendars and other published resources. |\par
+| Search | `/search` | Search available public pages and dynamic content. |\par
+| Contact | `/contact` | Contact form, phone, email, WhatsApp, office information and directions. |\par
+| FAQs | `/faqs` | Frequently asked questions and answers. |\par
+| Client confidence | `/client-confidence` | Parent, student and community testimonials. |\par
+\par
+\fs26\b Visitor actions\b0\fs24\par
+\par
+Visitors can:\par
+\par
+1. Use the header navigation or search to find information.\par
+2. Open cards to view previews and full details.\par
+3. Submit contact, admission, tour, interview, alumni or newsletter forms.\par
+4. Download published school documents.\par
+5. Tap phone numbers on compatible mobile devices to open the dialler.\par
+6. Use WhatsApp or the Let's Chat control where available.\par
+7. Browse the site on mobile portrait, mobile landscape, tablet, laptop and desktop layouts.\par
+\par
+\fs26\b Admissions workflow for visitors\b0\fs24\par
+\par
+1. Open **Admissions** or select **Enroll Online**.\par
+2. Complete the learner and parent/guardian information.\par
+3. Review the information before submission.\par
+4. Submit the application.\par
+5. Save the application reference if one is generated.\par
+6. Use **Application Status** or contact the school for follow-up.\par
+\par
+\fs26\b Job application workflow for visitors\b0\fs24\par
+\par
+1. Open **Jobs & Vacancies**.\par
+2. Select a vacancy and read the full description and requirements.\par
+3. Complete the application form.\par
+4. Attach a PDF rÃ©sumÃ© where requested.\par
+5. Submit the application and wait for the schoolâ€™s response.\par
+\par
+\fs30\b 4. Signing in to the admin panel\b0\fs24\par
+\par
+1. Open `https://dankamf-eduplex.web.app/login`.\par
+2. Enter the registered Firebase Authentication email and password.\par
+3. Select **Sign In**.\par
+4. After successful authentication, open the dashboard.\par
+\par
+The user must have both:\par
+\par
+â€¢ A Firebase Authentication account.\par
+â€¢ A Firestore document at `users/\{authentication-uid\}` containing the correct email and role.\par
+\par
+The UID in Authentication and the document ID in Firestore must match. A similar-looking email is not enough if the profile is attached to another UID.\par
+\par
+\fs26\b Login failure guidance\b0\fs24\par
+\par
+| Message | Meaning | Action |\par
+|---|---|---|\par
+| Invalid credential | Email or password is incorrect, or the account does not exist. | Confirm the exact registered email and reset/re-register only when necessary. |\par
+| Access denied | The account is authenticated but lacks an approved role. | Ask a superadmin to confirm the `users/\{uid\}` profile. |\par
+| Missing permissions | The account reached Firebase but attempted a restricted operation. | Confirm the role and use a superadmin account for publishing or uploads. |\par
+| Blank/404 page | A direct route or stale deployment may be in use. | Refresh, open the main site first, then retry; confirm the route exists. |\par
+\par
+\fs30\b 5. Admin dashboard\b0\fs24\par
+\par
+The dashboard provides an operational summary and links to management areas. Use the sidebar on desktop or the menu control on smaller screens. The active page is highlighted.\par
+\par
+\fs26\b Admin route directory\b0\fs24\par
+\par
+| Admin area | URL | Typical responsibility |\par
+|---|---|---|\par
+| Dashboard | `/dashboard` | Summary cards, activity and visitor overview. |\par
+| Academic programmes | `/admin/manage-services` | View academic programmes; add/edit route is `/admin/services`. |\par
+| Projects / school life | `/admin/manage-projects` | Manage project and student-life content. |\par
+| Services | `/admin/manage-services` | Manage school-related service/programme records. |\par
+| Enterprise features | `/admin/enterprise-features` | Manage homepage â€œThe Dankamf Advantageâ€ cards. |\par
+| News/posts | `/admin/manage-posts`, `/admin/blog` | Create and manage news or article content. |\par
+| Events | `/admin/manage-events` | Review, edit and remove event records. |\par
+| FAQs | `/admin/manage-faqs` | Maintain FAQ questions, answers and display order. |\par
+| Testimonials | `/admin/client-testimonials` | Manage Client Confidence testimonials. |\par
+| Hero images | `/admin/hero-images` | Superadmin-only hero image publishing and ordering. |\par
+| Gallery | `/admin/gallery` | Upload gallery images or reuse published hero images. |\par
+| About profile | `/admin/about` | School introduction, history, leadership message, vision, mission, values and achievements. |\par
+| Leadership | `/admin/leadership` | Staff and leadership names, roles, biographies, photos and order. |\par
+| Downloads | `/admin/downloads` | Publish school documents and resources. |\par
+| School alerts | `/admin/alerts` | Publish and manage notices shown to visitors. |\par
+| Admissions | `/admin/admissions` | Review applications, update status and manage documents. |\par
+| Fees and scholarships | `/admin/fees` | Maintain published fee and scholarship information. |\par
+| Interviews | `/admin/interviews` | Review and update interview request status. |\par
+| Alumni | `/admin/alumni` | Review alumni registrations. |\par
+| Jobs | `/admin/jobs` | Create and manage vacancies. |\par
+| Job applications | `/admin/applications/:jobId` | Review applicant details, documents and replies. |\par
+| Contact forms | `/admin/forms` | Read enquiries and send replies. |\par
+| Users | `/admin/users`, `/admin/add-user` | Superadmin-only user and role management. |\par
+| Settings | `/admin/settings` | School-wide configuration and public contact settings. |\par
+| Activity logs | `/admin/activity-logs` | Review recorded administrative actions. |\par
+| Profile | `/admin/profile` | Review the signed-in administrator profile. |\par
+\par
+\fs30\b 6. Role and permission matrix\b0\fs24\par
+\par
+| Capability | Superadmin | General admin |\par
+|---|---:|---:|\par
+| View dashboard and content | Yes | Yes |\par
+| View contact forms and applications | Yes | Yes |\par
+| Reply to contact/job enquiries | Yes | Yes |\par
+| Update approved application/interview statuses | Yes | Yes |\par
+| Create or edit public content | Yes | No |\par
+| Delete public content | Yes | No |\par
+| Upload or remove hero/gallery/content files | Yes | No |\par
+| Manage academic programmes | Yes | No |\par
+| Manage users and roles | Yes | No |\par
+| Change global settings | Yes | No |\par
+| Read activity logs | Yes | Yes |\par
+\par
+The deployed Firestore and Storage rules are the final authority. Hiding a button in the interface is not a security boundary; Firebase rules enforce the restriction.\par
+\par
+\fs30\b 7. Managing dynamic content\b0\fs24\par
+\par
+\fs26\b General publishing process\b0\fs24\par
+\par
+For a superadmin:\par
+\par
+1. Open the relevant management page.\par
+2. Review existing records before adding a duplicate.\par
+3. Select **Add**, **Edit** or the relevant action.\par
+4. Enter concise, accurate content.\par
+5. Set the display order where available. Lower numbers appear first.\par
+6. Upload an appropriately sized image if required.\par
+7. Save or publish.\par
+8. Open the public page in a new tab and verify the result on desktop and mobile.\par
+\par
+\fs26\b Display order\b0\fs24\par
+\par
+Use numeric ordering to control homepage and listing sequence. Recommended values are `1`, `2`, `3`, and so on. Avoid duplicate numbers when a clear sequence matters.\par
+\par
+Ordering applies particularly to:\par
+\par
+â€¢ Academic programmes.\par
+â€¢ Hero images.\par
+â€¢ Gallery images.\par
+â€¢ FAQs.\par
+â€¢ Testimonials.\par
+â€¢ Leadership profiles.\par
+â€¢ School capabilities.\par
+â€¢ News and events where supported.\par
+\par
+\fs26\b Homepage previews\b0\fs24\par
+\par
+Dynamic homepage sections should show a short preview, not the full record. The visitor selects **Read More**, **View programme**, **Explore**, or the relevant card to open the complete page or detail view.\par
+\par
+When preparing content for a homepage card:\par
+\par
+â€¢ Begin with a clear title or opening sentence.\par
+â€¢ Put the most important benefit in the first two or three sentences.\par
+â€¢ Keep long curriculum, policy or achievement details on the full page.\par
+â€¢ Confirm the detail link opens the correct record.\par
+\par
+\fs30\b 8. Markdown content standard\b0\fs24\par
+\par
+Markdown is supported in descriptions, biographies, programme content, news, FAQs and other rich-text fields.\par
+\par
+\fs26\b Recommended syntax\b0\fs24\par
+\par
+```markdown\par
+\fs30\b Programme Overview\b0\fs24\par
+\par
+The **CrÃ¨che and Nursery programme** supports safe, caring and stimulating early learning.\par
+\par
+\fs26\b Learning Areas\b0\fs24\par
+\par
+â€¢ Early language and communication\par
+â€¢ Number awareness and basic mathematics\par
+â€¢ Creative arts, music and movement\par
+\par
+Read more about the [admissions process](/admissions).\par
+```\par
+\par
+\fs26\b Content rules\b0\fs24\par
+\par
+â€¢ Use one `##` heading for a major subsection.\par
+â€¢ Use `###` for a subsection under it.\par
+â€¢ Use short paragraphs of two to four sentences.\par
+â€¢ Use bullet lists for subjects, requirements and features.\par
+â€¢ Use bold only for important terms.\par
+â€¢ Do not paste raw HTML unless specifically supported by the field.\par
+â€¢ Do not place confidential information, passwords or private student records in public content.\par
+â€¢ Preview the result after saving; malformed Markdown can affect readability.\par
+\par
+\fs30\b 9. Image and file standards\b0\fs24\par
+\par
+\fs26\b Hero images\b0\fs24\par
+\par
+â€¢ Recommended format: WebP or optimized JPG.\par
+â€¢ Maximum target size: approximately 200â€“300 KB.\par
+â€¢ Use a wide composition suitable for desktop and mobile crops.\par
+â€¢ Keep important faces, logos and text away from extreme edges.\par
+â€¢ Use the numeric order field to control the carousel.\par
+\par
+\fs26\b Gallery images\b0\fs24\par
+\par
+â€¢ Recommended format: WebP.\par
+â€¢ Target size: approximately 120â€“180 KB.\par
+â€¢ Use descriptive titles and categories.\par
+â€¢ Reuse an existing hero image through the gallery selector when appropriate instead of uploading a duplicate.\par
+\par
+\fs26\b Documents\b0\fs24\par
+\par
+â€¢ Use clear filenames without sensitive personal information.\par
+â€¢ Upload only approved school documents.\par
+â€¢ Confirm the public download link after publishing.\par
+\par
+\fs26\b Image quality checklist\b0\fs24\par
+\par
+Before upload, confirm:\par
+\par
+1. The image is sharp and correctly oriented.\par
+2. The file is within the size limit.\par
+3. The image does not contain private information.\par
+4. The composition works in a responsive container.\par
+5. The image is not already published elsewhere unless reuse is intentional.\par
+\par
+\fs30\b 10. Common operational workflows\b0\fs24\par
+\par
+\fs26\b Publish a news article\b0\fs24\par
+\par
+1. Open `/admin/blog` or the news management route.\par
+2. Add a clear title.\par
+3. Write the article in Markdown.\par
+4. Add an optimized image if required.\par
+5. Publish and confirm the homepage preview.\par
+6. Open the full article and verify Markdown headings, lists and links.\par
+\par
+\fs26\b Publish an academic programme\b0\fs24\par
+\par
+1. Open `/admin/manage-services` or `/admin/services`.\par
+2. Add the programme title and display order.\par
+3. Enter a concise description for previews.\par
+4. Add curriculum, assessment and timetable content in Markdown.\par
+5. Upload the programme image.\par
+6. Save and open `/academics/\{programme-slug\}`.\par
+\par
+\fs26\b Update About Us\b0\fs24\par
+\par
+1. Open `/admin/about`.\par
+2. Update only the relevant section: introduction, history, vision, mission, values, achievements, philosophy or leadership message.\par
+3. Use Markdown headings and lists for long sections.\par
+4. Add or replace proprietor/headteacher images when authorised.\par
+5. Save and verify `/about` on a large and small screen.\par
+\par
+\fs26\b Add a staff or leadership profile\b0\fs24\par
+\par
+1. Open `/admin/leadership`.\par
+2. Enter the personâ€™s name, role, display order and biography.\par
+3. Upload a clear professional image.\par
+4. Keep the biography factual and suitable for public publication.\par
+5. Verify the About preview and the full `/staff` profile.\par
+\par
+\fs26\b Review a contact message\b0\fs24\par
+\par
+1. Open `/admin/forms`.\par
+2. Read the enquiry and confirm the senderâ€™s email.\par
+3. Select **Reply**.\par
+4. Write a professional response.\par
+5. Send/save the reply.\par
+\par
+\fs26\b Review an admission application\b0\fs24\par
+\par
+1. Open `/admin/admissions`.\par
+2. Review the learner, guardian, programme and contact information.\par
+3. Update the status only when the school has completed the relevant step.\par
+4. Open **Manage files** when authorised documents must be reviewed.\par
+5. Keep personal data confidential.\par
+\par
+\fs26\b Review a job application\b0\fs24\par
+\par
+1. Open `/admin/jobs` and select the vacancy applications.\par
+2. Select **View Details**.\par
+3. Review applicant details, cover message and CV/PDF.\par
+4. Use the reply workflow for approved communication.\par
+5. Do not download or share applicant information outside authorised school processes.\par
+\par
+\fs30\b 11. Security and data protection\b0\fs24\par
+\par
+â€¢ Never share administrator passwords.\par
+â€¢ Use individual Firebase accounts rather than shared credentials.\par
+â€¢ Sign out after using a shared computer.\par
+â€¢ Use `superadmin` only for tasks that require elevated authority.\par
+â€¢ Do not upload identity documents to public content folders.\par
+â€¢ Do not place API secrets, service-account keys or private tokens in the frontend repository.\par
+â€¢ Review access whenever a staff member leaves or changes responsibility.\par
+â€¢ Treat admissions, job applications, contact messages and alumni records as confidential.\par
+â€¢ Report unexpected permission errors rather than weakening Firebase rules.\par
+\par
+\fs30\b 12. Troubleshooting\b0\fs24\par
+\par
+\fs26\b A page is blank\b0\fs24\par
+\par
+Refresh the page, return to the homepage and navigate again. If the issue affects one content card, check that its Firestore record contains the expected title and content fields.\par
+\par
+\fs26\b A route shows 404\b0\fs24\par
+\par
+Open the main domain first, then navigate through the application. Firebase Hosting is configured for single-page application rewrites; a stale browser cache can also show an old route.\par
+\par
+\fs26\b An image does not display\b0\fs24\par
+\par
+Check that the record contains a valid `imageUrl` or `iconUrl`, that the file upload completed, and that the user has the required role. Confirm the Storage path matches the featureâ€™s approved folder.\par
+\par
+\fs26\b â€œMissing or insufficient permissionsâ€\b0\fs24\par
+\par
+This normally means a general admin attempted a superadmin-only write, or the Authentication UID does not have a matching Firestore user profile. Confirm the user document and use the correct role.\par
+\par
+\fs26\b Markdown appears as plain text\b0\fs24\par
+\par
+Check that the content is entered in a Markdown-enabled field and that headings use `##` or `###` followed by a space. Save, refresh and inspect the full detail page.\par
+\par
+\fs26\b A homepage card shows too much text\b0\fs24\par
+\par
+The source content is probably missing a preview boundary or is being rendered by an outdated build. Confirm the public preview component, rebuild and deploy only after verification.\par
+\par
+\fs26\b Mobile layout is difficult to use\b0\fs24\par
+\par
+Test both portrait and landscape orientations. Confirm that the browser is not zoomed, the menu can scroll, and the latest deployed build is loaded after a hard refresh.\par
+\par
+\fs30\b 13. Local testing and release checklist\b0\fs24\par
+\par
+Before a release:\par
+\par
+1. Run the local app with `npm start`.\par
+2. Test homepage, About, Academics, Admissions, Jobs, Contact and admin login.\par
+3. Test mobile portrait, mobile landscape, tablet, laptop and desktop.\par
+4. Test at least one form submission and one admin response workflow.\par
+5. Confirm images and Markdown render correctly.\par
+6. Run the production build:\par
+\par
+```powershell\par
+$env:GENERATE_SOURCEMAP='false'; npm run build\par
+```\par
+\par
+7. Review `git status` and confirm only intended changes exist.\par
+8. Deploy hosting only after the build succeeds:\par
+\par
+```powershell\par
+firebase use dankamf-eduplex\par
+firebase deploy --only hosting\par
+```\par
+\par
+9. Deploy rules separately and review their security impact:\par
+\par
+```powershell\par
+firebase deploy --only firestore:rules,storage\par
+```\par
+\par
+10. Verify the live website after deployment using a private/incognito browser window.\par
+\par
+\fs30\b 14. Support information\b0\fs24\par
+\par
+For a technical incident, record:\par
+\par
+â€¢ The exact URL.\par
+â€¢ The signed-in role.\par
+â€¢ The action being performed.\par
+â€¢ The exact error message.\par
+â€¢ Device, browser and orientation.\par
+â€¢ Whether the issue occurs locally, in production or both.\par
+â€¢ The approximate time of the incident.\par
+\par
+This information makes debugging faster and prevents unnecessary changes to security rules or production data.\par
+\par
+\brdrb\brdrs\brdrw10\brsp20\par
+\par
+â€¢ *Document owner:** Dankamf Educational Complex administration  \par
+â€¢ *Technical platform:** React, Firebase Authentication, Firestore, Firebase Storage and Firebase Hosting\par
+}

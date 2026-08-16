@@ -18,7 +18,6 @@ import NewsletterSignup from '../components/NewsletterSignup';
 import CTABanner from '../components/CTABanner';
 import CareerPreview from '../components/CareerPreview';
 import UpcomingEvents from '../components/UpcomingEvents';
-import CampusGallery from '../components/CampusGallery';
 import DownloadCenter from '../components/DownloadCenter';
 import SchoolAlerts from '../components/SchoolAlerts';
 import VacancyPreview from '../components/VacancyPreview';
@@ -40,7 +39,7 @@ export default function Home() {
     <>
       <Seo {...SeoConfig.home} />
       <div className="min-h-screen bg-background text-text flex flex-col">
-        <main className="flex-grow">
+        <main className="homepage-content flex-grow">
           <SchoolAlerts />
           <HeroSection siteName={siteName} tagline={tagline} />
           <AboutSection />
@@ -52,7 +51,6 @@ export default function Home() {
           <ProjectsPreview />
           <BlogPreview />
           <UpcomingEvents />
-          <CampusGallery />
           <DownloadCenter />
           <SocialConnect />
           <VacancyPreview />

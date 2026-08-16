@@ -104,6 +104,10 @@ export default function ManageClientTestimonials() {
       image: null,
     });
     setFileInputKey(prev => prev + 1);
+    requestAnimationFrame(() => {
+      formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      formRef.current?.querySelector('input[name="name"]')?.focus();
+    });
   };
 
   const handleSubmit = async (event) => {

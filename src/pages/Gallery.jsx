@@ -1,24 +1,16 @@
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { collection, getDocs, orderBy, query } from 'firebase/firestore';
+import { FaChevronLeft, FaChevronRight, FaTimes } from 'react-icons/fa';
 import Seo from '../components/Seo';
 import SeoConfig from '../config/SeoConfig';
-import CampusGallery from '../components/CampusGallery';
+import { db } from '../firebase/config';
 
 export default function Gallery() {
-  return (
-    <>
-      <Seo title="Campus Gallery | Dankamf Educational Complex" description="Explore campus life, learning, activities, and events at Dankamf Educational Complex." {...SeoConfig.projects} />
-      <main className="min-h-screen bg-background-alt">
-        <section className="bg-primary-dark px-4 py-8 text-center text-white sm:px-8 sm:py-10">
-          <div className="mx-auto max-w-5xl text-left">
-            <div className="text-center">
-              <p className="text-xs font-black uppercase tracking-[0.25em] text-accent-yellow">Explore Our Campus</p>
-              <h1 className="mt-3 text-4xl font-black sm:text-5xl">Campus Gallery</h1>
-              <p className="mx-auto mt-4 max-w-2xl text-slate-300">A visual window into the learning, growth, and community that define Dankamf.</p>
-            </div>
-          </div>
-        </section>
-        <CampusGallery />
-      </main>
-    </>
-  );
+  const [images, setImages] = useState([]); const [category, setCategory] = useState('All'); const [activeImage, setActiveImage] = useState(null);
+  useEffect(() => { getDocs(query(collection(db, 'gallery'), orderBy('order', 'asc'))).then((snapshot) => setImages(snapshot.docs.map((item) => ({ id: item.id, ...item.data() })).filter((item) => item.imageUrl && item.published !== false))).catch(() => setImages([])); }, []);
+  const categories = useMemo(() => ['All', ...new Set(images.map((item) => item.category).filter(Boolean))], [images]);
+  const visibleImages = category === 'All' ? images : images.filter((item) => item.category === category);
+  return <><Seo title="Campus Gallery | Dankamf Educational Complex" description="Explore campus life, learning, activities, and events at Dankamf Educational Complex." {...SeoConfig.projects} /><main className="min-h-screen bg-background-alt"><section className="bg-primary-dark px-4 py-8 text-center text-white sm:px-8 sm:py-10"><div className="mx-auto max-w-5xl"><p className="text-xs font-black uppercase tracking-[0.25em] text-accent-yellow">Explore Our Campus</p><h1 className="mt-3 text-4xl font-black sm:text-5xl">Campus Gallery</h1><p className="mx-auto mt-4 max-w-2xl text-slate-300">A visual window into the learning, growth, and community that define Dankamf.</p></div></section><section className="mx-auto max-w-7xl px-4 py-10 sm:px-8 sm:py-14"><div className="mb-6 flex flex-wrap gap-2" aria-label="Gallery categories">{categories.map((item) => <button type="button" key={item} onClick={() => setCategory(item)} className={`rounded-full px-4 py-2 text-xs font-black uppercase tracking-wider transition ${category === item ? 'bg-primary text-white' : 'bg-white text-primary ring-1 ring-slate-200 hover:bg-blue-50'}`}>{item}</button>)}</div><div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">{visibleImages.map((image) => <button type="button" key={image.id} onClick={() => setActiveImage(image)} className="group relative aspect-square overflow-hidden rounded-2xl bg-slate-100 text-left"><img src={image.imageUrl} alt={image.title || 'Dankamf Educational Complex campus'} loading="lazy" decoding="async" className="h-full w-full rounded-2xl object-cover brightness-90 transition duration-500 group-hover:scale-105 group-hover:brightness-100" /><div className="pointer-events-none absolute inset-0 bg-black/5 transition group-hover:bg-transparent" /><div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-3 pt-10 text-sm font-bold text-white">{image.title}<span className="block text-xs font-medium text-white/70">{image.category}</span></div></button>)}</div>{visibleImages.length === 0 && <p className="rounded-2xl bg-white p-8 text-center text-text-light">No published gallery images in this category yet.</p>}</section></main>{activeImage && <GalleryViewer image={activeImage} images={visibleImages} onClose={() => setActiveImage(null)} onChange={setActiveImage} />}</>;
 }
+
+function GalleryViewer({ image, images, onClose, onChange }) { const index = images.findIndex((item) => item.id === image.id); return <div className="fixed inset-0 z-[120] flex h-[100svh] w-screen items-center justify-center overflow-hidden bg-slate-950/98 p-0" role="dialog" aria-modal="true" onClick={onClose}><button type="button" onClick={onClose} aria-label="Close gallery viewer" className="fixed right-4 top-4 z-20 flex h-11 w-11 items-center justify-center rounded-full bg-white/95 text-xl text-slate-900 shadow-lg transition hover:bg-white"><FaTimes /></button><button type="button" onClick={(event) => { event.stopPropagation(); onChange(images[(index - 1 + images.length) % images.length]); }} aria-label="Previous image" className="fixed left-3 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-slate-900 shadow-lg transition hover:bg-white sm:left-8"><FaChevronLeft /></button><figure className="flex h-full w-full flex-col items-center justify-center px-2 pb-8 pt-16 sm:px-12" onClick={(event) => event.stopPropagation()}><img src={image.imageUrl} alt={image.title || 'Dankamf Educational Complex campus'} className="max-h-[calc(100svh-7rem)] max-w-full object-contain" /><figcaption className="mt-3 text-center text-sm font-semibold text-white">{image.title || 'Dankamf Educational Complex'}{image.category && <span className="ml-2 text-white/60">· {image.category}</span>}<span className="ml-2 text-white/50">{index + 1} / {images.length}</span></figcaption></figure><button type="button" onClick={(event) => { event.stopPropagation(); onChange(images[(index + 1) % images.length]); }} aria-label="Next image" className="fixed right-3 top-1/2 z-20 flex h-11 w-11 items-center justify-center rounded-full bg-white/90 text-slate-900 shadow-lg transition hover:bg-white sm:right-8"><FaChevronRight /></button></div>; }

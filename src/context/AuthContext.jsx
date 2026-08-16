@@ -53,7 +53,7 @@ export function AuthProvider({ children }) {
 
   // Show a loading screen while we verify auth state
   if (loading) {
-    return <LoadingSpinner fullPage label="Loading session..." />;
+    return <LoadingSpinner fullPage label="Loading Dankamf Educational Complex..." />;
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

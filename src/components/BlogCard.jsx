@@ -27,7 +27,7 @@ export default function BlogCard({ post, onClick, index, id, className = '' }) {
           {post.title}
         </h2>
         
-        <div className="prose prose-sm line-clamp-3 max-h-[5.5rem] flex-1 overflow-hidden text-base leading-relaxed text-slate-600 sm:prose-base">
+        <div className="prose prose-sm line-clamp-3 max-h-[4.75rem] flex-1 overflow-hidden text-sm leading-relaxed text-slate-600">
           <ReactMarkdown>
             {post.content || 'Read the latest news and updates from Dankamf Educational Complex.'}
           </ReactMarkdown>

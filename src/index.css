@@ -1,6 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@600;700;800;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Enterprise-wide typography system. */
+body,
+button,
+input,
+textarea,
+select {
+  font-family: 'Inter', sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Montserrat', sans-serif;
+}
 
 /* Keep public Markdown content readable without excessive vertical gaps. */
 .public-site .prose > section,
@@ -26,6 +46,31 @@
 .public-site .prose ol {
   margin-top: 0.5rem;
   margin-bottom: 0.75rem;
+}
+
+/* Use the About page's readable Markdown scale across public content. The
+   line-clamp utilities still control preview length without shrinking text. */
+.public-site .prose,
+.public-site .prose-sm {
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.public-site .prose h1,
+.public-site .prose h2,
+.public-site .prose h3,
+.public-site .prose h4 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.public-site .prose h2 {
+  font-size: 1.5rem;
+}
+
+.public-site .prose h3 {
+  font-size: 1.2rem;
 }
 
 /* Consistent About-page hierarchy for JSX headings and admin Markdown. */
@@ -66,6 +111,83 @@
 .about-content .prose strong {
   color: #0047ab;
   font-weight: 800;
+}
+
+.about-page,
+.about-page .prose,
+.about-page p,
+.about-page li {
+  font-family: 'Inter', sans-serif;
+}
+
+.about-page h1,
+.about-page h2,
+.about-page h3,
+.about-page h4,
+.about-page .prose h1,
+.about-page .prose h2,
+.about-page .prose h3,
+.about-page .prose h4 {
+  font-family: 'Montserrat', sans-serif;
+}
+
+.about-markdown-card {
+  margin-top: 1.25rem;
+  border: 1px solid #d6f0ff;
+  border-radius: 1rem;
+  background: #fff;
+  padding: 1.25rem;
+  box-shadow: 0 8px 24px rgba(0, 49, 83, 0.06);
+}
+
+.about-markdown-card:first-child {
+  margin-top: 0;
+}
+
+.about-markdown-card > :first-child {
+  margin-top: 0;
+}
+
+.about-markdown-card h2,
+.about-markdown-card h3,
+.about-markdown-card h4 {
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.about-markdown-card p,
+.about-markdown-card ul,
+.about-markdown-card ol {
+  margin-top: 0.55rem;
+  margin-bottom: 0.8rem;
+}
+
+.about-markdown-card ul,
+.about-markdown-card ol {
+  padding-left: 1.35rem;
+}
+
+.about-markdown-card li {
+  margin-top: 0.3rem;
+}
+
+@media (max-width: 640px) {
+  .about-markdown-card {
+    padding: 1rem;
+  }
+}
+
+/* Compact homepage rhythm while preserving the full-height hero carousel. */
+.homepage-content > section:not([aria-roledescription='carousel']) {
+  padding-top: 3rem !important;
+  padding-bottom: 3rem !important;
+}
+
+@media (max-width: 640px) {
+  .homepage-content > section:not([aria-roledescription='carousel']) {
+    padding-top: 2.25rem !important;
+    padding-bottom: 2.25rem !important;
+  }
 }
 
 @layer base {
@@ -180,10 +302,101 @@ main.min-h-screen.bg-background-alt > section.bg-primary-dark h1 {
   padding-right: 1rem;
 }
 
+/* Gallery thumbnails are square cards, not pill-shaped controls. */
+.public-site main button[class~="aspect-square"] {
+  padding: 0 !important;
+  border-radius: 1rem !important;
+  box-shadow: none !important;
+}
+
+/* Gallery previews use the available tablet/desktop width with hairline gutters. */
+.public-site main.min-h-screen.bg-background-alt > section:nth-of-type(2) {
+  max-width: none;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.public-site main.min-h-screen.bg-background-alt > section:nth-of-type(2) .grid {
+  gap: 1px;
+}
+
+@media (min-width: 640px) {
+  .public-site main button[class~="aspect-square"] {
+    padding: 0 !important;
+  }
+
+  .public-site main.min-h-screen.bg-background-alt > section:nth-of-type(2) {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+}
+
+.public-site main button[class~="aspect-square"] img {
+  border-radius: 0.75rem !important;
+  box-shadow: none !important;
+}
+
+.public-site main button[class~="aspect-square"] > .pointer-events-none {
+  display: none;
+}
+
+.public-site main button[class~="aspect-square"] > div.absolute.inset-x-0.bottom-0 {
+  background-image: none !important;
+  background-color: transparent !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
 .public-site main .hero-control-button {
   padding: 0;
   font-size: inherit;
   line-height: inherit;
+}
+
+/* Hero carousel: navigation stays at the edges while play/pause remains centered. */
+.public-site main .hero-controls {
+  width: 100%;
+  max-width: 100%;
+  min-height: 2.75rem;
+  justify-content: center;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none;
+  padding: 0;
+}
+
+.public-site main .hero-controls > button:first-child,
+.public-site main .hero-controls > button:last-child {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  height: 2.75rem;
+  width: 2.75rem;
+  transform: translateY(-50%);
+  border-color: rgba(255, 255, 255, 0.55);
+  background-color: rgba(15, 23, 42, 0.45);
+  font-size: 2.25rem;
+  line-height: 1;
+}
+
+.public-site main .hero-controls > button:first-child { left: 0; }
+.public-site main .hero-controls > button:last-child { right: 0; }
+
+.public-site main .hero-controls > button:nth-child(2) {
+  position: relative;
+  z-index: 2;
+  height: 2.5rem;
+  width: 2.5rem;
+  background-color: rgba(15, 23, 42, 0.55);
+}
+
+/* Keep the carousel controls below the hero CTAs and inside the hero at every viewport size. */
+.public-site main .hero-controls {
+  position: relative;
+  bottom: auto;
+  left: auto;
+  right: auto;
+  top: auto;
 }
 
 .public-site form input:not([type="checkbox"]):not([type="radio"]),
@@ -252,9 +465,40 @@ main.min-h-screen.bg-background-alt > section.bg-primary-dark h1 {
 }
 
 @media (max-height: 520px) and (orientation: landscape) {
-  .hero-controls {
-    bottom: 34% !important;
+  .public-site main .hero-controls {
+    bottom: auto !important;
   }
+}
+
+.gallery-viewer-backdrop,
+[class~="bg-slate-950/98"] {
+  background-color: rgba(2, 6, 23, 0.70);
+  backdrop-filter: blur(1px);
+  -webkit-backdrop-filter: blur(1px);
+}
+
+[class~="bg-slate-950/98"] figure {
+  position: relative;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+[class~="bg-slate-950/98"] figure img {
+  height: 100svh;
+  max-height: 100svh;
+  width: auto;
+  max-width: 100%;
+}
+
+[class~="bg-slate-950/98"] figure figcaption {
+  position: absolute;
+  bottom: 1rem;
+  margin-top: 0;
+  border-radius: 9999px;
+  background: rgba(2, 6, 23, 0.42);
+  padding: 0.45rem 0.85rem;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
 }
 
 .loading-shell,
@@ -317,9 +561,8 @@ main.min-h-screen.bg-background-alt > section.bg-primary-dark h1 {
 }
 
 .loading-dots span:nth-child(2) { animation-delay: 120ms; background: #007ba7; }
-.loading-dots span:nth-child(3) { animation-delay: 240ms; background: #ffffff; }
+.loading-dots span:nth-child(3) { animation-delay: 240ms; background: #7df9ff; }
 .loading-dots span:nth-child(4) { animation-delay: 360ms; background: #003153; }
-.loading-dots span:nth-child(5) { animation-delay: 480ms; background: #ffffff; }
 
 @keyframes loading-dot-oscillate {
   0%, 100% { transform: translateY(0) scale(0.8); opacity: 0.6; }
@@ -455,6 +698,32 @@ main.min-h-screen.bg-background-alt > section.bg-primary-dark p:last-child {
 .public-site section.bg-electric-blue p:first-child,
 .public-site main.min-h-screen.bg-background-alt > section.bg-primary-dark p:first-child {
   color: #007ba7 !important;
+}
+
+/* Keep inner-page headers compact; the homepage hero remains untouched. */
+.public-site main > section.bg-primary-dark:not([aria-roledescription='carousel']),
+.public-site main > section.bg-electric-blue {
+  padding-top: 2rem !important;
+  padding-bottom: 2rem !important;
+}
+
+.public-site main > section.bg-primary-dark:not([aria-roledescription='carousel']) h1,
+.public-site main > section.bg-electric-blue h1 {
+  font-size: 2.5rem;
+  line-height: 1.15;
+}
+
+@media (max-width: 640px) {
+  .public-site main > section.bg-primary-dark:not([aria-roledescription='carousel']),
+  .public-site main > section.bg-electric-blue {
+    padding-top: 1.5rem !important;
+    padding-bottom: 1.5rem !important;
+  }
+
+  .public-site main > section.bg-primary-dark:not([aria-roledescription='carousel']) h1,
+  .public-site main > section.bg-electric-blue h1 {
+    font-size: 2rem;
+  }
 }
 
 .admin-site main > div > form,

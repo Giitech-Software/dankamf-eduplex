@@ -5,12 +5,12 @@ service cloud.firestore {
 
     // Helper function to check if a user is an admin or superadmin
     function isAdmin() {
-      return request.auth.uid != null && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['admin', 'superadmin'];
+      return request.auth != null && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['admin', 'superadmin'];
     }
 
     // Helper function to check if a user is the superadmin
     function isSuperAdmin() {
-      return request.auth.uid != null && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'superadmin';
+      return request.auth != null && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'superadmin';
     }
 
     // Users: Only superadmins can manage other users. Users can read their own profile.
@@ -20,56 +20,66 @@ service cloud.firestore {
       allow update: if isSuperAdmin() || request.auth.uid == userId;
     }
 
-    // Public Content (Projects, Services, etc.): Anyone can read, only admins can write.
-    match /projects/{docId} { allow read: if true; allow write: if isAdmin(); }
-    match /services/{docId} { allow read: if true; allow write: if isAdmin(); }
-    match /posts/{docId} { allow read: if true; allow write: if isAdmin(); }
-    match /events/{docId} { allow read: if true; allow write: if isAdmin(); }
-    match /faqs/{docId} { allow read: if true; allow write: if isAdmin(); }
-    match /clientTestimonials/{docId} { allow read: if true; allow write: if isAdmin(); }
-    match /partners/{docId} { allow read: if true; allow write: if isAdmin(); }
-    match /jobs/{docId} { allow read: if true; allow write: if isAdmin(); }
-    match /enterpriseFeatures/{docId} { allow read: if true; allow write: if isAdmin(); }
-    match /config/{docId} { allow read: if true; allow write: if isAdmin(); }
+    // Public content is readable by everyone, but only superadmins may publish, edit, or remove it.
+    match /projects/{docId} { allow read: if true; allow write: if isSuperAdmin(); }
+    match /services/{docId} { allow read: if true; allow write: if isSuperAdmin(); }
+    match /posts/{docId} { allow read: if true; allow write: if isSuperAdmin(); }
+    match /events/{docId} { allow read: if true; allow write: if isSuperAdmin(); }
+    match /faqs/{docId} { allow read: if true; allow write: if isSuperAdmin(); }
+    match /clientTestimonials/{docId} { allow read: if true; allow write: if isSuperAdmin(); }
+    match /partners/{docId} { allow read: if true; allow write: if isSuperAdmin(); }
+    match /jobs/{docId} { allow read: if true; allow write: if isSuperAdmin(); }
+    match /enterpriseFeatures/{docId} { allow read: if true; allow write: if isSuperAdmin(); }
+    match /config/{docId} { allow read: if true; allow write: if isSuperAdmin(); }
     // Public About page content; administrators may update the school profile.
-    match /about/{docId} { allow read: if true; allow write: if isAdmin(); }
+    match /about/{docId} { allow read: if true; allow write: if isSuperAdmin(); }
     // Hero media is public, but only superadmins may publish or remove slides.
     match /heroSlides/{docId} { allow read: if true; allow write: if isSuperAdmin(); }
 
     // Contact Forms & Applications: Anyone can create, only admins can read/delete.
     match /contactForms/{docId} {
       allow create: if true;
-      allow read, update, delete: if isAdmin();
+      allow read: if isAdmin();
+      allow update: if isAdmin() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['reply']);
+      allow delete: if isSuperAdmin();
     }
     match /applications/{docId} {
       allow create: if true;
-      allow read, update, delete: if isAdmin();
+      allow read: if isAdmin();
+      allow update: if isAdmin() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['reply', 'status']);
+      allow delete: if isSuperAdmin();
     }
     match /admissionApplications/{docId} {
       allow create: if true;
-      allow read, update, delete: if isAdmin();
+      allow read: if isAdmin();
+      allow update: if isAdmin() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status']);
+      allow delete: if isSuperAdmin();
     }
     match /admissionApplications/{applicationId}/documents/{documentId} {
-      allow read, write: if isAdmin();
+      allow read: if isAdmin();
+      allow write: if isSuperAdmin();
     }
-    match /downloads/{docId} { allow read: if true; allow write: if isAdmin(); }
-    match /gallery/{docId} { allow read: if true; allow write: if isAdmin(); }
-    match /schoolAlerts/{docId} { allow read: if true; allow write: if isAdmin(); }
-    match /leadership/{docId} { allow read: if true; allow write: if isAdmin(); }
-    match /about/{docId} { allow read: if true; allow write: if isAdmin(); }
-    match /alumniRegistrations/{docId} { allow create: if true; allow read, update, delete: if isAdmin(); }
-    match /interviewRequests/{docId} { allow create: if true; allow read, update, delete: if isAdmin(); }
-    match /admissionFees/{docId} { allow read: if true; allow write: if isAdmin(); }
-    match /scholarships/{docId} { allow read: if true; allow write: if isAdmin(); }
+    match /downloads/{docId} { allow read: if true; allow write: if isSuperAdmin(); }
+    match /gallery/{docId} { allow read: if true; allow write: if isSuperAdmin(); }
+    match /schoolAlerts/{docId} { allow read: if true; allow write: if isSuperAdmin(); }
+    match /leadership/{docId} { allow read: if true; allow write: if isSuperAdmin(); }
+    match /about/{docId} { allow read: if true; allow write: if isSuperAdmin(); }
+    match /alumniRegistrations/{docId} { allow create: if true; allow read: if isAdmin(); allow update, delete: if isSuperAdmin(); }
+    match /interviewRequests/{docId} { allow create: if true; allow read: if isAdmin(); allow update: if isAdmin() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status']); allow delete: if isSuperAdmin(); }
+    match /admissionFees/{docId} { allow read: if true; allow write: if isSuperAdmin(); }
+    match /scholarships/{docId} { allow read: if true; allow write: if isSuperAdmin(); }
     match /jobs/{jobId}/applications/{applicationId} {
       allow create: if true;
-      allow read, update, delete: if isAdmin();
+      allow read: if isAdmin();
+      allow update: if isAdmin() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'reply']);
+      allow delete: if isSuperAdmin();
     }
 
     // Newsletter: Anyone can subscribe, only admins can manage. Campaigns are server-only.
     match /newsletterSubscribers/{docId} {
       allow create: if true;
-      allow read, update, delete: if isAdmin();
+      allow read: if isAdmin();
+      allow update, delete: if isSuperAdmin();
     }
     match /newsletterCampaigns/{docId} {
       allow read: if true;
@@ -95,7 +105,7 @@ service cloud.firestore {
         && request.resource.data.count == 1;
       allow update: if request.resource.data.keys().hasOnly(['period', 'key', 'count'])
         && request.resource.data.count == resource.data.count + 1;
-      allow delete: if isAdmin();
+      allow delete: if isSuperAdmin();
     }
 
     // Default Deny: Deny all access to any other collection by default.

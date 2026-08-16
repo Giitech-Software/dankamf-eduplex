@@ -123,8 +123,9 @@ export default function Login() {
 
           <Link
             to="/"
-            className="block pt-2 text-center text-sm text-slate-600 dark:text-slate-400 hover:underline"
+            className="mx-auto inline-flex items-center justify-center rounded-full border border-cobalt/30 bg-white px-4 py-2 text-sm font-bold text-primary shadow-sm transition hover:border-cobalt hover:bg-blue-50 hover:underline dark:border-sky-300/40 dark:text-primary"
           >
+            ← Back to Homepage
           </Link>
         </form>
       </div>

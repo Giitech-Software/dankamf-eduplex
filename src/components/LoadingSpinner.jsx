@@ -18,7 +18,6 @@ export default function LoadingSpinner({
           <span />
           <span />
           <span />
-          <span />
         </div>
         {showLabel && <p className={`text-sm font-black uppercase tracking-[0.25em] ${fullPage ? 'text-sky-100' : 'text-slate-500'}`}>{label}</p>}
       </div>

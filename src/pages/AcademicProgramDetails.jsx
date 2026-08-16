@@ -57,32 +57,33 @@ export default function AcademicProgramDetails() {
     <>
       <Seo {...SeoConfig.dynamic.academicProgram({ title: program.title, excerpt, slug })} />
 
-      <section className="bg-primary-dark px-4 py-12 text-white sm:px-8 sm:py-16">
-        <div className="mx-auto max-w-4xl">
-          <Link to="/services" className="text-sm font-bold text-highlight transition hover:text-white">
+      <section className="border-b border-slate-200 bg-white px-4 py-7 text-primary-dark sm:px-8 sm:py-9">
+        <div className="mx-auto max-w-5xl">
+          <Link to="/services" className="inline-flex rounded-full border border-blue-200 px-3 py-1.5 text-xs font-bold text-primary transition hover:border-primary hover:bg-blue-50">
             &larr; Back to All Programs
           </Link>
-          <div className="mt-8 text-4xl text-highlight">{program.icon}</div>
-          <h1 className="mt-4 text-4xl font-black tracking-tight sm:text-5xl">{program.title}</h1>
+          <p className="mt-5 text-xs font-black uppercase tracking-[0.22em] text-accent">Academic Programme</p>
+          <h1 className="mt-2 text-3xl font-black tracking-tight sm:text-4xl">{program.title}</h1>
         </div>
       </section>
 
-      <main className="mx-auto w-full max-w-4xl px-4 py-10 sm:px-8 sm:py-14">
-        <div className="space-y-10">
+      <main className="min-h-screen bg-background-alt px-4 py-8 sm:px-8 sm:py-12">
+        <div className="mx-auto w-full max-w-5xl space-y-6">
+          {(program.imageUrl || program.iconUrl) && <div className="flex h-80 max-h-[34rem] min-h-64 items-center justify-center overflow-hidden rounded-xl border border-slate-200 bg-slate-100 shadow-sm sm:h-[30rem] lg:h-[34rem]"><img src={program.imageUrl || program.iconUrl} alt={program.title} className="h-full w-full object-cover" /></div>}
           {/* Program Overview */}
-          <section>
-            <h2 className="text-2xl font-bold text-primary mb-4 flex items-center gap-3">
+          <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8">
+            <h2 className="mb-4 flex items-center gap-3 text-2xl font-bold text-primary">
               <BookOpen size={24} /> Program Overview
             </h2>
-            <div className="prose prose-lg max-w-none">
-              <ReactMarkdown>{program.description}</ReactMarkdown>
+            <div className="prose prose-base max-w-none sm:prose-lg">
+              <ReactMarkdown>{program.description || 'Programme information will be published soon.'}</ReactMarkdown>
             </div>
           </section>
 
           {/* Core Subjects */}
           {program.subjects && program.subjects.length > 0 && (
-            <section>
-              <h2 className="text-2xl font-bold text-primary mb-4 flex items-center gap-3">
+            <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8">
+              <h2 className="mb-4 flex items-center gap-3 text-2xl font-bold text-primary">
                 <CheckCircle size={24} /> Core Subjects
               </h2>
               <ul className="grid grid-cols-2 md:grid-cols-3 gap-3 text-text-light">
@@ -97,8 +98,8 @@ export default function AcademicProgramDetails() {
 
           {/* Learning Resources */}
           {program.learningResources && (
-            <section>
-              <h2 className="text-2xl font-bold text-primary mb-4 flex items-center gap-3">
+            <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8">
+              <h2 className="mb-4 flex items-center gap-3 text-2xl font-bold text-primary">
                 <FlaskConical size={24} /> Learning Resources
               </h2>
               <div className="prose prose-lg max-w-none">
@@ -108,21 +109,21 @@ export default function AcademicProgramDetails() {
           )}
 
           {program.curriculum && (
-            <section>
+            <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8">
               <h2 className="mb-4 flex items-center gap-3 text-2xl font-bold text-primary"><BookOpen size={24} /> Curriculum</h2>
               <div className="prose prose-lg max-w-none"><ReactMarkdown>{program.curriculum}</ReactMarkdown></div>
             </section>
           )}
 
           {program.assessment && (
-            <section>
+            <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8">
               <h2 className="mb-4 flex items-center gap-3 text-2xl font-bold text-primary"><CheckCircle size={24} /> Assessment</h2>
               <div className="prose prose-lg max-w-none"><ReactMarkdown>{program.assessment}</ReactMarkdown></div>
             </section>
           )}
 
           {program.timetable && (
-            <section>
+            <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8">
               <h2 className="mb-4 text-2xl font-bold text-primary">Timetable & Academic Calendar</h2>
               <div className="prose prose-lg max-w-none"><ReactMarkdown>{program.timetable}</ReactMarkdown></div>
             </section>

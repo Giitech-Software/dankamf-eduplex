@@ -8,6 +8,7 @@ import { db, storage } from '../firebase/config';
 import Seo from '../components/Seo';
 import SeoConfig from '../config/SeoConfig';
 import LoadingSpinner from '../components/LoadingSpinner';
+import ReactMarkdown from 'react-markdown';
 import { findAdmissionProgram } from '../data/careerOpenings';
 
 export default function JobDetails() {
@@ -17,6 +18,7 @@ export default function JobDetails() {
   const [job, setJob] = useState(null);
   const [form, setForm] = useState({ name: '', email: '', cover: '', cv: null });
   const [msg, setMsg] = useState('');
+  const [msgType, setMsgType] = useState('');
   const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
@@ -43,12 +45,16 @@ export default function JobDetails() {
   const handleSubmit = async event => {
     event.preventDefault();
     setMsg('');
+    setMsgType('');
     setUploading(true);
 
     try {
       let cvUrl = '';
       if (form.cv) {
-        const fileRef = ref(storage, `applications/${id}/${Date.now()}-${form.cv.name}`);
+        if (!form.cv.name.toLowerCase().endsWith('.pdf')) throw new Error('Please upload your CV as a PDF file.');
+        if (form.cv.size > 5 * 1024 * 1024) throw new Error('Your CV must be 5 MB or smaller.');
+        const safeName = form.cv.name.replace(/[^a-zA-Z0-9._-]/g, '-');
+        const fileRef = ref(storage, `applications/${id}/${Date.now()}-${safeName}`);
         const snap = await uploadBytes(fileRef, form.cv);
         cvUrl = await getDownloadURL(snap.ref);
       }
@@ -68,10 +74,12 @@ export default function JobDetails() {
       ]);
 
       setMsg('Application submitted successfully.');
+      setMsgType('success');
       setForm({ name: '', email: '', cover: '', cv: null });
     } catch (error) {
       console.error(error);
       setMsg('Unable to submit application: ' + error.message);
+      setMsgType('error');
     } finally {
       setUploading(false);
     }
@@ -96,16 +104,16 @@ export default function JobDetails() {
     <>
       <Seo {...SeoConfig.dynamic.admissionInfo({ title: job.title, excerpt, id })} />
 
-      <section className="bg-slate-950 px-4 py-12 text-white sm:px-8 sm:py-16">
+      <section className="bg-electric-blue px-4 py-7 text-primary sm:px-8 sm:py-9">
         <div className="mx-auto max-w-4xl">
-          <Link to="/jobs" className="text-sm font-bold text-highlight transition hover:text-white">
+          <Link to="/jobs" className="text-sm font-bold text-cobalt transition hover:text-primary">
             &larr; {backLabel}
           </Link>
-          <FaSchool className="mt-8 h-8 w-8 text-highlight" aria-hidden="true" />
-          <h1 className="mt-4 text-4xl font-black tracking-tight sm:text-5xl">{job.title}</h1>
-          <div className="mt-4 flex flex-wrap gap-4 text-sm font-bold text-slate-300">
+          <FaSchool className="mt-5 h-7 w-7 text-cobalt" aria-hidden="true" />
+          <h1 className="mt-3 text-3xl font-black tracking-tight sm:text-4xl">{job.title}</h1>
+          <div className="mt-3 flex flex-wrap gap-4 text-sm font-bold text-primary/75">
             <span className="inline-flex items-center gap-2">
-              <MapPin className="h-4 w-4 text-highlight" aria-hidden="true" />
+              <MapPin className="h-4 w-4 text-cobalt" aria-hidden="true" />
               {job.location}
             </span>
             <span>{job.type}</span>
@@ -116,28 +124,26 @@ export default function JobDetails() {
       <main className="mx-auto grid w-full max-w-6xl gap-6 px-0 py-10 sm:px-8 sm:py-14 lg:grid-cols-[1fr_24rem]">
         <section className="space-y-6 px-4 sm:px-0">
           <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
-            <h2 className="text-2xl font-black text-primary">Program Overview</h2>
-            <p className="mt-3 text-base leading-relaxed text-text-light">{job.description}</p>
+            <h2 className="text-2xl font-black text-primary">Role Overview</h2>
+            <div className="prose mt-3 max-w-none text-text-light"><ReactMarkdown>{job.description}</ReactMarkdown></div>
           </div>
           <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
-            <h2 className="text-2xl font-black text-primary">Admission Requirements</h2>
-            <p className="mt-3 text-base leading-relaxed text-text-light">{job.requirements}</p>
+            <h2 className="text-2xl font-black text-primary">Role Requirements</h2>
+            <div className="prose mt-3 max-w-none text-text-light"><ReactMarkdown>{job.requirements}</ReactMarkdown></div>
           </div>
         </section>
 
-        <section className="border-y border-slate-200 bg-slate-50 p-5 sm:rounded-lg sm:border sm:p-6">
-          <h2 className="text-2xl font-black text-primary">Enroll Online</h2>
+        <section className="rounded-xl border border-powder-blue bg-white p-5 shadow-sm sm:p-6">
+          <h2 className="text-2xl font-black text-primary">Apply for This Role</h2>
           <p className="mt-2 text-sm leading-relaxed text-slate-500">
-            Share your details and attach a PDF resume. We will review your application carefully.
+            Submit your details and attach your CV in PDF format. Our school team will review your application carefully.
           </p>
-          {msg && <p className="mt-4 rounded-lg bg-white p-3 text-sm font-bold text-primary">{msg}</p>}
-
           <form onSubmit={handleSubmit} className="mt-5 space-y-4">
             <input
               name="name"
               value={form.name}
               onChange={handleChange}
-              placeholder="Parent/Guardian Name"
+              placeholder="Applicant full name"
               required
               className="w-full rounded border border-slate-300 bg-white p-3"
             />
@@ -167,7 +173,7 @@ export default function JobDetails() {
             />
             <button
               disabled={uploading}
-              className="w-full rounded bg-highlight px-6 py-3 font-bold text-white transition hover:bg-amber-600 disabled:cursor-wait disabled:opacity-70"
+              className="w-full rounded-full bg-primary px-6 py-3 text-sm font-bold text-white transition hover:bg-primary-dark disabled:cursor-wait disabled:opacity-70"
             >
               {uploading ? (
                 <span className="inline-flex items-center gap-2">
@@ -176,6 +182,7 @@ export default function JobDetails() {
                 </span>
               ) : 'Submit Application'}
             </button>
+            {msg && <p role="status" className={`rounded-lg border px-3 py-2 text-sm font-bold ${msgType === 'success' ? 'border-emerald-200 bg-emerald-50 text-emerald-700' : 'border-red-200 bg-red-50 text-red-700'}`}>{msg}</p>}
           </form>
         </section>
       </main>

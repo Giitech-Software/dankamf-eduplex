@@ -35,15 +35,18 @@ const AboutUs = () => {
       </div>
     </section>
 
-    <main className="mx-auto max-w-4xl px-4 py-10 text-text sm:px-6 sm:py-12">
-      {about.schoolIntroduction && <section className="mb-6 rounded-xl border border-powder-blue bg-white p-5 shadow-sm sm:p-6"><div className="prose prose-lg max-w-none"><ReactMarkdown>{about.schoolIntroduction}</ReactMarkdown></div></section>}
-      <div className="about-content prose prose-lg max-w-none prose-h2:text-primary prose-h2:font-bold prose-h3:font-semibold">
-        <section>
+    <main className="about-page mx-auto max-w-4xl px-4 py-10 text-text sm:px-6 sm:py-12">
+      <div className="about-content max-w-none">
+        {about.schoolIntroduction && <section className="about-markdown-card">
+          <ReactMarkdown>{about.schoolIntroduction}</ReactMarkdown>
+        </section>}
+
+        <section className="about-markdown-card">
           <h2>Our History</h2>
           <ReactMarkdown>{about.history}</ReactMarkdown>
         </section>
 
-        <section className="mt-6">
+        <section className="about-markdown-card">
           <h2>Message from the Headmaster</h2>
           {about.headteacherImage && <img src={about.headteacherImage} alt={about.headteacherName || 'Headteacher'} className="mb-5 h-48 w-40 rounded-xl object-cover shadow-md" />}
           {about.headteacherName && <p className="font-bold text-primary">{about.headteacherName} · {about.headteacherRole || 'Headteacher'}</p>}
@@ -53,7 +56,7 @@ const AboutUs = () => {
 
         <LeadershipSection />
 
-        <section className="mt-6">
+        <section className="about-markdown-card">
           <h2>Our Vision & Mission</h2>
           <h3>Vision</h3>
           <ReactMarkdown>{about.vision}</ReactMarkdown>
@@ -61,18 +64,19 @@ const AboutUs = () => {
           <ReactMarkdown>{about.mission}</ReactMarkdown>
         </section>
 
-        {about.educationalPhilosophy && <section className="mt-6">
+        {about.educationalPhilosophy && <section className="about-markdown-card">
           <h2>Educational Philosophy</h2>
           <ReactMarkdown>{about.educationalPhilosophy}</ReactMarkdown>
         </section>}
 
-        <section className="mt-6">
+        <section className="about-markdown-card">
           <h2>Our Core Values</h2>
-          <div className="prose prose-lg max-w-none"><ReactMarkdown>{about.values}</ReactMarkdown></div>
+          <ReactMarkdown>{about.values}</ReactMarkdown>
         </section>
 
-        {about.achievements && <section className="mt-10"><ReactMarkdown>{about.achievements}</ReactMarkdown></section>}
-        <section className={`mt-6 ${about.achievements ? 'hidden' : ''}`}>
+        {about.achievements ? <section className="about-markdown-card">
+          <ReactMarkdown>{about.achievements}</ReactMarkdown>
+        </section> : <section className="about-markdown-card">
           <h2>School Achievements</h2>
           <p>At Dankamf Educational Complex, we take pride in our continuous pursuit of excellence in education and the holistic development of our learners. Through the commitment of our dedicated staff, supportive parents, and hardworking students, we have achieved remarkable milestones in academics, character building, and talent development.</p>
           <ul>
@@ -83,7 +87,7 @@ const AboutUs = () => {
             <li><strong>Talent & Leadership Development:</strong> Encouraging participation in sports, creative arts, science activities, and leadership programs to discover and develop students’ talents.</li>
             <li><strong>Strong School-Community Partnership:</strong> Working closely with parents and stakeholders to create a supportive environment for learners’ success.</li>
           </ul>
-        </section>
+        </section>}
       </div>
 
       <div className="mt-12 text-center">

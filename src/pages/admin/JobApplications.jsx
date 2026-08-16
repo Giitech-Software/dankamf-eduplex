@@ -22,6 +22,7 @@ export default function JobApplications() {
   const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
   const [isReplying, setIsReplying] = useState(false);
+  const [isViewing, setIsViewing] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -105,9 +106,9 @@ export default function JobApplications() {
                 {app.name}
               </h3>
               <p className="text-gray-600 dark:text-gray-300">📧 {app.email}</p>
-              {app.message && (
+              {(app.message || app.coverLetter) && (
                 <p className="mt-2 text-gray-800 dark:text-gray-200 whitespace-pre-line">
-                  {app.message}
+                  {app.coverLetter || app.message}
                 </p>
               )}
               <p className="text-sm text-gray-500 mt-2">
@@ -126,6 +127,12 @@ export default function JobApplications() {
               )}
 
               <div className="flex gap-4 mt-4 flex-wrap">
+                <button
+                  onClick={() => { setSelectedApp(app); setIsViewing(true); }}
+                  className="px-4 py-2 bg-primary text-white rounded hover:bg-primary-dark"
+                >
+                  View Details
+                </button>
                 <button
                   onClick={() => handleReply(app)}
                   className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
@@ -184,6 +191,17 @@ export default function JobApplications() {
                 ✅ Send Reply
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {isViewing && selectedApp && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 p-4" onMouseDown={(event) => event.target === event.currentTarget && setIsViewing(false)}>
+          <div role="dialog" aria-modal="true" className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-xl bg-white p-6 shadow-2xl dark:bg-gray-900">
+            <div className="flex items-start justify-between gap-4"><div><h2 className="text-2xl font-black text-primary dark:text-white">Application Details</h2><p className="mt-1 text-sm text-gray-500 dark:text-gray-300">{selectedApp.name}</p></div><button onClick={() => setIsViewing(false)} className="rounded-full border px-3 py-1 text-sm font-bold text-gray-600 dark:border-gray-600 dark:text-gray-200">Close</button></div>
+            <div className="mt-6 grid gap-4 text-sm sm:grid-cols-2"><div><strong>Applicant:</strong><p>{selectedApp.name || '—'}</p></div><div><strong>Email:</strong><p>{selectedApp.email || '—'}</p></div><div><strong>Phone:</strong><p>{selectedApp.phone || '—'}</p></div><div><strong>Submitted:</strong><p>{selectedApp.submittedAt?.toDate ? selectedApp.submittedAt.toDate().toLocaleString() : 'N/A'}</p></div></div>
+            <div className="mt-6"><h3 className="font-black text-primary dark:text-sky-300">Cover message</h3><p className="mt-2 whitespace-pre-wrap rounded-lg bg-slate-50 p-4 text-gray-700 dark:bg-gray-800 dark:text-gray-200">{selectedApp.coverLetter || selectedApp.message || 'No cover message provided.'}</p></div>
+            {selectedApp.cvUrl && <a href={selectedApp.cvUrl} target="_blank" rel="noreferrer" className="mt-6 inline-flex rounded-full bg-primary px-5 py-2.5 text-sm font-bold text-white hover:bg-primary-dark">Open CV / PDF</a>}
           </div>
         </div>
       )}

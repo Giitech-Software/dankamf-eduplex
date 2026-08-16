@@ -30,15 +30,10 @@ const Services = () => {
     fetchData();
   }, []);
 
-  const truncateText = (text, limit) => {
-    if (!text) return '';
-    return text.length > limit ? text.substring(0, limit) + '...' : text;
-  };
-
   return (
     <>
       <Seo {...SeoConfig.services} />
-      <div className="min-h-screen bg-white px-0 py-8 text-slate-900 sm:px-5 lg:px-12">
+      <div className="min-h-screen bg-gradient-to-b from-[#f8fcff] to-[#eaf6ff] px-0 py-8 text-slate-900 sm:px-5 lg:px-12">
         <div className="max-w-7xl mx-auto">
           <div className="mb-8 px-4 sm:px-0">
             <h1 className="text-3xl font-black tracking-tight text-slate-900 sm:text-4xl">
@@ -52,24 +47,25 @@ const Services = () => {
             <LoadingSpinner label="Loading services" />
           ) : (
           <div className="grid gap-3 px-4 sm:gap-6 sm:px-0 md:grid-cols-2 lg:grid-cols-3">
-            {services.map((service, idx) => {
-              const previewText = truncateText(service.description, 180);
-              return (
+            {services.map((service) => {
+                return (
                 <Link
                   key={service.id}
                   to={`/academics/${getServiceSlug(service.title)}`}
-                  className="group flex flex-col rounded-lg border border-slate-200 bg-white p-4 shadow-sm transition-all duration-300 hover:border-accent hover:shadow-lg sm:p-5"
+                  className="group flex flex-col overflow-hidden rounded-2xl border border-white/80 bg-white/60 shadow-lg shadow-[#003153]/10 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-cerulean/60 hover:bg-white/80 hover:shadow-xl"
                 >
-                  <div className="text-3xl mb-4">{service.icon}</div>
-                  <h2 className="text-xl font-bold text-slate-900 mb-3 leading-tight group-hover:text-primary transition-colors">
+                  <div className="mb-4 flex h-48 items-center justify-center overflow-hidden bg-slate-100 sm:h-56">
+                    {(service.imageUrl || service.iconUrl) ? <img src={service.imageUrl || service.iconUrl} alt="" loading="lazy" className="h-full w-full object-contain p-2" /> : <span className="text-5xl text-primary">{service.icon}</span>}
+                  </div>
+                  <div className="px-4 pb-5 sm:px-5"><h2 className="text-xl font-bold text-slate-900 mb-3 leading-tight group-hover:text-primary transition-colors">
                     {service.title}
                   </h2>
-                  <p className="text-[1rem] text-text-light leading-relaxed flex-1">
-                    <ReactMarkdown>{previewText}</ReactMarkdown>
-                  </p>
+                  <div className="prose prose-sm line-clamp-4 max-h-24 max-w-none flex-1 overflow-hidden text-text-light sm:prose-base">
+                    <ReactMarkdown>{service.description || 'Explore this academic programme and its learning pathway.'}</ReactMarkdown>
+                  </div>
                   <div className="mt-4 flex min-h-11 items-center gap-2 text-sm font-black uppercase tracking-widest text-accent transition-all">
                     View Program <span className="text-xs transition-transform group-hover:translate-x-1">-&gt;</span>
-                  </div>
+                  </div></div>
                 </Link>
               );
             })}

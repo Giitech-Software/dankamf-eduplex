@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
@@ -34,6 +34,19 @@ export default function AdminLayout({ children }) {
   const { theme } = useTheme();
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
+  const sidebarScrollTop = useRef(0);
+
+  const restoreSidebarScroll = (node) => {
+    if (!node) return;
+    const saved = Number(sessionStorage.getItem('dankamf-admin-sidebar-scroll') || 0);
+    node.scrollTop = saved || sidebarScrollTop.current;
+  };
+
+  const saveSidebarScroll = (event) => {
+    const value = event.currentTarget.scrollTop;
+    sidebarScrollTop.current = value;
+    sessionStorage.setItem('dankamf-admin-sidebar-scroll', String(value));
+  };
 
   useEffect(() => {
     if (window.innerWidth < 1024) {
@@ -68,7 +81,7 @@ export default function AdminLayout({ children }) {
         <p className="text-xs text-warm-amber font-medium tracking-wide">{role?.toUpperCase()}</p>
       </div>
 
-      <nav className="flex-1 min-h-0 space-y-1 overflow-y-auto pr-1.5 custom-scrollbar">
+      <nav ref={restoreSidebarScroll} onScroll={saveSidebarScroll} className="flex-1 min-h-0 space-y-1 overflow-y-auto pr-1.5 custom-scrollbar">
         <NavLink to="/dashboard" className={navLinkClass}><FaTachometerAlt /> Dashboard</NavLink>
         {role === 'superadmin' && <NavLink to="/admin/users" className={navLinkClass}><FaUsers /> Manage Users</NavLink>}
         <NavLink to="/admin/forms" className={navLinkClass}><FaWpforms /> Contact Forms</NavLink>
@@ -118,7 +131,7 @@ export default function AdminLayout({ children }) {
   );
 
   return (
-    <div className={`admin-site flex min-h-screen ${theme === 'dark' ? 'bg-[#071426] text-gray-100' : 'bg-[#f2f8fc] text-gray-900'}`}>
+    <div className={`admin-site flex min-h-screen min-w-0 overflow-x-hidden ${theme === 'dark' ? 'bg-[#071426] text-gray-100' : 'bg-[#f2f8fc] text-gray-900'}`}>
       
       {/* Desktop Sidebar */}
       <div className="hidden lg:block w-64 bg-prussian text-white fixed top-0 left-0 h-screen z-40 shadow-2xl">
@@ -177,7 +190,7 @@ export default function AdminLayout({ children }) {
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0">
         <Topbar />
-        <main className="flex-1 pt-20 pb-6 px-4 sm:px-5 md:px-6 lg:pl-[280px] transition-all duration-300">
+        <main className="min-w-0 flex-1 overflow-x-hidden pt-20 pb-6 px-4 sm:px-5 md:px-6 lg:pl-[280px] transition-all duration-300">
           <div className="max-w-7xl mx-auto">
              {children}
           </div>

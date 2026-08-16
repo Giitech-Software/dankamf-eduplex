@@ -6,6 +6,7 @@ import Seo from '../components/Seo';
 import SeoConfig from '../config/SeoConfig';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { fallbackTestimonials } from '../data/clientTestimonials';
+import ReactMarkdown from 'react-markdown';
 
 export default function ClientConfidence() {
   const [testimonials, setTestimonials] = useState(fallbackTestimonials);
@@ -32,24 +33,24 @@ export default function ClientConfidence() {
   }, []);
 
   return (
-    <>
+    <main className="min-h-screen bg-background-alt">
       <Seo {...SeoConfig.clientConfidence} />
-      <section className="bg-slate-950 px-4 py-14 text-white sm:px-8 sm:py-16">
-        <div className="mx-auto max-w-5xl text-center">
-          <p className="text-sm font-black uppercase tracking-[0.3em] text-warm">
+      <section className="bg-primary-dark px-4 py-10 text-center text-white sm:px-8 sm:py-14">
+        <div className="mx-auto max-w-5xl">
+          <p className="text-xs font-black uppercase tracking-[0.25em] text-accent-yellow">
             Testimonials
           </p>
           <h1 className="mt-3 text-4xl font-black tracking-tight sm:text-5xl">
             Voices of Our Community
           </h1>
-          <p className="mx-auto mt-4 max-w-3xl text-base leading-relaxed text-slate-200 sm:text-lg">
+          <p className="mx-auto mt-4 max-w-3xl text-base leading-relaxed text-slate-300 sm:text-lg">
             Hear what parents, students, and alumni have to say about their experience
             at Dankamf Educational Complex.
           </p>
         </div>
       </section>
 
-      <section className="bg-white px-0 py-10 sm:px-8 sm:py-14">
+      <section className="px-4 py-10 sm:px-8 sm:py-14">
         <div className="mx-auto max-w-7xl">
           {loading ? (
             <LoadingSpinner label="Loading client testimonials" />
@@ -58,20 +59,22 @@ export default function ClientConfidence() {
               {testimonials.map(({ id, quote, description, imageUrl, name, role }) => (
                 <figure
                   key={id || name}
-                  className="border border-slate-200 bg-slate-50 p-4 transition-shadow hover:shadow-lg sm:rounded-lg sm:p-5"
+                  className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:border-cobalt/40 hover:shadow-xl"
                 >
                   {imageUrl && (
-                    <div className="-mx-4 -mt-4 mb-4 h-64 overflow-hidden bg-white ring-1 ring-slate-200 sm:mx-0 sm:mt-0 sm:h-72 sm:rounded-lg">
+                    <div className="flex h-56 items-center justify-center overflow-hidden bg-slate-100 sm:h-64">
                       <img src={imageUrl} alt={name} className="h-full w-full object-cover" />
                     </div>
                   )}
-                  <blockquote className="text-base leading-relaxed text-slate-700">
-                    "{description || quote}"
-                  </blockquote>
+                  <div className="p-5">
+                    <blockquote className="prose prose-sm max-w-none text-text-light sm:prose-base">
+                      <ReactMarkdown>{description || quote}</ReactMarkdown>
+                    </blockquote>
                   <figcaption className="mt-4 border-t border-slate-200 pt-3">
-                    <p className="font-black text-slate-950">{name}</p>
-                    <p className="mt-1 text-base text-slate-500">{role}</p>
+                    <p className="font-black text-primary">{name}</p>
+                    <p className="mt-1 text-sm text-slate-500">{role}</p>
                   </figcaption>
+                  </div>
                 </figure>
               ))}
             </div>
@@ -80,13 +83,13 @@ export default function ClientConfidence() {
           <div className="mt-10 text-center">
             <Link
               to="/contact"
-              className="inline-flex rounded-full bg-warm px-4 py-2 text-base font-bold text-white shadow-lg transition hover:bg-warm-terracotta"
+              className="inline-flex rounded-full bg-primary px-4 py-2 text-sm font-bold text-white shadow-lg transition hover:bg-primary-dark"
             >
             Contact Us for Admissions
             </Link>
           </div>
         </div>
       </section>
-    </>
+    </main>
   );
 }
