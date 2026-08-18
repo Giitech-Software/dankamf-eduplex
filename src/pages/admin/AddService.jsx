@@ -82,7 +82,7 @@ export default function AddService() {
 
         <label className="block text-sm font-bold text-slate-700 dark:text-slate-200">Homepage display number<input type="number" min="1" name="order" placeholder="e.g. 1" value={form.order} onChange={handleChange} className="mt-1 w-full rounded-lg border p-3 dark:border-gray-700 dark:bg-gray-900 dark:text-white" /><span className="mt-1 block text-xs font-normal text-slate-500">Lower numbers appear first in Our Academics.</span></label>
 
-        <textarea name="curriculum" value={form.curriculum} onChange={handleChange} placeholder="Curriculum overview (Markdown supported)" className="w-full h-32 p-3 border rounded bg-white dark:bg-gray-900 dark:border-gray-700 dark:text-white placeholder-gray-500 dark:placeholder-gray-400" />
+        <textarea name="curriculum" value={form.curriculum} onChange={handleChange} placeholder="Curriculum details (Markdown supported)" className="w-full h-32 p-3 border rounded bg-white dark:bg-gray-900 dark:border-gray-700 dark:text-white placeholder-gray-500 dark:placeholder-gray-400" />
         <textarea name="assessment" value={form.assessment} onChange={handleChange} placeholder="Assessment approach (Markdown supported)" className="w-full h-32 p-3 border rounded bg-white dark:bg-gray-900 dark:border-gray-700 dark:text-white placeholder-gray-500 dark:placeholder-gray-400" />
         <textarea name="timetable" value={form.timetable} onChange={handleChange} placeholder="Timetable and academic calendar (Markdown supported)" className="w-full h-32 p-3 border rounded bg-white dark:bg-gray-900 dark:border-gray-700 dark:text-white placeholder-gray-500 dark:placeholder-gray-400" />
 

@@ -135,7 +135,7 @@ export default function EditService() {
         />
         <label className="block text-sm font-bold text-slate-700 dark:text-slate-200">Homepage display number<input type="number" min="1" value={service.order || ''} onChange={(e) => setService({ ...service, order: e.target.value })} className="mt-1 w-full rounded-lg border p-3 dark:border-gray-700 dark:bg-gray-900 dark:text-white" /><span className="mt-1 block text-xs font-normal text-slate-500">Lower numbers appear first in Our Academics.</span></label>
 
-        <textarea name="curriculum" value={service.curriculum} onChange={(e) => setService({ ...service, curriculum: e.target.value })} placeholder="Curriculum overview (Markdown supported)" className="w-full h-32 p-3 border rounded bg-white dark:bg-gray-900 dark:border-gray-700 dark:text-white" />
+        <textarea name="curriculum" value={service.curriculum} onChange={(e) => setService({ ...service, curriculum: e.target.value })} placeholder="Curriculum details (Markdown supported)" className="w-full h-32 p-3 border rounded bg-white dark:bg-gray-900 dark:border-gray-700 dark:text-white" />
         <textarea name="assessment" value={service.assessment} onChange={(e) => setService({ ...service, assessment: e.target.value })} placeholder="Assessment approach (Markdown supported)" className="w-full h-32 p-3 border rounded bg-white dark:bg-gray-900 dark:border-gray-700 dark:text-white" />
         <textarea name="timetable" value={service.timetable} onChange={(e) => setService({ ...service, timetable: e.target.value })} placeholder="Timetable and academic calendar (Markdown supported)" className="w-full h-32 p-3 border rounded bg-white dark:bg-gray-900 dark:border-gray-700 dark:text-white" />
 

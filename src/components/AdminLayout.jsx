@@ -98,7 +98,7 @@ export default function AdminLayout({ children }) {
         {role === 'superadmin' && <NavLink to="/admin/add-user" className={navLinkClass}><FaUserPlus /> Add User</NavLink>}
         {role === 'superadmin' && <NavLink to="/admin/hero-images" className={navLinkClass}><FaBriefcase /> Hero Images</NavLink>}
 
-        <div className={sectionClass}>Services & Projects</div>
+        <div className={sectionClass}>Academic Content &amp; Campus</div>
         <NavLink to="/admin/manage-services" className={navLinkClass}><FaCog /> Manage Academic Programmes</NavLink>
         <NavLink to="/admin/enterprise-features" className={navLinkClass}><FaLayerGroup /> School Capabilities</NavLink>
         <NavLink to="/admin/client-testimonials" className={navLinkClass}><FaQuoteLeft /> Client Testimonials</NavLink>

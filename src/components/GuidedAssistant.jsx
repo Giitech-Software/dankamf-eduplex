@@ -17,8 +17,8 @@ const whatsappUrl =
 const options = [
   {
     label: 'Explore Academics',
-    description: 'Review our academic programs.',
-    to: '/services',
+    description: 'Review our academic programmes.',
+    to: '/academics',
     icon: BriefcaseBusiness,
   },
   {

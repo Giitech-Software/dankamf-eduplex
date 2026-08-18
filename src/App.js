@@ -63,7 +63,6 @@ import Gallery from './pages/Gallery';
 import ManageDownloads from './pages/admin/ManageDownloads';
 import Search from './pages/Search';
 import Downloads from './pages/Downloads';
-import Academics from './pages/Academics';
 import BookTour from './pages/BookTour';
 import ManageAlerts from './pages/admin/ManageAlerts';
 import ManageLeadership from './pages/admin/ManageLeadership';
@@ -93,8 +92,10 @@ export default function App() {
           <Route element={<MainLayout />}>
             <Route path="/" element={<Home />} />
             <Route path="/academics/:slug" element={<AcademicProgramDetails />} />
-            <Route path="/services" element={<Services />} />
-            <Route path="/academics" element={<Academics />} />
+            {/* Academics is the canonical public programme directory. Keep the
+                legacy Services URL as a safe compatibility redirect. */}
+            <Route path="/academics" element={<Services />} />
+            <Route path="/services" element={<Navigate to="/academics" replace />} />
             <Route path="/projects" element={<Projects />} />
             <Route path="/gallery" element={<Gallery />} />
             <Route path="/student-life" element={<StudentLife />} />
@@ -114,6 +115,7 @@ export default function App() {
             <Route path="/calendar" element={<Calendar />} />
             <Route path="/admissions/fees" element={<Fees />} />
             <Route path="/jobs/:id" element={<JobDetails />} />
+            <Route path="/admissions/:id" element={<JobDetails />} />
             <Route path="/about" element={<About />} />
             <Route path="/staff" element={<StaffDirectory />} />
             <Route path="/privacy" element={<Privacy />} />

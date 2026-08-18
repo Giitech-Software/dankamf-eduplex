@@ -14,7 +14,7 @@ export default function CTABanner() {
             Ready to give your child the best start?
           </h3>
           <p className="mt-3 text-base leading-relaxed text-slate-300">
-            Schedule a visit or contact our admissions office to learn more about our vibrant community and excellent programs.
+            Schedule a visit or contact our admissions office to learn more about our vibrant community and excellent programmes.
           </p>
         </div>
 
@@ -26,7 +26,7 @@ export default function CTABanner() {
             Get In Touch
           </Link>
           <Link
-            to="/services"
+            to="/academics"
             className="inline-flex w-full items-center justify-center rounded-full border border-white/30 px-4 py-2 text-sm font-black uppercase tracking-widest text-white transition-all duration-300 hover:border-white hover:bg-white hover:text-primary-dark sm:w-auto"
           >
             Our Academics

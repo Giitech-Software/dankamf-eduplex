@@ -10,6 +10,8 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import ReactMarkdown from 'react-markdown';
 
 const getServiceSlug = (title = '') => title
+  .normalize('NFD')
+  .replace(/[\u0300-\u036f]/g, '')
   .toLowerCase()
   .replace(/[^a-z0-9]+/g, '-')
   .replace(/(^-|-$)/g, '');
@@ -33,15 +35,14 @@ const Services = () => {
   return (
     <>
       <Seo {...SeoConfig.services} />
-      <div className="min-h-screen bg-gradient-to-b from-[#f8fcff] to-[#eaf6ff] px-0 py-8 text-slate-900 sm:px-5 lg:px-12">
-        <div className="max-w-7xl mx-auto">
-          <div className="mb-8 px-4 sm:px-0">
-            <h1 className="text-3xl font-black tracking-tight text-slate-900 sm:text-4xl">
-              Academic Programs
-            </h1>
-            <div className="w-20 h-1.5 bg-accent mt-3 rounded-full"></div>
-            <p className="mt-3 text-text-light text-base leading-relaxed max-w-3xl">Our curriculum is designed to foster intellectual curiosity and a love for learning at every stage, from foundational skills to advanced studies.</p>
-          </div>
+      <main className="min-h-screen bg-background-alt text-slate-900">
+        <section className="bg-primary-dark px-4 py-8 text-center text-white sm:px-8 sm:py-10">
+          <p className="text-xs font-black uppercase tracking-[0.25em] text-accent-yellow">Learning Pathways</p>
+          <h1 className="mt-2 text-3xl font-black sm:text-4xl">Academic Programmes</h1>
+          <p className="mx-auto mt-2 max-w-3xl text-slate-300">Our curriculum is designed to foster intellectual curiosity and a love for learning at every stage, from foundational skills to advanced studies.</p>
+        </section>
+        <section className="px-0 py-8 sm:px-5 lg:px-12">
+        <div className="mx-auto max-w-7xl">
           
           {loading ? (
             <LoadingSpinner label="Loading services" />
@@ -64,7 +65,7 @@ const Services = () => {
                     <ReactMarkdown>{service.description || 'Explore this academic programme and its learning pathway.'}</ReactMarkdown>
                   </div>
                   <div className="mt-4 flex min-h-11 items-center gap-2 text-sm font-black uppercase tracking-widest text-accent transition-all">
-                    View Program <span className="text-xs transition-transform group-hover:translate-x-1">-&gt;</span>
+                    View Programme <span className="text-xs transition-transform group-hover:translate-x-1">-&gt;</span>
                   </div></div>
                 </Link>
               );
@@ -72,7 +73,8 @@ const Services = () => {
           </div>
           )}
         </div>
-      </div>
+        </section>
+      </main>
     </>
   );
 };

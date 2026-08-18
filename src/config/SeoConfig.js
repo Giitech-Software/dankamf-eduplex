@@ -17,9 +17,9 @@ const staticPages = {
   },
   services: {
     title: `Academics | ${siteName}`,
-    description: 'Explore our comprehensive academic programs and curriculum.',
-    path: '/services',
-    url: `${baseUrl}/services`,
+    description: 'Explore our comprehensive academic programmes and curriculum.',
+    path: '/academics',
+    url: `${baseUrl}/academics`,
     author: siteAuthor,
     publisher: sitePublisher,
   },

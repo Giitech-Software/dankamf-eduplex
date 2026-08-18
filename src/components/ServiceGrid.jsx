@@ -14,7 +14,7 @@ const fallbackIcon = (title = '') => {
   return <FaSchool />;
 };
 
-const slugify = (title = '') => title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+const slugify = (title = '') => title.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 
 function ProgrammeImage({ service }) {
   return (
@@ -44,7 +44,7 @@ export default function ServiceGrid() {
       <div className="mx-auto max-w-7xl">
         <div className="mb-8 max-w-3xl px-4 sm:px-0">
           <p className="text-xs font-black uppercase tracking-[0.22em] text-accent sm:text-sm sm:tracking-[0.3em]">Our Academics</p>
-          <h3 className="mt-2 text-2xl font-black tracking-tight text-primary-dark sm:text-4xl">Programs &amp; Curriculum</h3>
+          <h3 className="mt-2 text-2xl font-black tracking-tight text-primary-dark sm:text-4xl">Programmes &amp; Curriculum</h3>
           <p className="mt-3 text-base leading-relaxed text-text-light">A structured and engaging learning path designed to inspire excellence at every level of education.</p>
         </div>
 
@@ -66,7 +66,7 @@ export default function ServiceGrid() {
         )}
 
         <div className="mt-8 px-4 text-center sm:px-0">
-          <Link to="/services" className="inline-flex items-center justify-center rounded-full bg-accent-yellow px-4 py-2 text-xs font-black uppercase tracking-widest text-darkgray shadow-lg transition-all duration-300 hover:-translate-y-1 hover:bg-accent-yellow-dark hover:shadow-xl">Explore All Programs</Link>
+          <Link to="/academics" className="inline-flex items-center justify-center rounded-full bg-accent-yellow px-4 py-2 text-xs font-black uppercase tracking-widest text-darkgray shadow-lg transition-all duration-300 hover:-translate-y-1 hover:bg-accent-yellow-dark hover:shadow-xl">Explore All Programmes</Link>
         </div>
       </div>
     </section>

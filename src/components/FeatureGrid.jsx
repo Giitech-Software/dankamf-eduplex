@@ -94,6 +94,7 @@ export default function FeatureGrid() {
         {loading ? (
           <LoadingSpinner label="Loading enterprise features" />
         ) : (
+        <>
         <div className="grid gap-3 px-4 sm:gap-4 sm:px-0 md:grid-cols-2 lg:grid-cols-4">
           {features.slice(0, 6).map(({ id, icon, imageUrl, title, text }) => (
             <div
@@ -123,6 +124,12 @@ export default function FeatureGrid() {
             </div>
           ))}
         </div>
+        <div className="mt-8 text-center">
+          <Link to="/school-capabilities" className="inline-flex items-center justify-center rounded-full border border-primary/30 bg-white px-4 py-2 text-xs font-black uppercase tracking-widest text-primary transition hover:border-primary hover:bg-blue-50">
+            Explore More <span className="ml-2">→</span>
+          </Link>
+        </div>
+        </>
         )}
       </div>
     </section>

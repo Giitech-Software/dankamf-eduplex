@@ -30,7 +30,7 @@ export default function CareerPreview() {
               </p>
               <p className="mt-2 text-sm font-bold text-text-light">{program.type}</p>
               <Link
-                to={`/jobs/${program.id}`}
+                to={`/admissions/${program.id}`}
                 className="mt-auto inline-flex items-center gap-1 pt-5 text-sm font-bold text-accent transition hover:text-primary"
               >
                 View Details <ArrowRight className="h-4 w-4" aria-hidden="true" />
