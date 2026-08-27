@@ -24,7 +24,7 @@ body {
 .public-site main > section:not([aria-roledescription='carousel']) p.text-slate-600,
 .public-site main > section:not([aria-roledescription='carousel']) p.text-slate-500,
 .public-site main > section:not([aria-roledescription='carousel']) li {
-  font-size: 1.0625rem;
+  font-size: 1.1rem;
   line-height: 1.7;
 }
 
@@ -67,7 +67,7 @@ h6 {
    line-clamp utilities still control preview length without shrinking text. */
 .public-site .prose,
 .public-site .prose-sm {
-  font-size: 1rem;
+  font-size: 1.05rem;
   line-height: 1.7;
 }
 
@@ -86,6 +86,39 @@ h6 {
 
 .public-site .prose h3 {
   font-size: 1.2rem;
+}
+
+/* Restore visible Markdown list markers in dynamic content. Tailwind's
+   preflight removes list markers globally, but school subject points need
+   their bullets for clear scanning. */
+.markdown-content ul {
+  list-style: disc;
+  padding-left: 1.5rem;
+}
+
+.markdown-content ol {
+  list-style: decimal;
+  padding-left: 1.5rem;
+}
+
+.markdown-content li {
+  padding-left: 0.2rem;
+}
+
+.markdown-content h1,
+.markdown-content h2,
+.markdown-content h3,
+.markdown-content h4 {
+  margin-top: 0.9rem;
+  margin-bottom: 0.45rem;
+  color: #003153;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.markdown-content h3 {
+  font-size: 1.15rem;
 }
 
 /* Consistent About-page hierarchy for JSX headings and admin Markdown. */
@@ -205,6 +238,25 @@ h6 {
   }
 }
 
+/* Keep homepage card collections close to the viewport edge while retaining
+   responsive breathing room and the existing gaps between cards. */
+.homepage-content > section:not([aria-roledescription='carousel']) {
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+}
+
+.homepage-content > section:not([aria-roledescription='carousel']) .grid {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+@media (max-width: 640px) {
+  .homepage-content > section:not([aria-roledescription='carousel']) {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+}
+
 @layer base {
   html,
   body,
@@ -303,7 +355,7 @@ main.min-h-screen.bg-background-alt > section.bg-primary-dark h1 {
 }
 
 .public-site main button,
-.public-site main a[class*="rounded"] {
+.public-site main a[class*="rounded-"]:not(.rounded-none) {
   border-radius: 9999px;
   font-size: 0.875rem;
   line-height: 1.25rem;
@@ -312,9 +364,14 @@ main.min-h-screen.bg-background-alt > section.bg-primary-dark h1 {
 }
 
 .public-site main button:not([class*="w-full"]),
-.public-site main a[class*="rounded"]:not([class*="w-full"]) {
+.public-site main a[class*="rounded-"]:not(.rounded-none):not([class*="w-full"]) {
   padding-left: 1rem;
   padding-right: 1rem;
+}
+
+/* Academic programme previews use soft card corners, not pill-shaped buttons. */
+.public-site main a.academic-preview-card {
+  border-radius: 0.75rem !important;
 }
 
 /* Gallery thumbnails are square cards, not pill-shaped controls. */
@@ -405,6 +462,7 @@ main.min-h-screen.bg-background-alt > section.bg-primary-dark h1 {
   background-color: rgba(15, 23, 42, 0.55);
 }
 
+
 .public-site main .hero-scroll-cue {
   margin-top: 2rem !important;
   display: inline-flex;
@@ -440,7 +498,13 @@ main.min-h-screen.bg-background-alt > section.bg-primary-dark h1 {
   left: auto;
   right: auto;
   top: auto;
+  height: 3.25rem;
+  min-height: 3.25rem;
+  margin-top: 0.75rem !important;
+  isolation: isolate;
+  z-index: 3;
 }
+
 
 .public-site form input:not([type="checkbox"]):not([type="radio"]),
 .public-site form select,
@@ -775,4 +839,34 @@ main.min-h-screen.bg-background-alt > section.bg-primary-dark p:last-child {
 .admin-site main > div > div.rounded-xl {
   border-color: rgba(70, 130, 180, 0.22);
   box-shadow: 0 12px 30px rgba(0, 49, 83, 0.07);
+}
+
+/* Video slides have no welcome copy or CTA row, so anchor their controls at
+   the lower safe area of the viewer without changing image-slide placement. */
+.public-site main section:has(> video.opacity-100) > div:last-of-type {
+  align-items: flex-end !important;
+  justify-content: flex-end !important;
+  padding-top: 0 !important;
+  padding-bottom: 4.75rem !important;
+}
+
+.public-site main section:has(> video.opacity-100) .hero-controls {
+  position: relative !important;
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin-top: 0 !important;
+  z-index: 10;
+}
+
+.public-site main section:has(> video.opacity-100) .hero-controls > button {
+  position: static !important;
+  flex: 0 0 auto;
+  transform: none !important;
+}
+
+.public-site main section:has(> video.opacity-100) .hero-scroll-cue {
+  margin-top: 0.75rem !important;
 }

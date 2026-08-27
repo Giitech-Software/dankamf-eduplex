@@ -9,15 +9,15 @@ export default function BlogCard({ post, onClick, index, id, className = '' }) {
       className={`group flex cursor-pointer flex-col overflow-hidden border border-slate-200 bg-white shadow-sm transition-all duration-500 hover:border-warm hover:shadow-xl sm:rounded-lg ${className}`}
       style={{ transitionDelay: `${index * 50}ms` }}
     >
-      {post.image && (
-        <div className="relative h-52 w-full overflow-hidden bg-slate-100 sm:h-60">
+      {(post.imageUrl || post.image) && (
+        <div className="relative h-60 w-full overflow-hidden bg-slate-100 sm:h-72">
           <img
-            src={post.image}
+            src={post.imageUrl || post.image}
             alt={post.title}
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
           />
           <div className="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full shadow-sm text-xs font-black uppercase text-slate-900">
-            Article
+            News &amp; Events
           </div>
         </div>
       )}
@@ -34,7 +34,7 @@ export default function BlogCard({ post, onClick, index, id, className = '' }) {
         </div>
 
         <div className="flex items-center pt-3 text-sm font-black uppercase tracking-[0.16em] text-warm transition-opacity sm:opacity-0 sm:group-hover:opacity-100">
-          Read Article &rarr;
+          Read News Article &rarr;
         </div>
       </div>
     </div>

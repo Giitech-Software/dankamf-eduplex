@@ -14,13 +14,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="google-site-verification" content="a09ba4300567a419" />
 
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-47CSJXLVQT"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-47CSJXLVQT', { send_page_view: false });
+    </script>
+
     <!-- Enterprise default metadata for crawlers that do not execute React Helmet -->
     <title>Dankamf Educational Complex</title>
     <meta name="description" content="A premier educational institution committed to excellence in learning and character development." />
     <meta property="og:title" content="Dankamf Educational Complex" />
     <meta property="og:description" content="A premier educational institution committed to excellence in learning and character development." />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://dankamf-eduplex.web.app/" />
+    <meta property="og:url" content="https://dankamfeducational.com/" />
     <meta name="twitter:title" content="Dankamf Educational Complex" />
     <meta name="twitter:description" content="A premier educational institution committed to excellence in learning and character development." />
 
@@ -32,8 +41,12 @@
     <link rel="manifest" href="%PUBLIC_URL%/site.webmanifest" />
   </head>
 
-  <body>
+  <body style="margin:0;background:#003153;">
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="app"></div>
+    <noscript>
+      <h1>Dankamf Educational Complex — Private School in Oyibi, Kpone-Katamanso, Greater Accra</h1>
+      <p>Please enable JavaScript to view the complete Dankamf Educational Complex website.</p>
+    </noscript>
+    <div id="app" style="min-height:100vh;background:#003153;"></div>
   </body>
 </html>

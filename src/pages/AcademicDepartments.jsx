@@ -1,0 +1,27 @@
+import React, { useEffect, useState } from 'react';
+import { collection, getDocs, orderBy, query } from 'firebase/firestore';
+import { Link } from 'react-router-dom';
+import { ArrowRight, BookOpen, Calculator, FlaskConical, Laptop } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import { db } from '../firebase/config';
+import Seo from '../components/Seo';
+import LoadingSpinner from '../components/LoadingSpinner';
+
+const fallbackDepartments = [
+  { title: 'Language Department', description: 'Developing effective communication and a strong foundation in language learning.', subjects: ['English Language', 'Ghanaian Language', 'French', 'Reading and Writing Skills'] },
+  { title: 'Mathematics Department', description: 'Building logical thinking, problem-solving ability, and confident numerical skills.', subjects: ['Mathematics', 'Advanced problem-solving activities', 'Practical applications of mathematical concepts'] },
+  { title: 'Science Department', description: 'Encouraging curiosity, experimentation, innovation, and responsible discovery.', subjects: ['Integrated Science', 'Basic Science', 'STEM-based learning activities', 'Practical experiments and research projects'] },
+  { title: 'Computing & ICT Department', description: 'Preparing learners for the digital world through practical technology education.', subjects: ['Information and Communication Technology (ICT)', 'Computer literacy', 'Coding and programming', 'Digital skills development'] },
+];
+const icons = [BookOpen, Calculator, FlaskConical, Laptop];
+const subjectsMarkdown = (department) => {
+  const content = department.subjectsMarkdown || (department.subjects || []).map((subject) => `- ${subject}`).join('\n');
+  return content.replace(/^\s*[-*+]\s+(#{1,6}\s+)/gm, '$1');
+};
+
+export default function AcademicDepartments() {
+  const [departments, setDepartments] = useState(fallbackDepartments); const [loading, setLoading] = useState(true);
+  useEffect(() => { getDocs(query(collection(db, 'academicDepartments'), orderBy('order', 'asc'))).then((snapshot) => { if (snapshot.docs.length) setDepartments(snapshot.docs.map((item) => ({ id: item.id, ...item.data() }))); }).catch((error) => console.warn('Academic departments unavailable; using school content.', error)).finally(() => setLoading(false)); }, []);
+  return <><Seo title="Academic Departments | Dankamf Educational Complex" description="Explore the academic departments supporting excellence, creativity, innovation, and character development at Dankamf Educational Complex." /><main className="min-h-screen bg-background-alt"><section className="bg-primary-dark px-4 py-8 text-center text-white sm:px-8 sm:py-10"><p className="text-xs font-black uppercase tracking-[0.25em] text-accent-yellow">Learning Community</p><h1 className="mt-2 text-3xl font-black sm:text-4xl">Academic Departments</h1><p className="mx-auto mt-2 max-w-3xl text-slate-300">Our departments work together to provide a well-rounded education that promotes excellence, creativity, innovation, and character development.</p></section><section className="mx-auto max-w-7xl px-4 py-8 sm:px-8"><div className="mb-6 flex flex-wrap gap-3"><Link to="/academics" className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-white px-4 py-2 text-sm font-bold text-primary hover:bg-blue-50">← Academic Programmes</Link><Link to="/student-life" className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-white px-4 py-2 text-sm font-bold text-primary hover:bg-blue-50">Student Life <ArrowRight size={15} /></Link></div>{loading ? <LoadingSpinner label="Loading academic departments" /> : <div className="grid gap-5 md:grid-cols-2">{departments.map((department, index) => { const Icon = icons[index % icons.length]; return <article key={department.id || department.title} className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:border-primary/30 hover:shadow-lg">{department.imageUrl ? <img src={department.imageUrl} alt={department.title} loading="lazy" decoding="async" className="h-48 w-full object-cover" /> : <div className="flex h-20 items-center gap-4 bg-blue-50 px-5 text-primary"><Icon size={28} /></div>}<div className="p-5"><div className="flex items-start gap-4"><div className="hidden h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-accent-light text-primary sm:flex"><Icon size={24} /></div><div className="min-w-0"><h2 className="text-xl font-black text-primary">{department.title}</h2><div className="markdown-content mt-2 max-w-none text-text-light"><ReactMarkdown remarkPlugins={[remarkGfm]}>{department.description || ''}</ReactMarkdown></div></div></div>{subjectsMarkdown(department) && <div className="markdown-content mt-5 border-t border-slate-100 pt-4 text-sm leading-relaxed text-text-light"><ReactMarkdown remarkPlugins={[remarkGfm]}>{subjectsMarkdown(department)}</ReactMarkdown></div>}</div></article>; })}</div>}<div className="mt-8 rounded-2xl border border-blue-200 bg-blue-50 p-5"><h2 className="text-xl font-black text-primary">Preparing every learner for opportunity</h2><p className="mt-2 text-base leading-relaxed text-text-light">Our departments are committed to quality teaching, innovative learning experiences, and holistic development for every learner.</p></div></section></main></>;
+}

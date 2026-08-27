@@ -5,6 +5,7 @@ import { useAuth } from '../../context/AuthContext';
 import { logActivity } from '../../utils/activityLog';
 import AdminLayout from '../../components/AdminLayout';
 import PageTitle from '../../components/PageTitle';
+import { requireRecentAdminAuth } from '../../firebase/security';
 
 const initialForm = {
   title: '',
@@ -23,6 +24,7 @@ export default function AddEvent() {
   const [form, setForm] = useState(initialForm);
   const [status, setStatus] = useState('');
   const [saving, setSaving] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   const handleChange = (event) => {
     const { name, value, type, checked } = event.target;
@@ -35,6 +37,7 @@ export default function AddEvent() {
     setStatus('');
 
     try {
+      await requireRecentAdminAuth(confirmPassword);
       await addDoc(collection(db, 'events'), {
         ...form,
         createdAt: serverTimestamp(),
@@ -42,6 +45,7 @@ export default function AddEvent() {
       });
       await logActivity(user, 'add_event', `Added event: "${form.title}"`);
       setForm(initialForm);
+      setConfirmPassword('');
       setStatus('Event published successfully.');
     } catch (error) {
       console.error('Error adding event:', error);
@@ -94,6 +98,10 @@ export default function AddEvent() {
         <label className="flex items-center gap-3 text-sm font-semibold text-slate-700 dark:text-slate-200">
           <input type="checkbox" name="published" checked={form.published} onChange={handleChange} className="h-4 w-4 accent-primary" />
           Publish on the public website
+        </label>
+        <label className="block space-y-2 text-sm font-bold text-slate-700 dark:text-slate-200">
+          <span>Confirm password to publish</span>
+          <input type="password" required value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} autoComplete="current-password" className="w-full rounded-lg border border-slate-300 bg-white p-3 text-slate-900 dark:border-slate-600 dark:bg-slate-800 dark:text-white" />
         </label>
         <div className="flex flex-wrap gap-3">
           <button disabled={saving} className="rounded-full bg-primary px-6 py-3 text-sm font-bold text-white transition hover:bg-primary-dark disabled:opacity-60">

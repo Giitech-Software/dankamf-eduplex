@@ -5,6 +5,7 @@ import { useAuth } from '../../context/AuthContext';
 import { logActivity } from '../../utils/activityLog';
 import AdminLayout from '../../components/AdminLayout';
 import PageTitle from '../../components/PageTitle';
+import { requireRecentAdminAuth } from '../../firebase/security';
 
 export default function AddFAQ() {
   const { user } = useAuth();
@@ -29,6 +30,7 @@ export default function AddFAQ() {
     setLoading(true);
 
     try {
+      await requireRecentAdminAuth(window.prompt('Enter your administrator password to confirm publishing:'));
       await addDoc(collection(db, 'faqs'), {
         ...form,
         order: Number(form.order) || 9999,

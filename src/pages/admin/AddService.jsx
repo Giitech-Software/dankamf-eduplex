@@ -5,6 +5,7 @@ import { db, storage } from '../../firebase/config';
 import { useAuth } from '../../context/AuthContext';
 import { logActivity } from '../../utils/activityLog';
 import AdminLayout from '../../components/AdminLayout';
+import { requireRecentAdminAuth } from '../../firebase/security';
 import PageTitle from '../../components/PageTitle';
 
 export default function AddService() {
@@ -37,6 +38,7 @@ export default function AddService() {
     setUploading(true);
 
     try {
+      await requireRecentAdminAuth(window.prompt('Enter your administrator password to confirm publishing:'));
       let iconUrl = '';
       if (form.iconImage) {
         const imgRef = ref(storage, `serviceIcons/${Date.now()}-${form.iconImage.name}`);

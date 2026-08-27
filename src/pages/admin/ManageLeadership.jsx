@@ -6,6 +6,7 @@ import AdminLayout from '../../components/AdminLayout';
 import PageTitle from '../../components/PageTitle';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import { db, storage } from '../../firebase/config';
+import { requireRecentAdminAuth } from '../../firebase/security';
 
 const emptyForm = { name: '', role: '', bio: '', order: 1, image: null };
 
@@ -17,6 +18,7 @@ export default function ManageLeadership() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   const load = async () => {
     try {
@@ -49,6 +51,7 @@ export default function ManageLeadership() {
   const save = async (event) => {
     event.preventDefault(); setSaving(true); setMessage('');
     try {
+      await requireRecentAdminAuth(confirmPassword);
       let imageUrl = editing?.imageUrl || '';
       let imagePath = editing?.imagePath || '';
       if (form.image) {
@@ -62,6 +65,7 @@ export default function ManageLeadership() {
       else await addDoc(collection(db, 'leadership'), { ...data, createdAt: serverTimestamp() });
       setMessage(editing ? 'Staff profile updated successfully.' : 'Staff profile published successfully.');
       setEditing(null); setForm({ ...emptyForm, order: leaders.length + 2 }); setPreview(''); await load();
+      setConfirmPassword('');
     } catch (error) { console.error(error); setMessage(error.message || 'Unable to save staff profile.'); } finally { setSaving(false); }
   };
 
@@ -83,6 +87,7 @@ export default function ManageLeadership() {
       <label className="block text-sm font-bold text-darkgray dark:text-slate-200">Display order<input type="number" min="1" value={form.order} onChange={(e) => setForm({ ...form, order: e.target.value })} className="mt-2 w-full rounded-lg border border-slate-300 p-3 dark:border-slate-600 dark:bg-slate-800 dark:text-white" /></label>
       <label className="block text-sm font-bold text-darkgray dark:text-slate-200">Profile photo <span className="font-normal text-slate-500">(optional when editing, max 180 KB)</span><input type="file" accept="image/jpeg,image/png,image/webp" onChange={chooseImage} className="mt-2 w-full rounded-lg border border-slate-300 p-2 text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white" /></label>
       {preview ? <img src={preview} alt="Staff preview" className="h-40 w-full rounded-lg object-cover" /> : <div className="flex h-32 items-center justify-center rounded-lg border-2 border-dashed border-slate-300 text-slate-400"><FaImage size={28} /></div>}
+      <label className="block text-sm font-bold text-darkgray dark:text-slate-200">Confirm password to publish<input type="password" required value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} autoComplete="current-password" className="mt-2 w-full rounded-lg border border-slate-300 p-3 dark:border-slate-600 dark:bg-slate-800 dark:text-white" /></label>
       <div className="flex gap-2"><button disabled={saving} className="flex-1 rounded-full bg-primary px-5 py-3 text-sm font-bold text-white hover:bg-primary-dark disabled:opacity-60">{saving ? 'Saving…' : editing ? 'Save Changes' : 'Publish Staff Profile'}</button>{editing && <button type="button" onClick={cancelEdit} className="rounded-full border border-slate-300 px-4 text-sm font-bold text-slate-600">Cancel</button>}</div>
     </form>
     <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-900"><h2 className="mb-4 text-lg font-black text-primary dark:text-sky-300">Published Staff ({leaders.length})</h2>{loading ? <LoadingSpinner label="Loading staff profiles" /> : leaders.length === 0 ? <p className="rounded-lg bg-slate-50 p-8 text-center text-text-light dark:bg-slate-800 dark:text-slate-300">No staff profiles yet.</p> : <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">{leaders.map((leader) => <article key={leader.id} className="overflow-hidden rounded-xl border border-slate-200 bg-slate-50 dark:border-slate-700 dark:bg-slate-800">{leader.imageUrl ? <img src={leader.imageUrl} alt={leader.name} className="h-40 w-full object-cover" /> : <div className="flex h-40 items-center justify-center bg-primary text-4xl font-black text-white">{leader.name?.charAt(0)}</div>}<div className="p-4"><h3 className="font-black text-darkgray dark:text-white">{leader.name}</h3><p className="mt-1 text-xs font-bold uppercase tracking-wider text-accent">{leader.role}</p><p className="mt-2 line-clamp-3 text-sm text-text-light dark:text-slate-300">{leader.bio}</p><div className="mt-3 flex gap-4"><button onClick={() => startEdit(leader)} className="inline-flex items-center gap-2 text-xs font-bold text-primary dark:text-sky-300"><FaPencilAlt /> Edit</button><button onClick={() => remove(leader)} className="inline-flex items-center gap-2 text-xs font-bold text-red-600"><FaTrash /> Delete</button></div></div></article>)}</div>}</section>

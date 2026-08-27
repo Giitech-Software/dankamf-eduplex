@@ -40,6 +40,7 @@ const Services = () => {
           <p className="text-xs font-black uppercase tracking-[0.25em] text-accent-yellow">Learning Pathways</p>
           <h1 className="mt-2 text-3xl font-black sm:text-4xl">Academic Programmes</h1>
           <p className="mx-auto mt-2 max-w-3xl text-slate-300">Our curriculum is designed to foster intellectual curiosity and a love for learning at every stage, from foundational skills to advanced studies.</p>
+          <Link to="/academic-departments" className="mt-4 inline-flex rounded-full border border-white/30 px-4 py-2 text-sm font-bold text-white transition hover:bg-white hover:text-primary">Explore Academic Departments</Link>
         </section>
         <section className="px-0 py-8 sm:px-5 lg:px-12">
         <div className="mx-auto max-w-7xl">
@@ -55,8 +56,8 @@ const Services = () => {
                   to={`/academics/${getServiceSlug(service.title)}`}
                   className="group flex flex-col overflow-hidden rounded-2xl border border-white/80 bg-white/60 shadow-lg shadow-[#003153]/10 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-cerulean/60 hover:bg-white/80 hover:shadow-xl"
                 >
-                  <div className="mb-4 flex h-48 items-center justify-center overflow-hidden bg-slate-100 sm:h-56">
-                    {(service.imageUrl || service.iconUrl) ? <img src={service.imageUrl || service.iconUrl} alt="" loading="lazy" className="h-full w-full object-contain p-2" /> : <span className="text-5xl text-primary">{service.icon}</span>}
+                  <div className="mb-4 flex h-60 items-center justify-center overflow-hidden bg-slate-100 sm:h-72">
+                    {(service.imageUrl || service.iconUrl) ? <img src={service.imageUrl || service.iconUrl} alt="" loading="lazy" className="h-full w-full object-cover" /> : <span className="text-5xl text-primary">{service.icon}</span>}
                   </div>
                   <div className="px-4 pb-5 sm:px-5"><h2 className="text-xl font-bold text-slate-900 mb-3 leading-tight group-hover:text-primary transition-colors">
                     {service.title}

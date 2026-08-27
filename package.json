@@ -2,7 +2,7 @@
   "name": "dankamf-eduplex",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://dankamf-eduplex.web.app",
+  "homepage": "https://dankamfeducational.com",
   "dependencies": {
     "@headlessui/react": "^2.2.5",
     "@heroicons/react": "^2.2.0",

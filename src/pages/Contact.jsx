@@ -49,27 +49,27 @@ export default function Contact() {
           <div className="mb-6 space-y-3 px-4 text-gray-700 sm:px-0">
             <div className="grid gap-3 sm:grid-cols-2">
               <a
-                href="mailto:dankamfeducationalcomplex2016@gmail.com"
+                href="mailto:dankamfeducational@gmail.com"
                 className="flex min-h-14 items-center gap-3 rounded-lg border border-gray-200 bg-white p-3 text-primary shadow-sm transition hover:border-primary"
               >
                 <FaEnvelope className="shrink-0" />
-                <span className="min-w-0 truncate">dankamfeducationalcomplex2016@gmail.com</span>
+                <span className="min-w-0 truncate">dankamfeducational@gmail.com</span>
               </a>
               <a
                 href="tel:+233242172216"
                 className="flex min-h-14 items-center gap-3 rounded-lg border border-gray-200 bg-white p-3 text-primary shadow-sm transition hover:border-primary"
               >
                 <FaPhoneAlt className="shrink-0" />
-                <span>024 217 2216</span>
+                <span>+23324 217 2216</span>
               </a>
               <a
-                href="https://dankamf-eduplex.web.app"
+                href="https://dankamfeducational.com"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex min-h-14 items-center gap-3 rounded-lg border border-gray-200 bg-white p-3 text-primary shadow-sm transition hover:border-primary"
               >
                 <FaGlobe className="shrink-0" />
-                <span className="min-w-0 truncate">dankamf-eduplex.web.app</span>
+                <span className="min-w-0 truncate">dankamfeducational.com</span>
               </a>
               <p className="flex min-h-14 items-center gap-3 rounded-lg border border-gray-200 bg-white p-3 shadow-sm">
                 <FaMapMarkerAlt className="shrink-0 text-primary" />

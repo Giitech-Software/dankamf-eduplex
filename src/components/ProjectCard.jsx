@@ -9,7 +9,7 @@ export default function ProjectCard({ project, onClick, index, id, className = '
       className={`group flex cursor-pointer flex-col overflow-hidden border border-slate-200 bg-white transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl sm:rounded-lg ${className}`}
       style={{ transitionDelay: `${index * 50}ms` }}
     >
-      <div className="relative h-52 w-full overflow-hidden bg-slate-100 sm:h-60">
+      <div className="relative h-60 w-full overflow-hidden bg-slate-100 sm:h-72">
         {project.imageUrl ? (
           <img
             src={project.imageUrl}

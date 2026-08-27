@@ -1,6 +1,6 @@
 ﻿﻿﻿﻿// src/config/SeoConfig.js
 
-const baseUrl = 'https://dankamf-eduplex.web.app'; 
+const baseUrl = 'https://dankamfeducational.com';
 const siteName = 'Dankamf Educational Complex';
 const siteAuthor = 'Dankamf Educational Complex';
 const sitePublisher = 'Dankamf Educational Complex';
@@ -63,11 +63,19 @@ const staticPages = {
     author: siteAuthor,
     publisher: sitePublisher,
   },
+  localSchool: {
+    title: `Private School in Oyibi, Kpone-Katamanso | ${siteName}`,
+    description: 'Discover Dankamf Educational Complex, a trusted private basic school in Oyibi, Kpone-Katamanso, Greater Accra, offering nursery, kindergarten, primary, and JHS education.',
+    path: '/private-school-oyibi',
+    url: `${baseUrl}/private-school-oyibi`,
+    author: siteAuthor,
+    publisher: sitePublisher,
+  },
   careers: {
-    title: `Admissions | ${siteName}`,
-    description: 'Learn about the admission process and join the Dankamf Educational Complex family.',
-    path: '/admissions',
-    url: `${baseUrl}/admissions`,
+    title: `Careers & Vacancies | ${siteName}`,
+    description: 'Explore teaching, administration, and support opportunities at Dankamf Educational Complex.',
+    path: '/jobs',
+    url: `${baseUrl}/jobs`,
     author: siteAuthor,
     publisher: sitePublisher,
   },

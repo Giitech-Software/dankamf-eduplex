@@ -9,7 +9,7 @@ import {
   getAuth,
   signOut,
 } from 'firebase/auth';
-import { initializeApp } from 'firebase/app';
+import { deleteApp, initializeApp } from 'firebase/app';
 import {
   doc,
   setDoc,
@@ -23,6 +23,7 @@ import { Eye, EyeOff } from 'lucide-react';
 export default function AddUser() {
   const [form, setForm] = useState({ email: '', password: '', role: 'admin' });
   const [status, setStatus] = useState('');
+  const [saving, setSaving] = useState(false);
   const [users, setUsers] = useState([]);
   const [showPassword, setShowPassword] = useState(false);
   const { user } = useAuth();
@@ -46,13 +47,28 @@ export default function AddUser() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  const friendlyError = (error) => {
+    switch (error?.code) {
+      case 'auth/email-already-in-use': return 'A user with this email already exists.';
+      case 'auth/invalid-email': return 'Enter a valid email address.';
+      case 'auth/weak-password': return 'Use a stronger temporary password with at least 6 characters.';
+      case 'permission-denied':
+      case 'firestore/permission-denied': return 'Your superadmin session is not permitted to create this user. Please sign in again.';
+      case 'auth/network-request-failed': return 'The network connection was interrupted. Check your connection and try again.';
+      default: return 'Unable to add the user right now. Please try again.';
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus('');
+    setSaving(true);
+    let secondaryApp;
     try {
+      setStatus('Creating user account…');
       // Use a secondary Auth instance so creating a user does not replace the
       // currently signed-in superadmin session.
-      const secondaryApp = initializeApp(firebaseConfig, `user-creation-${Date.now()}`);
+      secondaryApp = initializeApp(firebaseConfig, `user-creation-${Date.now()}`);
       const secondaryAuth = getAuth(secondaryApp);
       const userCred = await createUserWithEmailAndPassword(
         secondaryAuth,
@@ -64,7 +80,9 @@ export default function AddUser() {
       try {
         await setDoc(doc(db, 'users', userId), { email: form.email, role: form.role, createdAt: new Date() });
       } catch (profileError) {
-        throw new Error(`Auth account created, but Firestore profile failed (${profileError.code || profileError.message}). Confirm superadmin permissions.`);
+        const profileErrorWithCode = new Error('The authentication account was created, but the school profile could not be saved. Please check superadmin permissions.');
+        profileErrorWithCode.code = profileError.code;
+        throw profileErrorWithCode;
       }
 
       await signOut(secondaryAuth);
@@ -77,7 +95,14 @@ export default function AddUser() {
       setStatus('✅ User added successfully!');
       setForm({ email: '', password: '', role: 'admin' });
       fetchUsers();
+      if (secondaryApp) await deleteApp(secondaryApp).catch(() => {});
+      setSaving(false);
     } catch (err) {
+      setStatus(friendlyError(err));
+      setSaving(false);
+      if (secondaryApp) await deleteApp(secondaryApp).catch(() => {});
+      return;
+      // eslint-disable-next-line no-unreachable
       console.error('❌ Error:', err.message);
       setStatus('❌ Failed to add user: ' + err.message);
     }
@@ -135,9 +160,10 @@ export default function AddUser() {
           </select>
           <button
             type="submit"
-            className="w-full bg-primary text-white py-3 rounded hover:bg-cta transition"
+            disabled={saving}
+            className="w-full bg-primary text-white py-3 rounded hover:bg-cta transition disabled:cursor-not-allowed disabled:opacity-60"
           >
-            Add User
+            {saving ? 'Adding User…' : 'Add User'}
           </button>
         </form>
 

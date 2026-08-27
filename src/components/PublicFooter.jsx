@@ -55,7 +55,7 @@ const PublicFooter = () => {
           <div className="space-y-1 text-xs">
             <p><strong>Location:</strong> Oyibi–Accra, near SDA Church</p>
             <p><strong>Office hours:</strong> Monday–Friday, 7:00 AM–3:00 PM</p>
-            <p><strong>Email:</strong> dankamfeducationalcomplex2016@gmail.com</p>
+            <p><strong>Email:</strong> dankamfeducational@gmail.com</p>
             <p className="flex items-center gap-1">
               <FaMapMarkerAlt className="text-accent" />
               <a

@@ -19,6 +19,7 @@ import PageTitle from '../../components/PageTitle';
 import { db, storage } from '../../firebase/config';
 import { useAuth } from '../../context/AuthContext';
 import { logActivity } from '../../utils/activityLog';
+import { requireRecentAdminAuth } from '../../firebase/security';
 
 const emptyForm = {
   name: '',
@@ -39,6 +40,7 @@ export default function ManageClientTestimonials() {
   const [fileInputKey, setFileInputKey] = useState(0);
   const [editingTestimonial, setEditingTestimonial] = useState(null);
   const [expandedTestimonialId, setExpandedTestimonialId] = useState(null);
+  const [confirmPassword, setConfirmPassword] = useState('');
   const formRef = useRef(null);
 
   const fetchTestimonials = async () => {
@@ -116,6 +118,7 @@ export default function ManageClientTestimonials() {
     setSaving(true);
 
     try {
+      await requireRecentAdminAuth(confirmPassword);
       let imageUrl = editingTestimonial?.imageUrl || '';
       let imagePath = editingTestimonial?.imagePath || '';
 
@@ -158,6 +161,7 @@ export default function ManageClientTestimonials() {
       }
 
       resetForm();
+      setConfirmPassword('');
       fetchTestimonials();
     } catch (error) {
       console.error('Error saving client testimonial:', error);
@@ -172,6 +176,8 @@ export default function ManageClientTestimonials() {
     if (!window.confirm(`Delete "${testimonial.name}" from Client Confidence?`)) return;
 
     try {
+      const password = window.prompt('Enter your administrator password to confirm deletion:');
+      await requireRecentAdminAuth(password);
       await deleteDoc(doc(db, 'clientTestimonials', testimonial.id));
 
       if (testimonial.imagePath) {
@@ -281,6 +287,18 @@ export default function ManageClientTestimonials() {
               className="w-full rounded border border-slate-300 bg-white p-2 text-sm file:mr-3 file:rounded file:border-0 file:bg-primary file:px-3 file:py-2 file:text-white hover:file:bg-cta dark:border-gray-700 dark:bg-gray-800 dark:text-white"
             />
           </div>
+
+          <label className="block text-sm font-bold text-slate-700 dark:text-slate-200">
+            Confirm password to save
+            <input
+              type="password"
+              value={confirmPassword}
+              onChange={(event) => setConfirmPassword(event.target.value)}
+              autoComplete="current-password"
+              required
+              className="mt-1 w-full rounded border border-slate-300 bg-white p-3 text-slate-900 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            />
+          </label>
 
           <button
             type="submit"

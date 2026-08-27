@@ -4,6 +4,7 @@ import { db } from '../../firebase/config';
 import AdminLayout from '../../components/AdminLayout';
 import { useNavigate } from 'react-router-dom';
 import PageTitle from '../../components/PageTitle';
+import { requireRecentAdminAuth } from '../../firebase/security';
 
 export default function AddJob() {
   const [form, setForm] = useState({
@@ -24,6 +25,7 @@ export default function AddJob() {
     e.preventDefault();
     setMsg('');
     try {
+      await requireRecentAdminAuth(window.prompt('Enter your administrator password to confirm publishing:'));
       await addDoc(collection(db, 'jobs'), {
         ...form,
         postedAt: serverTimestamp(),

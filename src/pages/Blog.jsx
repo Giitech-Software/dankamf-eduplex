@@ -60,10 +60,10 @@ const Blog = () => {
           </section>
 
           {loading ? (
-            <LoadingSpinner label="Loading insights" />
+            <LoadingSpinner label="Loading news and events" />
           ) : posts.length === 0 ? (
             <div className="py-12 text-center border-2 border-dashed border-slate-100 rounded-lg">
-              <p className="text-slate-400 font-medium">No insights published yet.</p>
+              <p className="text-slate-400 font-medium">No news or events have been published yet.</p>
             </div>
           ) : (
           <div className="grid gap-3 px-4 sm:gap-6 sm:px-0 md:grid-cols-2 lg:grid-cols-3">

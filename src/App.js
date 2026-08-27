@@ -1,6 +1,7 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import AcademicProgramDetails from './pages/AcademicProgramDetails';
+import PrivateSchoolOyibi from './pages/PrivateSchoolOyibi';
 
 import Home from './pages/Home';
 import Services from './pages/Services';
@@ -67,6 +68,8 @@ import BookTour from './pages/BookTour';
 import ManageAlerts from './pages/admin/ManageAlerts';
 import ManageLeadership from './pages/admin/ManageLeadership';
 import StudentLife from './pages/StudentLife';
+import AcademicDepartments from './pages/AcademicDepartments';
+import ManageAcademicDepartments from './pages/admin/ManageAcademicDepartments';
 import Alumni from './pages/Alumni';
 import ManageAlumni from './pages/admin/ManageAlumni';
 import InterviewBooking from './pages/InterviewBooking';
@@ -78,13 +81,27 @@ import ApplicationDocuments from './pages/admin/ApplicationDocuments';
 import ManageHeroImages from './pages/admin/ManageHeroImages';
 import ManageGallery from './pages/admin/ManageGallery';
 import Calendar from './pages/Calendar';
+import Videos from './pages/Videos';
+import ManageVideos from './pages/admin/ManageVideos';
 import { ThemeProvider } from './context/ThemeContext';
 import './index.css';
+import { trackPageView } from './utils/analytics';
+
+function AnalyticsTracker() {
+  const location = useLocation();
+
+  useEffect(() => {
+    trackPageView(`${location.pathname}${location.search}`);
+  }, [location.pathname, location.search]);
+
+  return null;
+}
 
 export default function App() {
   return (
     <ThemeProvider>
       <Router>
+        <AnalyticsTracker />
         <ScrollToTop />
         <Routes>
 
@@ -92,12 +109,15 @@ export default function App() {
           <Route element={<MainLayout />}>
             <Route path="/" element={<Home />} />
             <Route path="/academics/:slug" element={<AcademicProgramDetails />} />
+            <Route path="/private-school-oyibi" element={<PrivateSchoolOyibi />} />
             {/* Academics is the canonical public programme directory. Keep the
                 legacy Services URL as a safe compatibility redirect. */}
             <Route path="/academics" element={<Services />} />
+            <Route path="/academic-departments" element={<AcademicDepartments />} />
             <Route path="/services" element={<Navigate to="/academics" replace />} />
             <Route path="/projects" element={<Projects />} />
             <Route path="/gallery" element={<Gallery />} />
+            <Route path="/videos" element={<Videos />} />
             <Route path="/student-life" element={<StudentLife />} />
             <Route path="/alumni" element={<Alumni />} />
             <Route path="/search" element={<Search />} />
@@ -217,6 +237,7 @@ export default function App() {
               </ProtectedRoute>
             }
           />
+          <Route path="/admin/academic-departments" element={<ProtectedRoute allowedRoles={['superadmin']}><ManageAcademicDepartments /></ProtectedRoute>} />
           <Route
             path="/admin/add-event"
             element={
@@ -236,6 +257,7 @@ export default function App() {
           <Route path="/admin/downloads" element={<ProtectedRoute allowedRoles={['admin', 'superadmin']}><ManageDownloads /></ProtectedRoute>} />
           <Route path="/admin/alerts" element={<ProtectedRoute allowedRoles={['admin', 'superadmin']}><ManageAlerts /></ProtectedRoute>} />
           <Route path="/admin/gallery" element={<ProtectedRoute allowedRoles={['admin', 'superadmin']}><ManageGallery /></ProtectedRoute>} />
+          <Route path="/admin/videos" element={<ProtectedRoute allowedRoles={['admin', 'superadmin']}><ManageVideos /></ProtectedRoute>} />
           <Route path="/admin/leadership" element={<ProtectedRoute allowedRoles={['admin', 'superadmin']}><ManageLeadership /></ProtectedRoute>} />
           <Route path="/admin/about" element={<ProtectedRoute allowedRoles={['admin', 'superadmin']}><ManageAbout /></ProtectedRoute>} />
           <Route path="/admin/alumni" element={<ProtectedRoute allowedRoles={['admin', 'superadmin']}><ManageAlumni /></ProtectedRoute>} />

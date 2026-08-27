@@ -3,6 +3,7 @@ import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import { useParams, useNavigate } from 'react-router-dom';
 import AdminLayout from '../../components/AdminLayout';
+import { requireRecentAdminAuth } from '../../firebase/security';
 
 export default function EditJob() {
   const { id } = useParams();
@@ -32,6 +33,7 @@ export default function EditJob() {
     e.preventDefault();
     setMsg('');
     try {
+      await requireRecentAdminAuth(window.prompt('Enter your administrator password to confirm this update:'));
       await updateDoc(doc(db, 'jobs', id), form);
       setMsg('✅ Job updated!');
       setTimeout(() => navigate('/admin/jobs'), 800);

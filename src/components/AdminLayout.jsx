@@ -26,7 +26,7 @@ import {
   FaLayerGroup,
   FaQuoteLeft,
   FaEnvelope, FaImage
-  , FaCalendarAlt, FaFileDownload, FaBell, FaUserTie, FaUniversity
+  , FaCalendarAlt, FaFileDownload, FaBell, FaUserTie, FaUniversity, FaPlayCircle
 } from 'react-icons/fa';
 
 export default function AdminLayout({ children }) {
@@ -100,11 +100,13 @@ export default function AdminLayout({ children }) {
 
         <div className={sectionClass}>Academic Content &amp; Campus</div>
         <NavLink to="/admin/manage-services" className={navLinkClass}><FaCog /> Manage Academic Programmes</NavLink>
-        <NavLink to="/admin/enterprise-features" className={navLinkClass}><FaLayerGroup /> School Capabilities</NavLink>
+        {role === 'superadmin' && <NavLink to="/admin/academic-departments" className={navLinkClass}><FaUniversity /> Academic Departments</NavLink>}
+        <NavLink to="/admin/enterprise-features" className={navLinkClass}><FaLayerGroup /> Why Choose Dankamf</NavLink>
         <NavLink to="/admin/client-testimonials" className={navLinkClass}><FaQuoteLeft /> Client Testimonials</NavLink>
         <NavLink to="/admin/add-project" className={navLinkClass}><FaBriefcase /> Add Campus Activity</NavLink>
         <NavLink to="/admin/manage-projects" className={navLinkClass}><FaCog /> Campus Activities</NavLink>
         <NavLink to="/admin/gallery" className={navLinkClass}><FaImage /> Gallery Manager</NavLink>
+        <NavLink to="/admin/videos" className={navLinkClass}><FaPlayCircle /> Videos &amp; Media</NavLink>
         
         <NavLink to="/admin/add-post" className={navLinkClass}><FaPenNib /> Add News Article</NavLink>
         <NavLink to="/admin/manage-posts" className={navLinkClass}><FaRegNewspaper /> Manage News &amp; Events</NavLink>

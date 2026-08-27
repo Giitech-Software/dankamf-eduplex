@@ -16,7 +16,7 @@ export default function ProjectsPreview() {
         const q = query(
           collection(db, 'projects'),
           orderBy('timestamp', 'desc'),
-          limit(6)
+          limit(12)
         );
         const snap = await getDocs(q);
 
@@ -24,7 +24,8 @@ export default function ProjectsPreview() {
           .map(d => ({ id: d.id, ...d.data() }))
           .filter(p => p.title && p.description);
 
-        setProjects(projectData);
+        projectData.sort((a, b) => (Number(a.order) || 9999) - (Number(b.order) || 9999));
+        setProjects(projectData.slice(0, 6));
       } catch (error) {
         console.error("Error fetching project preview:", error);
       } finally {

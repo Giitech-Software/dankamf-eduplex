@@ -18,11 +18,11 @@ const slugify = (title = '') => title.normalize('NFD').replace(/[\u0300-\u036f]/
 
 function ProgrammeImage({ service }) {
   return (
-    <div className="box-border flex h-48 min-w-0 max-w-full shrink-0 items-center justify-center overflow-hidden bg-slate-100 sm:h-56 sm:w-full lg:h-64">
+    <div className="h-72 w-full min-w-0 overflow-hidden bg-slate-100 sm:h-[22rem] lg:h-[24rem]">
       {(service.imageUrl || service.iconUrl) ? (
-        <img src={service.imageUrl || service.iconUrl} alt="" loading="lazy" className="block h-full max-w-full w-full object-contain transition-transform duration-500 group-hover:scale-105" />
+        <img src={service.imageUrl || service.iconUrl} alt="" loading="lazy" className="block h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
       ) : (
-        <span className="text-5xl text-primary">{fallbackIcon(service.title)}</span>
+        <span className="flex h-full items-center justify-center text-5xl text-primary">{fallbackIcon(service.title)}</span>
       )}
     </div>
   );
@@ -51,14 +51,14 @@ export default function ServiceGrid() {
         {loading ? <LoadingSpinner label="Loading academic programmes" /> : services.length === 0 ? (
           <p className="px-4 text-text-light">Academic programmes will be published soon.</p>
         ) : (
-          <div className="grid gap-3 px-4 sm:grid-cols-2 sm:gap-4 sm:px-0">
+          <div className="grid gap-5 px-4 sm:grid-cols-2 sm:gap-7 sm:px-0">
             {services.map((service) => (
-              <Link key={service.id} to={`/academics/${slugify(service.title)}`} className="group flex min-w-0 flex-col overflow-hidden rounded-2xl border border-white/80 bg-white/60 shadow-lg shadow-[#003153]/10 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-cerulean/60 hover:bg-white/80 hover:shadow-xl">
+              <Link key={service.id} to={`/academics/${slugify(service.title)}`} className="academic-preview-card group flex min-w-0 cursor-pointer flex-col overflow-hidden border border-slate-200 bg-white transition-all duration-500 hover:-translate-y-1 hover:border-primary/30 hover:shadow-xl">
                 <ProgrammeImage service={service} />
-                <div className="p-4 sm:p-5">
-                  <h4 className="mb-2 text-base font-bold text-slate-950 sm:text-lg">{service.title}</h4>
-                  <div className="prose prose-sm line-clamp-3 max-w-none text-text-light sm:prose-base"><ReactMarkdown>{service.description || 'Explore this academic programme and its learning pathway.'}</ReactMarkdown></div>
-                  <span className="mt-3 inline-flex text-sm font-bold text-accent">View programme →</span>
+                <div className="flex flex-1 flex-col space-y-3 p-4 sm:p-5">
+                  <h4 className="text-xl font-bold leading-tight text-slate-900 transition-colors group-hover:text-primary sm:text-2xl">{service.title}</h4>
+                  <div className="prose prose-sm line-clamp-3 max-h-[5.5rem] max-w-none overflow-hidden text-base leading-relaxed text-slate-600 sm:prose-base"><ReactMarkdown>{service.description || 'Explore this academic programme and its learning pathway.'}</ReactMarkdown></div>
+                  <span className="flex items-center pt-3 text-sm font-black uppercase tracking-[0.16em] text-accent transition-opacity sm:opacity-0 sm:group-hover:opacity-100">View programme &rarr;</span>
                 </div>
               </Link>
             ))}

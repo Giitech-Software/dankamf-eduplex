@@ -4,6 +4,7 @@ import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '../../firebase/config';
 import AdminLayout from '../../components/AdminLayout';
+import { requireRecentAdminAuth } from '../../firebase/security';
 import PageTitle from '../../components/PageTitle';
 
 export default function AddProject() {
@@ -11,6 +12,7 @@ export default function AddProject() {
     title: '',
     description: '',
     category: 'Clubs',
+    order: '',
     image: null,
   });
   const [preview, setPreview] = useState(null); // Step 1: Add Preview State
@@ -41,8 +43,8 @@ export default function AddProject() {
     e.preventDefault();
     setMsg('');
     setUploading(true);
-    if (form.image && form.image.size > 180 * 1024) {
-      setMsg('Gallery images must be 180 KB or smaller. Recommended range: 120–180 KB.');
+    if (form.image && (!form.image.type.match(/^image\/(jpeg|png|webp)$/) || form.image.size > 250 * 1024)) {
+      setMsg('Campus activity images must be JPG, PNG, or WEBP and 250 KB or smaller.');
       setUploading(false);
       return;
     }
@@ -54,6 +56,7 @@ export default function AddProject() {
     }
 
     try {
+      await requireRecentAdminAuth(window.prompt('Enter your administrator password to confirm publishing:'));
       // Step 2: Unique File Naming (Clean Strategy)
       const fileExtension = form.image.name.split('.').pop();
       const cleanTitle = form.title.toLowerCase().replace(/\s+/g, '-');
@@ -68,12 +71,13 @@ export default function AddProject() {
         title: form.title,
         description: form.description,
         category: form.category,
+        order: Number(form.order) || 9999,
         imageUrl,
         timestamp: serverTimestamp(),
       });
 
       setMsg('✅ Project added successfully!');
-      setForm({ title: '', description: '', category: 'Clubs', image: null });
+      setForm({ title: '', description: '', category: 'Clubs', order: '', image: null });
       setPreview(null);
     } catch (err) {
       setMsg('❌ Failed: ' + err.message);
@@ -113,6 +117,11 @@ export default function AddProject() {
             </select>
           </label>
 
+          <label className="block text-sm font-bold text-gray-700 dark:text-gray-200">Homepage display order
+            <input name="order" type="number" min="1" value={form.order} onChange={handleChange} placeholder="1 appears first" className="mt-2 w-full rounded border border-gray-300 bg-white p-3 text-gray-900 dark:border-gray-600 dark:bg-gray-800 dark:text-white" />
+            <span className="mt-1 block text-xs font-normal text-gray-500 dark:text-gray-400">Use a smaller number for Highlights of School Life items you want first.</span>
+          </label>
+
           {/* Modern Image Upload Zone */}
           <div className="space-y-2">
             <label className="text-sm font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider">Featured Image</label>
@@ -140,12 +149,12 @@ export default function AddProject() {
                     <input 
                       name="image" 
                       type="file" 
-                      accept="image/*" 
+                      accept="image/jpeg,image/png,image/webp" 
                       onChange={handleChange} 
                       className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" 
                     />
                   </div>
-                  <p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+                  <p className="text-xs text-gray-500">JPG, PNG, or WEBP up to 250 KB</p>
                   {form.image && (
                     <p className="text-sm text-warm font-bold mt-2 animate-pulse italic">
                       Ready for upload: {form.image.name}

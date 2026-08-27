@@ -41,7 +41,7 @@ export default function CareerPreview() {
 
         <div className="mt-8 px-4 text-center sm:px-0">
           <Link
-            to="/jobs"
+            to="/admissions"
             className="inline-flex w-full justify-center rounded-full bg-accent-yellow px-5 py-2.5 text-sm font-bold text-darkgray shadow-lg transition hover:bg-accent-yellow-dark sm:w-auto"
           >
             Learn About Admissions

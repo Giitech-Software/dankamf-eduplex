@@ -9,6 +9,7 @@ import AdminLayout from '../../components/AdminLayout';
 import PageTitle from '../../components/PageTitle';
 import { toast } from 'react-toastify';
 import { logActivity } from '../../utils/activityLog';
+import { requireRecentAdminAuth } from '../../firebase/security';
 
 export default function EditPost() {
   const { id } = useParams();
@@ -17,6 +18,7 @@ export default function EditPost() {
 
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+  const [order, setOrder] = useState('');
   const [image, setImage] = useState(null);
   const [currentImage, setCurrentImage] = useState('');
   const [loading, setLoading] = useState(false);
@@ -29,7 +31,8 @@ export default function EditPost() {
           const data = snap.data();
           setTitle(data.title || '');
           setContent(data.content || '');
-          setCurrentImage(data.image || '');
+          setOrder(data.order || '');
+          setCurrentImage(data.imageUrl || data.image || '');
         } else {
           toast.error('Post not found');
           navigate('/admin/manage-posts');
@@ -46,6 +49,7 @@ export default function EditPost() {
     setLoading(true);
 
     try {
+      await requireRecentAdminAuth(window.prompt('Enter your administrator password to confirm this update:'));
       let imageUrl = currentImage;
 
       if (image) {
@@ -57,6 +61,8 @@ export default function EditPost() {
       await updateDoc(doc(db, 'posts', id), {
         title,
         content,
+        order: Number(order) || 9999,
+        imageUrl,
         image: imageUrl,
         updatedAt: serverTimestamp(),
       });
@@ -82,7 +88,7 @@ export default function EditPost() {
       >
         <input
           type="text"
-          placeholder="Post Title"
+          placeholder="News article title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           className="w-full p-2 border rounded dark:bg-gray-800 dark:border-gray-700 dark:text-white"
@@ -90,13 +96,17 @@ export default function EditPost() {
         />
 
         <textarea
-          placeholder="Post Content (Markdown Supported)"
+          placeholder="News article content (Markdown supported)"
           value={content}
           onChange={(e) => setContent(e.target.value)}
           rows="8"
           className="w-full p-2 border rounded dark:bg-gray-800 dark:border-gray-700 dark:text-white"
           required
         />
+
+        <label className="block text-sm font-bold text-slate-700 dark:text-slate-300">Homepage display order
+          <input type="number" min="1" value={order} onChange={(e) => setOrder(e.target.value)} placeholder="1 appears first" className="mt-2 w-full p-2 border rounded dark:bg-gray-800 dark:border-gray-700 dark:text-white" />
+        </label>
 
         {currentImage && (
           <img

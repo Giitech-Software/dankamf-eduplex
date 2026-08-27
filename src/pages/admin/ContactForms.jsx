@@ -13,6 +13,7 @@ import {
 import { db } from '../../firebase/config';
 import PageTitle from '../../components/PageTitle';
 import LoadingSpinner from '../../components/LoadingSpinner';
+import { requireRecentAdminAuth } from '../../firebase/security';
 
 export default function ContactForms() {
   const { role } = useAuth();
@@ -58,6 +59,7 @@ export default function ContactForms() {
     if (!replyMessage.trim()) return;
     setSendingReply(true);
     try {
+      await requireRecentAdminAuth(window.prompt('Enter your administrator password to confirm sending this reply:'));
       const docRef = doc(db, 'contactForms', selectedForm.id);
       await updateDoc(docRef, { reply: replyMessage });
       alert('✅ Reply sent and saved.');

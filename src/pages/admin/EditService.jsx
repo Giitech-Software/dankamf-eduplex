@@ -8,6 +8,7 @@ import { db, storage } from '../../firebase/config';
 import { useAuth } from '../../context/AuthContext';
 import { logActivity } from '../../utils/activityLog';
 import AdminLayout from '../../components/AdminLayout';
+import { requireRecentAdminAuth } from '../../firebase/security';
 import PageTitle from '../../components/PageTitle';
 
 export default function EditService() {
@@ -64,6 +65,7 @@ export default function EditService() {
     setLoading(true);
 
     try {
+      await requireRecentAdminAuth(window.prompt('Enter your administrator password to confirm this update:'));
       let iconUrl = service.iconUrl;
 
       if (service.iconImage) {

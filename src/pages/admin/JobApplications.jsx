@@ -13,6 +13,7 @@ import { db } from '../../firebase/config';
 import AdminLayout from '../../components/AdminLayout';
 import PageTitle from '../../components/PageTitle';
 import LoadingSpinner from '../../components/LoadingSpinner';
+import { requireRecentAdminAuth } from '../../firebase/security';
 
 export default function JobApplications() {
   const { jobId } = useParams();
@@ -45,6 +46,7 @@ export default function JobApplications() {
 
   const handleDelete = async (id) => {
     if (window.confirm('Delete this application?')) {
+      await requireRecentAdminAuth(window.prompt('Enter your administrator password to confirm deletion:'));
       await deleteDoc(doc(db, 'applications', id));
       setApplications((prev) => prev.filter((app) => app.id !== id));
     }
@@ -61,6 +63,7 @@ export default function JobApplications() {
     if (!subject || !message) return alert('Subject and message required.');
 
     try {
+      await requireRecentAdminAuth(window.prompt('Enter your administrator password to confirm sending this reply:'));
       const appRef = doc(db, 'applications', selectedApp.id);
       await updateDoc(appRef, {
         reply: {

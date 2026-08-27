@@ -19,6 +19,8 @@ export default function ProtectedRoute({ children, allowedRoles }) {
 
   if (!user) return <Navigate to="/login" replace />;
 
+  if (!user.emailVerified) return <Navigate to="/login" state={{ emailVerificationRequired: true }} replace />;
+
   if (allowedRoles && !role && !timeoutReached) {
     return <LoadingSpinner label="Checking permissions" fullPage />;
   }

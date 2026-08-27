@@ -12,9 +12,11 @@ export default function BlogPreview() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const q = query(collection(db, 'posts'), orderBy('timestamp', 'desc'), limit(3));
+        const q = query(collection(db, 'posts'), orderBy('timestamp', 'desc'), limit(12));
         const snapshot = await getDocs(q);
-        setPosts(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+        const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        data.sort((a, b) => (Number(a.order) || 9999) - (Number(b.order) || 9999));
+        setPosts(data.slice(0, 3));
       } catch (err) {
         console.error("Error fetching blog preview:", err);
       } finally {
@@ -46,7 +48,7 @@ export default function BlogPreview() {
         </div>
 
         {loading ? (
-          <LoadingSpinner label="Loading insights" />
+          <LoadingSpinner label="Loading news and events" />
         ) : (
         <div className="grid gap-3 px-4 sm:grid-cols-2 sm:gap-6 sm:px-0 lg:grid-cols-3">
           {posts.map((post, index) => (

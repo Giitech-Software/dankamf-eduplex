@@ -7,6 +7,7 @@ import { logActivity } from '../../utils/activityLog';
 import AdminLayout from '../../components/AdminLayout';
 import PageTitle from '../../components/PageTitle';
 import LoadingSpinner from '../../components/LoadingSpinner';
+import { requireRecentAdminAuth } from '../../firebase/security';
 
 const fields = ['title', 'date', 'time', 'location', 'category', 'imageUrl', 'registrationUrl', 'description'];
 
@@ -29,6 +30,7 @@ export default function EditEvent() {
   const handleSubmit = async (event) => {
     event.preventDefault(); setSaving(true); setMessage('');
     try {
+      await requireRecentAdminAuth(window.prompt('Enter your administrator password to confirm this update:'));
       const updates = Object.fromEntries(fields.map((field) => [field, form[field]]));
       await updateDoc(doc(db, 'events', id), { ...updates, published: form.published, updatedAt: serverTimestamp() });
       await logActivity(user, 'edit_event', `Updated event: "${form.title}"`);

@@ -7,13 +7,15 @@ import { logActivity } from '../../utils/activityLog';
 import AdminLayout from '../../components/AdminLayout';
 import PageTitle from '../../components/PageTitle';
 import { FaTrash, FaImage } from 'react-icons/fa';
+import { requireRecentAdminAuth } from '../../firebase/security';
 
 export default function AddPost() {
   const { user } = useAuth();
-  const [form, setForm] = useState({ title: '', content: '', image: null });
+  const [form, setForm] = useState({ title: '', content: '', order: '', image: null });
   const [previewUrl, setPreviewUrl] = useState(null); // Local preview state
   const [msg, setMsg] = useState('');
   const [uploading, setUploading] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   // Handle local preview cleanup to prevent memory leaks
   useEffect(() => {
@@ -46,6 +48,7 @@ export default function AddPost() {
     setUploading(true);
 
     try {
+      await requireRecentAdminAuth(confirmPassword);
       let imageUrl = '';
       if (form.image) {
         const imgRef = ref(storage, `blogImages/${Date.now()}-${form.image.name}`);
@@ -56,15 +59,18 @@ export default function AddPost() {
       await addDoc(collection(db, 'posts'), {
         title: form.title,
         content: form.content,
-        imageUrl, // Matching frontend field name
+        order: Number(form.order) || 9999,
+        imageUrl,
+        image: imageUrl,
         timestamp: serverTimestamp(),
       });
 
       await logActivity(user, 'add_post', `Added post: "${form.title}"`);
 
       setMsg('✅ Post published successfully!');
-      setForm({ title: '', content: '', image: null });
+      setForm({ title: '', content: '', order: '', image: null });
       setPreviewUrl(null);
+      setConfirmPassword('');
     } catch (err) {
       setMsg('❌ Error: ' + err.message);
     } finally {
@@ -83,10 +89,16 @@ export default function AddPost() {
             name="title"
             value={form.title}
             onChange={handleChange}
-            placeholder="Enter a compelling title..."
+            placeholder="Enter the news article title..."
             required
             className="w-full p-3 border rounded-lg bg-white dark:bg-gray-900 dark:border-gray-700 dark:text-white focus:ring-2 focus:ring-primary outline-none transition"
           />
+        </div>
+
+        <div className="space-y-2">
+          <label className="text-sm font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Homepage display order</label>
+          <input name="order" type="number" min="1" value={form.order} onChange={handleChange} placeholder="1 appears first" className="w-full p-3 border rounded-lg bg-white dark:bg-gray-900 dark:border-gray-700 dark:text-white focus:ring-2 focus:ring-primary outline-none transition" />
+          <p className="text-xs text-slate-500 dark:text-slate-400">Use a smaller number for News &amp; Events items you want to appear first.</p>
         </div>
 
         <div className="space-y-2">
@@ -95,7 +107,7 @@ export default function AddPost() {
             name="content"
             value={form.content}
             onChange={handleChange}
-            placeholder="Write your insights here (Markdown supported)..."
+            placeholder="Write the news article content (Markdown supported)..."
             required
             className="w-full p-3 border rounded-lg h-56 bg-white dark:bg-gray-900 dark:border-gray-700 dark:text-white focus:ring-2 focus:ring-primary outline-none transition resize-none"
           />
@@ -142,6 +154,11 @@ export default function AddPost() {
             </div>
           )}
         </div>
+
+        <label className="block space-y-2 text-sm font-bold text-slate-700 dark:text-slate-200">
+          <span>Confirm password to publish</span>
+          <input type="password" required value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} autoComplete="current-password" className="w-full rounded-lg border border-slate-300 bg-white p-3 text-slate-900 dark:border-gray-700 dark:bg-gray-900 dark:text-white" />
+        </label>
 
         <div className="pt-2">
           <button

@@ -5,6 +5,7 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '../../firebase/config';
 import { useAuth } from '../../context/AuthContext';
 import AdminLayout from '../../components/AdminLayout';
+import { requireRecentAdminAuth } from '../../firebase/security';
 import PageTitle from '../../components/PageTitle';
 import { toast } from 'react-toastify';
 import { logActivity } from '../../utils/activityLog';
@@ -18,6 +19,7 @@ export default function EditProject() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
+  const [order, setOrder] = useState('');
   const [link, setLink] = useState('');
   const [image, setImage] = useState(null);
   const [currentImage, setCurrentImage] = useState('');
@@ -32,6 +34,7 @@ export default function EditProject() {
           setTitle(data.title || '');
           setDescription(data.description || '');
           setCategory(data.category || '');
+          setOrder(data.order || '');
           setLink(data.link || '');
           setCurrentImage(data.imageUrl || ''); // Note: matches your display logic 'imageUrl'
         } else {
@@ -58,12 +61,13 @@ export default function EditProject() {
     setLoading(true);
 
     try {
+      await requireRecentAdminAuth(window.prompt('Enter your administrator password to confirm this update:'));
       let finalImageUrl = currentImage;
 
       // Only upload if a new file was selected
       if (image) {
-        if (image.size > 180 * 1024) {
-          toast.error('Gallery images must be 180 KB or smaller. Recommended range: 120–180 KB.');
+        if (!image.type.match(/^image\/(jpeg|png|webp)$/) || image.size > 250 * 1024) {
+          toast.error('Campus activity images must be JPG, PNG, or WEBP and 250 KB or smaller.');
           setLoading(false);
           return;
         }
@@ -76,6 +80,7 @@ export default function EditProject() {
         title: title.trim(),
         description: description.trim(),
         category: category.trim(),
+        order: Number(order) || 9999,
         link: link.trim(),
         imageUrl: finalImageUrl,
         updatedAt: serverTimestamp(),
@@ -95,7 +100,7 @@ export default function EditProject() {
 
   return (
     <AdminLayout>
-      <PageTitle>💼 Edit Portfolio Project</PageTitle>
+      <PageTitle>🏫 Edit Campus Activity</PageTitle>
       
       <form
         onSubmit={handleUpdate}
@@ -104,7 +109,7 @@ export default function EditProject() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Title */}
           <div className="space-y-2">
-            <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Project Title</label>
+            <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Activity Title</label>
             <input
               type="text"
               placeholder="e.g., M'Salem Library System"
@@ -117,7 +122,7 @@ export default function EditProject() {
 
           {/* Category */}
           <div className="space-y-2">
-            <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Category</label>
+            <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Student Life Category</label>
             <input
               type="text"
               placeholder="e.g., Desktop Application"
@@ -140,9 +145,15 @@ export default function EditProject() {
           />
         </div>
 
+        <div className="space-y-2">
+          <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Homepage display order</label>
+          <input type="number" min="1" value={order} onChange={(e) => setOrder(e.target.value)} placeholder="1 appears first" className="w-full p-3 border rounded-lg dark:bg-gray-800 dark:border-gray-700 dark:text-white" />
+          <p className="text-xs text-slate-500 dark:text-slate-400">Use a smaller number for Highlights of School Life items you want first.</p>
+        </div>
+
         {/* Description */}
         <div className="space-y-2">
-          <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Project Description (Markdown)</label>
+          <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Activity Description (Markdown)</label>
           <textarea
             placeholder="Describe the challenges, tech stack, and results..."
             value={description}
@@ -155,7 +166,7 @@ export default function EditProject() {
 
         {/* Image Preview & Upload */}
         <div className="space-y-3">
-          <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Project Cover Image</label>
+          <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Activity Cover Image</label>
           <div className="flex items-center gap-4">
             {currentImage && (
               <div className="relative group">
@@ -171,7 +182,7 @@ export default function EditProject() {
             )}
             <input
               type="file"
-              accept="image/*"
+              accept="image/jpeg,image/png,image/webp"
               onChange={(e) => setImage(e.target.files[0])}
               className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
             />
@@ -190,7 +201,7 @@ export default function EditProject() {
           <button
             type="button"
             onClick={() => navigate('/admin/manage-projects')}
-            className="bg-slate-100 hover:bg-slate-200 text-slate-700 px-8 py-3 rounded-lg font-bold transition-all"
+            className="border border-slate-300 bg-slate-100 hover:bg-slate-200 text-slate-700 px-8 py-3 rounded-lg font-bold transition-all dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700"
           >
             Cancel
           </button>

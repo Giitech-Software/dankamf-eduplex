@@ -57,7 +57,7 @@ export default function UpcomingEvents() {
           <div className="grid gap-5 md:grid-cols-3">
             {events.map((event) => (
               <article key={event.id} className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
-                {event.imageUrl && <img src={event.imageUrl} alt="" className="h-40 w-full object-cover" loading="lazy" decoding="async" />}
+                {event.imageUrl && <img src={event.imageUrl} alt="" className="h-52 w-full object-cover sm:h-60" loading="lazy" decoding="async" />}
                 <div className="p-5">
                   <p className="text-xs font-bold uppercase tracking-wider text-accent">{event.category}</p>
                   <h3 className="mt-2 text-xl font-black text-primary">{event.title}</h3>

@@ -1,7 +1,7 @@
 ﻿import React from 'react';
 import { Helmet } from 'react-helmet-async';
 
-const baseUrl = 'https://dankamf-eduplex.web.app';
+const baseUrl = 'https://dankamfeducational.com';
 const defaultImage = `${baseUrl}/og-image.png`;
 const siteName = 'Dankamf Educational Complex';
 const schoolDescription = 'Dankamf Educational Complex is a private school in Oyibi, Kpone-Katamanso, Greater Accra, Ghana, providing quality education and character development for children.';
@@ -50,7 +50,7 @@ export default function Seo({ title, description, image = defaultImage, path, au
         image: defaultImage,
         description: schoolDescription,
         telephone: '+233242172216',
-        email: 'dankamfeducationalcomplex2016@gmail.com',
+        email: 'dankamfeducational@gmail.com',
         address: {
           '@type': 'PostalAddress',
           streetAddress: 'Oyibi',

@@ -5,12 +5,12 @@ service cloud.firestore {
 
     // Helper function to check if a user is an admin or superadmin
     function isAdmin() {
-      return request.auth != null && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['admin', 'superadmin'];
+      return request.auth != null && request.auth.token.email_verified == true && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['admin', 'superadmin'];
     }
 
     // Helper function to check if a user is the superadmin
     function isSuperAdmin() {
-      return request.auth != null && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'superadmin';
+      return request.auth != null && request.auth.token.email_verified == true && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'superadmin';
     }
 
     // Users: Only superadmins can manage other users. Users can read their own profile.
@@ -23,6 +23,7 @@ service cloud.firestore {
     // Public content is readable by everyone, but only superadmins may publish, edit, or remove it.
     match /projects/{docId} { allow read: if true; allow write: if isSuperAdmin(); }
     match /services/{docId} { allow read: if true; allow write: if isSuperAdmin(); }
+    match /academicDepartments/{docId} { allow read: if true; allow write: if isSuperAdmin(); }
     match /posts/{docId} { allow read: if true; allow write: if isSuperAdmin(); }
     match /events/{docId} { allow read: if true; allow write: if isSuperAdmin(); }
     match /faqs/{docId} { allow read: if true; allow write: if isSuperAdmin(); }
@@ -61,6 +62,7 @@ service cloud.firestore {
     }
     match /downloads/{docId} { allow read: if true; allow write: if isSuperAdmin(); }
     match /gallery/{docId} { allow read: if true; allow write: if isSuperAdmin(); }
+    match /videos/{docId} { allow read: if true; allow write: if isSuperAdmin(); }
     match /schoolAlerts/{docId} { allow read: if true; allow write: if isSuperAdmin(); }
     match /leadership/{docId} { allow read: if true; allow write: if isSuperAdmin(); }
     match /about/{docId} { allow read: if true; allow write: if isSuperAdmin(); }

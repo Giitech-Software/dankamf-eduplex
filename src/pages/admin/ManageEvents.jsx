@@ -8,6 +8,7 @@ import { logActivity } from '../../utils/activityLog';
 import AdminLayout from '../../components/AdminLayout';
 import PageTitle from '../../components/PageTitle';
 import LoadingSpinner from '../../components/LoadingSpinner';
+import { requireRecentAdminAuth } from '../../firebase/security';
 
 export default function ManageEvents() {
   const { user } = useAuth();
@@ -32,6 +33,7 @@ export default function ManageEvents() {
   const removeEvent = async (event) => {
     if (!window.confirm(`Delete “${event.title}”?`)) return;
     try {
+      await requireRecentAdminAuth(window.prompt('Enter your administrator password to confirm deletion:'));
       await deleteDoc(doc(db, 'events', event.id));
       await logActivity(user, 'delete_event', `Deleted event: "${event.title}"`);
       setEvents((current) => current.filter((item) => item.id !== event.id));

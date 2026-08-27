@@ -19,6 +19,7 @@ import PageTitle from '../../components/PageTitle';
 import { db, storage } from '../../firebase/config';
 import { useAuth } from '../../context/AuthContext';
 import { logActivity } from '../../utils/activityLog';
+import { requireRecentAdminAuth } from '../../firebase/security';
 
 const emptyForm = {
   title: '',
@@ -38,6 +39,7 @@ export default function ManageEnterpriseFeatures() {
   const [status, setStatus] = useState(null);
   const [editingFeature, setEditingFeature] = useState(null);
   const [expandedFeatureId, setExpandedFeatureId] = useState(null);
+  const [confirmPassword, setConfirmPassword] = useState('');
   const formRef = useRef(null);
 
   const fetchFeatures = async () => {
@@ -110,6 +112,7 @@ export default function ManageEnterpriseFeatures() {
     setSaving(true);
 
     try {
+      await requireRecentAdminAuth(confirmPassword);
       let imageUrl = editingFeature?.imageUrl || '';
       let imagePath = editingFeature?.imagePath || '';
 
@@ -151,6 +154,7 @@ export default function ManageEnterpriseFeatures() {
       }
 
       resetForm();
+      setConfirmPassword('');
       fetchFeatures();
     } catch (error) {
       console.error('Error saving enterprise feature:', error);
@@ -184,7 +188,7 @@ export default function ManageEnterpriseFeatures() {
 
   return (
     <AdminLayout>
-      <PageTitle>School Capabilities &amp; Highlights</PageTitle>
+      <PageTitle>Why Choose Dankamf</PageTitle>
 
       <div className="grid gap-5 lg:grid-cols-[360px_1fr]">
         <form
@@ -198,7 +202,7 @@ export default function ManageEnterpriseFeatures() {
               {editingFeature ? 'Edit Homepage Feature Card' : 'Add Homepage Feature Card'}
             </h2>
             <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-              These cards power the homepage “Why Choose Us” section. Use Markdown for bold text, lists, and links.
+              These cards power the homepage “Why Choose Dankamf” section. Use Markdown for bold text, lists, and links.
             </p>
           </div>
 
@@ -265,6 +269,8 @@ export default function ManageEnterpriseFeatures() {
               className="w-full rounded border border-slate-300 bg-white p-2 text-sm file:mr-3 file:rounded file:border-0 file:bg-primary file:px-3 file:py-2 file:text-white hover:file:bg-cta dark:border-gray-700 dark:bg-gray-800 dark:text-white"
             />
           </div>
+
+          <label className="block text-sm font-bold text-slate-700 dark:text-slate-200">Confirm password to save<input type="password" required value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} autoComplete="current-password" className="mt-1 w-full rounded border border-slate-300 bg-white p-3 text-slate-900 dark:border-gray-700 dark:bg-gray-800 dark:text-white" /></label>
 
           <button
             type="submit"

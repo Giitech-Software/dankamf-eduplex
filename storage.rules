@@ -7,11 +7,11 @@ service firebase.storage {
     }
 
     function isAdmin() {
-      return signedIn() && firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.role in ['admin', 'superadmin'];
+      return signedIn() && request.auth.token.email_verified == true && firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.role in ['admin', 'superadmin'];
     }
 
     function isSuperAdmin() {
-      return signedIn() && firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.role in ['superadmin', 'super_admin'];
+      return signedIn() && request.auth.token.email_verified == true && firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.role in ['superadmin', 'super_admin'];
     }
 
     match /heroImages/{allPaths=**} {
@@ -25,6 +25,11 @@ service firebase.storage {
     }
 
     match /serviceIcons/{allPaths=**} {
+      allow read: if true;
+      allow write: if isSuperAdmin();
+    }
+
+    match /academicDepartments/{allPaths=**} {
       allow read: if true;
       allow write: if isSuperAdmin();
     }

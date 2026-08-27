@@ -6,6 +6,7 @@ import { useAuth } from '../../context/AuthContext';
 import { logActivity } from '../../utils/activityLog';
 import AdminLayout from '../../components/AdminLayout';
 import PageTitle from '../../components/PageTitle';
+import { requireRecentAdminAuth } from '../../firebase/security';
 
 export default function EditFAQ() {
   const { user } = useAuth();
@@ -32,6 +33,7 @@ export default function EditFAQ() {
     setMsg('');
     setLoading(true);
     try {
+      await requireRecentAdminAuth(window.prompt('Enter your administrator password to confirm this update:'));
       // Keep the original timestamp so editing an FAQ does not change its
       // public position or distort the numbered presentation.
       await updateDoc(doc(db, 'faqs', id), { ...faq });
@@ -52,6 +54,7 @@ export default function EditFAQ() {
     setMsg('');
     setLoading(true);
     try {
+      await requireRecentAdminAuth(window.prompt('Enter your administrator password to confirm deletion:'));
       await deleteDoc(doc(db, 'faqs', id));
       await logActivity(user, 'delete_faq', `Deleted FAQ: ${faq.question}`);
       setMsg('🗑️ FAQ deleted successfully!');

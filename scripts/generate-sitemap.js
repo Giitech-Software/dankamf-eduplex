@@ -3,7 +3,7 @@
 const fs = require("fs");
 const path = require("path");
 
-const SITE_URL = "https://dankamf-eduplex.web.app";
+const SITE_URL = "https://dankamfeducational.com";
 
 const staticRoutes = [
   "/",
@@ -16,6 +16,7 @@ const staticRoutes = [
   "/admissions",
   "/jobs",
   "/school-capabilities",
+  "/private-school-oyibi",
   "/admissions/apply",
   "/admissions/interview",
   "/admissions/fees",

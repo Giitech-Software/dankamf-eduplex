@@ -2,7 +2,7 @@
 
 Enterprise school website and administration platform for Dankamf Educational Complex.
 
-Live site: [dankamf-eduplex.web.app](https://dankamf-eduplex.web.app)
+Live site: [dankamfeducational.com](https://dankamfeducational.com)
 
 ## Platform overview
 

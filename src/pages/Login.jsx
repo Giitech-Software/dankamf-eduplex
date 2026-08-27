@@ -1,6 +1,8 @@
 // src/pages/Login.jsx
 import React, { useState, useEffect } from 'react';
-import { loginUser } from '../firebase/auth';
+import { getMultiFactorResolver, PhoneAuthProvider, PhoneMultiFactorGenerator, RecaptchaVerifier } from 'firebase/auth';
+import { auth } from '../firebase/config';
+import { loginUser, logoutUser, sendVerificationEmail } from '../firebase/auth';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import Seo from '../components/Seo';
 import { Eye, EyeOff } from 'lucide-react'; // ✅ Import icons
@@ -14,18 +16,25 @@ export default function Login() {
   const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [mfaResolver, setMfaResolver] = useState(null);
+  const [mfaVerificationId, setMfaVerificationId] = useState('');
+  const [mfaCode, setMfaCode] = useState('');
   const [showPassword, setShowPassword] = useState(false); // ✅ Toggle state
   const { currentUser, isAdmin } = useAuth(); // ✅ Get auth state
 
   // If an admin is already logged in, redirect them to the dashboard.
   useEffect(() => {
-    if (currentUser && isAdmin) {
+    if (currentUser && isAdmin && currentUser.emailVerified) {
       // The dashboard route is registered at /dashboard. Keep the fallback
       // aligned with App.js so a successful login never lands on a 404 page.
       const from = location.state?.from?.pathname || '/dashboard';
       navigate(from, { replace: true });
     }
   }, [currentUser, isAdmin, navigate, location.state]);
+
+  useEffect(() => {
+    if (location.state?.emailVerificationRequired) setError('Please verify your administrator email before accessing the dashboard.');
+  }, [location.state]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -37,7 +46,12 @@ export default function Login() {
     setError(''); // Reset error on new submission
 
     try {
-      await loginUser(form.email, form.password);
+      const user = await loginUser(form.email, form.password);
+      if (!user.emailVerified) {
+        await sendVerificationEmail(user);
+        await logoutUser();
+        throw new Error('EMAIL_NOT_VERIFIED');
+      }
       toast.success('Login successful! Redirecting...');
       // The useEffect above will handle the redirect automatically.
     } catch (err) {
@@ -50,7 +64,19 @@ export default function Login() {
         'auth/too-many-requests': 'Too many unsuccessful attempts. Please wait a few minutes and try again.',
         'auth/invalid-email': 'Please enter a valid email address.',
       };
-      const errorMessage = errorMessages[err.code] || 'We could not sign you in right now. Please try again.';
+      if (err.code === 'auth/multi-factor-auth-required') {
+        try {
+          const resolver = getMultiFactorResolver(auth, err);
+          const verifier = new RecaptchaVerifier(auth, 'login-mfa-recaptcha', { size: 'invisible' });
+          const provider = new PhoneAuthProvider(auth);
+          const id = await provider.verifyPhoneNumber({ multiFactorHint: resolver.hints[0], session: resolver.session }, verifier);
+          setMfaResolver(resolver); setMfaVerificationId(id); setError('A verification code was sent to your enrolled phone.');
+        } catch (mfaError) { console.error(mfaError); setError('We could not start MFA verification. Please try again.'); }
+        return;
+      }
+      const errorMessage = err.message === 'EMAIL_NOT_VERIFIED'
+        ? 'Your email is not verified. A verification link has been sent. Verify it, then sign in again.'
+        : errorMessages[err.code] || 'We could not sign you in right now. Please try again.';
       if (err.code === 'auth/network-request-failed' || !navigator.onLine) {
         setError('No internet connection. Please check your network and try again.');
       } else {
@@ -62,12 +88,19 @@ export default function Login() {
     }
   };
 
+  const handleMfaSubmit = async (event) => {
+    event.preventDefault(); setLoading(true); setError('');
+    try { await mfaResolver.resolveSignIn(PhoneMultiFactorGenerator.assertion(mfaVerificationId, mfaCode.trim())); toast.success('MFA verified. Redirecting…'); }
+    catch (err) { console.error(err); setError('The MFA code is invalid or expired. Please try again.'); }
+    finally { setLoading(false); }
+  };
+
   return (
     <>
       <Seo title="Admin Login" description="Admin login page for Dankamf Eduplex" />
       <div className="login-shell flex min-h-screen items-center justify-center overflow-y-auto px-4 py-5 sm:py-8">
         <form
-          onSubmit={handleSubmit}
+          onSubmit={mfaResolver ? handleMfaSubmit : handleSubmit}
           className="w-full min-w-0 max-w-[21rem] space-y-2 rounded-2xl border border-sky-100 bg-white p-3 shadow-2xl shadow-slate-950/20 sm:p-4"
         >
           <div className="text-center">
@@ -111,12 +144,13 @@ export default function Login() {
             </button>
           </div></label>
 
+          {mfaResolver && <><label className="block space-y-1 text-xs font-bold uppercase tracking-wide text-slate-600">SMS verification code<input value={mfaCode} onChange={(event) => setMfaCode(event.target.value)} inputMode="numeric" autoComplete="one-time-code" required className="block w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 text-sm text-slate-900 outline-none focus:border-[#007BA7] focus:ring-2 focus:ring-[#007BA7]/20" /></label><div id="login-mfa-recaptcha" /></>}
           <button
             type="submit"
             disabled={loading}
             className="w-full justify-center rounded-lg bg-gradient-to-r from-[#003153] to-[#007BA7] px-4 py-2 text-sm font-black text-white shadow-lg shadow-sky-900/20 transition hover:-translate-y-0.5 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {loading ? 'Signing in...' : 'Sign In'}
+            {loading ? 'Verifying...' : mfaResolver ? 'Verify and Continue' : 'Sign In'}
           </button>
 
           {error && <p role="alert" className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm font-medium text-red-700">{error}</p>}

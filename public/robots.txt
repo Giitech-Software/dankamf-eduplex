@@ -8,4 +8,4 @@ Disallow: /search
 Disallow: /admin
 Disallow: /api/
 
-Sitemap: https://dankamf-eduplex.web.app/sitemap.xml
+Sitemap: https://dankamfeducational.com/sitemap.xml

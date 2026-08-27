@@ -60,7 +60,7 @@ export default function AcademicProgramDetails() {
       <Seo {...SeoConfig.dynamic.academicProgram({ title: program.title, excerpt, slug })} />
 
       <section className="border-b border-slate-200 bg-white px-4 py-7 text-primary-dark sm:px-8 sm:py-9">
-        <div className="mx-auto max-w-5xl">
+        <div className="mx-auto max-w-5xl text-center">
           <Link to="/academics" className="inline-flex rounded-full border border-blue-200 px-3 py-1.5 text-xs font-bold text-primary transition hover:border-primary hover:bg-blue-50">
             &larr; Back to All Programmes
           </Link>

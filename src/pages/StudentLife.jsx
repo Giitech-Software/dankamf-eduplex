@@ -10,10 +10,17 @@ import ReactMarkdown from 'react-markdown';
 const categories = ['All', 'Clubs', 'Sports', 'STEM', 'Arts', 'Leadership'];
 const categoryTerms = { Clubs: ['club', 'clubs'], Sports: ['sport', 'sports', 'athletics', 'games'], STEM: ['stem', 'robot', 'coding', 'science', 'technology'], Arts: ['art', 'arts', 'music', 'creative', 'culture'], Leadership: ['leadership', 'leader', 'service', 'student council'] };
 const getImageUrl = (item) => item.imageUrl || item.image || item.imageURL || '';
+const fallbackClubs = [
+  { id: 'french-club', title: 'French Club', category: 'Clubs', description: 'The French Club develops communication skills, cultural understanding, and confidence through interactive language activities.' },
+  { id: 'stem-club', title: 'STEM Club', category: 'STEM', description: 'Learners explore science experiments, coding, robotics, innovation challenges, and practical problem-solving.' },
+  { id: 'art-culture-club', title: 'Art and Culture Club', category: 'Arts', description: 'Drawing, painting, crafts, music, drama, design, and Ghanaian culture nurture creativity and artistic expression.' },
+  { id: 'discipleship-club', title: 'Discipleship Club', category: 'Leadership', description: 'Learners develop positive values, respect, honesty, responsibility, faith, and servant leadership.' },
+  { id: 'sanitation-club', title: 'Sanitation Club', category: 'Clubs', description: 'Cleanliness campaigns, recycling, environmental protection, and healthy hygiene practices build responsible citizenship.' },
+];
 
 export default function StudentLife() {
   const [projects, setProjects] = useState([]); const [active, setActive] = useState('All'); const [loading, setLoading] = useState(true);
-  useEffect(() => { getDocs(query(collection(db, 'projects'), orderBy('timestamp', 'desc'))).then((snap) => setProjects(snap.docs.map((item) => ({ id: item.id, ...item.data() })))).catch(console.error).finally(() => setLoading(false)); }, []);
+  useEffect(() => { getDocs(query(collection(db, 'projects'), orderBy('timestamp', 'desc'))).then((snap) => setProjects(snap.docs.length ? snap.docs.map((item) => ({ id: item.id, ...item.data() })) : fallbackClubs)).catch((error) => { console.error(error); setProjects(fallbackClubs); }).finally(() => setLoading(false)); }, []);
   const filtered = useMemo(() => {
     if (active === 'All') return projects;
     const wanted = active.toLowerCase();

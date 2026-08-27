@@ -43,7 +43,8 @@ export default function PublicHeader() {
 
   const navLinks = [
     { label: 'Home', to: '/' },
-    { label: 'Academics', to: '/academics' },
+    { label: 'About', to: '/about' },
+    { label: 'Why Choose Us', to: '/school-capabilities' },
     { label: 'School Life', to: '/student-life' },
     { label: 'Gallery', to: '/gallery' },
     { label: 'News', to: '/blog' },
@@ -90,27 +91,41 @@ export default function PublicHeader() {
 
               {/* Desktop Navigation */}
               <div className="hidden md:flex items-center space-x-2 text-sm">
-                {navLinks.map(({ label, to }) => (
+                {navLinks.slice(0, 1).map(({ label, to }) => (
                   <Link
                     key={to}
                     to={to}
-                    className={`rounded-full px-2.5 py-1.5 text-xs font-bold transition ${
+                    className={`rounded-full px-2.5 py-1.5 text-sm font-bold transition ${
                       isActive(to) ? 'bg-white/20 text-white ring-1 ring-electric-blue' : 'text-white/90 hover:bg-white/15 hover:text-white'
                     }`}
                   >
                     {label}
                   </Link>
                 ))}
+                <div className="group relative">
+                  <Link to="/academics" className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1.5 text-sm font-bold transition ${isActive('/academics') ? 'bg-white/20 text-white ring-1 ring-electric-blue' : 'text-white/90 hover:bg-white/15 hover:text-white'}`}>
+                    Academics
+                  </Link>
+                  <div className="invisible absolute left-0 top-full z-50 mt-4 w-56 translate-y-2 rounded-xl border border-slate-100 bg-white p-2 text-darkgray opacity-0 shadow-2xl transition-all group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
+                    <Link to="/academics" className="block rounded-lg px-3 py-2 text-sm font-semibold hover:bg-accent-light hover:text-primary">Academic Programmes</Link>
+                    <Link to="/academic-departments" className="block rounded-lg px-3 py-2 text-sm font-semibold hover:bg-accent-light hover:text-primary">Academic Departments</Link>
+                  </div>
+                </div>
+                {navLinks.slice(1).map(({ label, to }) => (
+                  <Link key={to} to={to} className={`rounded-full px-2.5 py-1.5 text-sm font-bold transition ${isActive(to) ? 'bg-white/20 text-white ring-1 ring-electric-blue' : 'text-white/90 hover:bg-white/15 hover:text-white'}`}>
+                    {label}
+                  </Link>
+                ))}
 
                 <div className="group relative">
-                  <button type="button" className="inline-flex items-center gap-1 rounded-full border border-sky-blue/70 bg-white/10 px-2.5 py-1.5 text-xs font-bold text-white transition hover:bg-white/20 hover:text-electric-blue">
+                  <button type="button" className="inline-flex items-center gap-1 rounded-full border border-sky-blue/70 bg-white/10 px-2.5 py-1.5 text-sm font-bold text-white transition hover:bg-white/20 hover:text-electric-blue">
                     More <span className="text-xs" aria-hidden="true">⌄</span>
                   </button>
                   <div className="invisible absolute right-0 top-full z-50 mt-4 w-72 translate-y-2 rounded-xl border border-slate-100 bg-white p-3 text-darkgray opacity-0 shadow-2xl transition-all group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
                     <p className="px-3 pb-2 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Explore Dankamf</p>
                     <div className="grid grid-cols-2 gap-1">
                       {[
-                        ['About Us', '/about'], ['Our Staff', '/staff'], ['Enroll Online', '/admissions/apply'],
+                        ['Private School in Oyibi', '/private-school-oyibi'], ['Our Staff', '/staff'], ['Enroll Online', '/admissions/apply'],
                         ['FAQs', '/faqs'], ['Calendar', '/calendar'], ['Check Status', '/admissions/status'], ['Downloads', '/downloads'],
                         ['Testimonials', '/client-confidence'], ['Alumni', '/alumni'], ['Careers & Vacancies', '/jobs'], ['Contact Us', '/contact'],
                       ].map(([label, to]) => (
@@ -171,7 +186,26 @@ export default function PublicHeader() {
                 <Search className="h-4 w-4" />
               </button>
             </form>
-            {navLinks.map(({ label, to }) => (
+            {navLinks.slice(0, 1).map(({ label, to }) => (
+              <Link
+                key={to}
+                to={to}
+                onClick={close}
+                className={`block rounded-lg px-3 py-3 text-base font-semibold transition ${
+                  isActive(to) ? 'bg-white/20 text-white' : 'text-white hover:bg-white/15 hover:text-white'
+                }`}
+              >
+                {label}
+              </Link>
+            ))}
+            <div className="relative">
+              <Link to="/academics" onClick={close} className={`block rounded-lg px-3 py-3 text-base font-semibold transition ${isActive('/academics') ? 'bg-white/20 text-white' : 'text-white hover:bg-white/15 hover:text-white'}`}>Academics</Link>
+              <div className="ml-3 grid grid-cols-2 gap-1 border-l border-white/20 pl-3">
+                <Link to="/academics" onClick={close} className="rounded-lg px-3 py-2 text-sm font-semibold text-white/85 hover:bg-white/15">Programmes</Link>
+                <Link to="/academic-departments" onClick={close} className="rounded-lg px-3 py-2 text-sm font-semibold text-white/85 hover:bg-white/15">Departments</Link>
+              </div>
+            </div>
+            {navLinks.slice(1).map(({ label, to }) => (
               <Link
                 key={to}
                 to={to}
@@ -189,7 +223,7 @@ export default function PublicHeader() {
               </button>
               {mobileMoreOpen && <div className="grid grid-cols-2 gap-1">
                 {[
-                  ['About Us', '/about'], ['Our Staff', '/staff'], ['Enroll Online', '/admissions/apply'],
+                  ['Private School in Oyibi', '/private-school-oyibi'], ['Our Staff', '/staff'], ['Enroll Online', '/admissions/apply'],
                   ['FAQs', '/faqs'], ['Calendar', '/calendar'],
                   ['Check Status', '/admissions/status'], ['Downloads', '/downloads'],
                   ['Testimonials', '/client-confidence'], ['Alumni', '/alumni'],
