@@ -10,7 +10,7 @@ export default function BlogCard({ post, onClick, index, id, className = '' }) {
       style={{ transitionDelay: `${index * 50}ms` }}
     >
       {(post.imageUrl || post.image) && (
-        <div className="relative h-60 w-full overflow-hidden bg-slate-100 sm:h-72">
+        <div className="relative h-72 w-full overflow-hidden bg-slate-100 sm:h-72">
           <img
             src={post.imageUrl || post.image}
             alt={post.title}

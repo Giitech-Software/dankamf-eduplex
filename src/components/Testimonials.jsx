@@ -56,7 +56,7 @@ export default function Testimonials() {
           {testimonials.slice(0, 3).map(({ id, quote, description, imageUrl, name, role }, index) => (
             <figure key={id || name} className="rounded-lg border border-slate-200 bg-slate-50 p-4 sm:p-5">
               {imageUrl && (
-                <div className="-mx-4 -mt-4 mb-4 h-64 overflow-hidden bg-white ring-1 ring-slate-200 sm:mx-0 sm:mt-0 sm:h-72 sm:rounded-lg">
+                <div className="-mx-4 -mt-4 mb-4 h-72 overflow-hidden bg-white ring-1 ring-slate-200 sm:mx-0 sm:mt-0 sm:h-72 sm:rounded-lg">
                   <img
                     src={imageUrl}
                     alt={name}

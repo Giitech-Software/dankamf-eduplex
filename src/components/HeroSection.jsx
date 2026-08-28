@@ -4,7 +4,12 @@ import { collection, getDocs, orderBy, query } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import { trackEvent } from '../utils/analytics';
 
-const heroImages = ['/images/hero-banner-01.webp', '/images/hero-banner-06.webp', '/images/hero-banner-07.webp', '/images/hero-banner-08.webp', '/images/hero-banner-09.webp', '/images/hero-banner-12.webp', '/images/hero-banner-13.webp'].map((url) => ({ url, type: 'image' }));
+const heroImages = [
+  '/images/hero-banner-01.webp',
+  '/images/hero-banner-02.webp',
+  '/images/hero-banner-03.webp',
+  '/images/hero-banner-04.webp',
+].map((url) => ({ url, type: 'image' }));
 
 export default function HeroSection({ siteName }) {
   const [activeImage, setActiveImage] = useState(0); const [isPaused, setIsPaused] = useState(false); const [slides, setSlides] = useState(heroImages); const videoRefs = useRef({}); const activeUrlRef = useRef(heroImages[0].url);
@@ -19,6 +24,7 @@ export default function HeroSection({ siteName }) {
   return <section className="relative isolate min-h-[100svh] overflow-hidden bg-primary-dark text-white sm:aspect-[16/9] sm:min-h-0" aria-roledescription="carousel" aria-label="Dankamf Educational Complex highlights">
     {slides.map((slide, index) => <React.Fragment key={slide.url}>{slide.type === 'video' ? <video ref={(element) => { videoRefs.current[index] = element; }} src={slide.url} aria-hidden="true" autoPlay={!isPaused && index === activeImage} muted playsInline preload={index === activeImage ? 'auto' : 'metadata'} onEnded={() => { if (index === activeImage) showNext(); }} className={`absolute inset-0 -z-20 h-full w-full object-cover transition-opacity duration-1000 ${index === activeImage ? 'opacity-100' : 'opacity-0'}`} /> : <><img src={slide.url} alt="" aria-hidden="true" onError={useFallbackImage} loading="lazy" className={`absolute inset-0 -z-30 h-full w-full scale-110 object-cover opacity-60 blur-2xl transition-opacity duration-1000 ${index === activeImage ? 'opacity-60' : 'opacity-0'}`} /><img src={slide.url} alt="" aria-hidden="true" onError={useFallbackImage} loading={index === activeImage ? 'eager' : 'lazy'} fetchPriority={index === activeImage ? 'high' : 'low'} decoding="async" className={`absolute inset-0 -z-20 h-full w-full object-cover object-center transition-opacity duration-1000 sm:object-contain ${index === activeImage ? 'opacity-100' : 'opacity-0'}`} /></>}</React.Fragment>)}
     <div className="absolute inset-0 -z-10 bg-primary-dark/30" />
+    <div className="pointer-events-none absolute inset-0 -z-10 bg-amber-500/30 mix-blend-color" aria-hidden="true" />
     <div className="mx-auto flex h-full max-w-6xl items-start px-4 pb-24 pt-24 sm:px-10 sm:pb-24 sm:pt-28 lg:px-16"><div className="mx-auto max-w-4xl text-center">
       {isVideo && <h1 className="sr-only">Welcome to {siteName || 'Dankamf Educational Complex'}</h1>}
       {!isVideo && <><h1 className="mt-3 text-[2.35rem] font-black leading-[1.04] sm:text-5xl lg:text-6xl"><span className="block text-2xl font-semibold italic text-white drop-shadow-[0_2px_3px_rgba(0,0,0,0.9)] sm:text-3xl">Welcome to</span><span className="mt-1 block text-[2rem] text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)] sm:text-4xl lg:text-5xl">{siteName || 'Dankamf Educational Complex'}</span></h1><p className="mx-auto mt-4 max-w-2xl text-lg font-medium italic leading-relaxed text-white drop-shadow-[0_2px_3px_rgba(0,0,0,0.8)] sm:text-xl">Changing lives through Godly principles and quality education.</p></>}

@@ -104,7 +104,7 @@ export default function FeatureGrid() {
               }`}
             >
               {imageUrl ? (
-                <div className="h-56 overflow-hidden bg-slate-100 sm:h-72 lg:h-80">
+                <div className="h-72 overflow-hidden bg-slate-100 sm:h-72 lg:h-80">
                   <img
                     src={imageUrl}
                     alt={title}
