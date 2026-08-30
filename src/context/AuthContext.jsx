@@ -1,5 +1,5 @@
 // src/context/AuthContext.jsx
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { auth, db } from '../firebase/config';
@@ -7,6 +7,7 @@ import { logoutUser } from '../firebase/auth';
 import LoadingSpinner from '../components/LoadingSpinner';
 
 const AuthContext = createContext();
+const ADMIN_IDLE_TIMEOUT_MS = 15 * 60 * 1000;
 
 export function useAuth() {
   return useContext(AuthContext);
@@ -16,6 +17,7 @@ export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [userRole, setUserRole] = useState(null);
   const [loading, setLoading] = useState(true);
+  const idleTimerRef = useRef(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -38,6 +40,48 @@ export function AuthProvider({ children }) {
 
     return unsubscribe;
   }, []);
+
+  // Automatically sign administrators out after a period of inactivity.
+  // This is intentionally scoped to admin roles; public users are not given
+  // an authenticated session by this provider.
+  useEffect(() => {
+    if (!currentUser || !['admin', 'superadmin'].includes(userRole)) return undefined;
+
+    let lastActivityAt = Date.now();
+    const clearIdleTimer = () => {
+      if (idleTimerRef.current) window.clearTimeout(idleTimerRef.current);
+    };
+    const scheduleLogout = () => {
+      clearIdleTimer();
+      idleTimerRef.current = window.setTimeout(async () => {
+        if (Date.now() - lastActivityAt >= ADMIN_IDLE_TIMEOUT_MS) {
+          try {
+            await logoutUser();
+          } catch (error) {
+            console.error('Automatic logout error:', error);
+          }
+        } else {
+          scheduleLogout();
+        }
+      }, ADMIN_IDLE_TIMEOUT_MS);
+    };
+    const recordActivity = () => {
+      lastActivityAt = Date.now();
+      scheduleLogout();
+    };
+
+    ['pointerdown', 'keydown', 'touchstart', 'scroll'].forEach((eventName) => {
+      window.addEventListener(eventName, recordActivity, { passive: true });
+    });
+    scheduleLogout();
+
+    return () => {
+      clearIdleTimer();
+      ['pointerdown', 'keydown', 'touchstart', 'scroll'].forEach((eventName) => {
+        window.removeEventListener(eventName, recordActivity);
+      });
+    };
+  }, [currentUser, userRole]);
 
   const value = {
     currentUser,
