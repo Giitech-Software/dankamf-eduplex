@@ -27,6 +27,9 @@ export default function Dashboard() {
     posts: '...',
     contacts: '...',
     applications: '...',
+    admissionApplications: '...',
+    alumniRegistrations: '...',
+    interviewRequests: '...',
     visits: { allTime: '...', daily: '...', weekly: '...', monthly: '...', yearly: '...' },
   });
 
@@ -45,6 +48,9 @@ export default function Dashboard() {
           getDoc(doc(db, 'siteStats', 'visits', 'periods', `weekly_${periodKeys.weekly}`)),
           getDoc(doc(db, 'siteStats', 'visits', 'periods', `monthly_${periodKeys.monthly}`)),
           getDoc(doc(db, 'siteStats', 'visits', 'periods', `yearly_${periodKeys.yearly}`)),
+          getDocs(collection(db, 'admissionApplications')),
+          getDocs(collection(db, 'alumniRegistrations')),
+          getDocs(collection(db, 'interviewRequests')),
         ]);
 
         const read = (index, fallback) => results[index].status === 'fulfilled' ? results[index].value : fallback;
@@ -54,6 +60,9 @@ export default function Dashboard() {
         const contactSnap = read(3, { size: 'Unavailable' });
         const jobSnap = read(4, { docs: [] });
         const visitSnap = read(5, { exists: () => false });
+        const admissionSnap = read(10, { size: 'Unavailable' });
+        const alumniSnap = read(11, { size: 'Unavailable' });
+        const interviewSnap = read(12, { size: 'Unavailable' });
 
         let totalApplications = 0;
         for (const jobDoc of jobSnap.docs) {
@@ -68,6 +77,9 @@ export default function Dashboard() {
           posts: postSnap.size,
           contacts: contactSnap.size,
           applications: totalApplications,
+          admissionApplications: admissionSnap.size,
+          alumniRegistrations: alumniSnap.size,
+          interviewRequests: interviewSnap.size,
           visits: { allTime: visitSnap.exists() ? visitSnap.data().count : 0, daily: periodCount(6), weekly: periodCount(7), monthly: periodCount(8), yearly: periodCount(9) },
         });
       } catch (error) {
@@ -109,6 +121,15 @@ export default function Dashboard() {
           <StatCard label="📰 News Articles" value={stats.posts} accent="border-warm" />
           <StatCard label="📬 Contact Forms" value={stats.contacts} accent="border-warm-amber" />
           <StatCard label="📝 Applications" value={stats.applications} accent="border-warm-terracotta" />
+          <Link to="/admin/admissions" className="block transform transition-transform duration-200 hover:scale-[1.02]">
+            <StatCard label="Admission Applications" value={stats.admissionApplications} accent="border-emerald-500" />
+          </Link>
+          <Link to="/admin/alumni" className="block transform transition-transform duration-200 hover:scale-[1.02]">
+            <StatCard label="Alumni Registrations" value={stats.alumniRegistrations} accent="border-violet-500" />
+          </Link>
+          <Link to="/admin/interviews" className="block transform transition-transform duration-200 hover:scale-[1.02]">
+            <StatCard label="Interview Requests" value={stats.interviewRequests} accent="border-cyan-500" />
+          </Link>
           <div className="rounded-xl border-l-4 border-accent bg-white p-6 shadow-sm dark:bg-gray-800 sm:col-span-2 lg:col-span-3">
             <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">Visitor Periods</h3>
             <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-5">

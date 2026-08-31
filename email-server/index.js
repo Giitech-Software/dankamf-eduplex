@@ -7,7 +7,7 @@ admin.initializeApp({ credential: admin.credential.applicationDefault() });
 
 const app = express();
 const db = admin.firestore();
-const allowedOrigins = (process.env.ALLOWED_ORIGINS || '')
+const allowedOrigins = (process.env.ALLOWED_ORIGINS || 'http://localhost:3000,http://127.0.0.1:3000')
   .split(',')
   .map((origin) => origin.trim())
   .filter(Boolean);

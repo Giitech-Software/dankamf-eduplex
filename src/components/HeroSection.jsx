@@ -7,8 +7,6 @@ import { trackEvent } from '../utils/analytics';
 const heroImages = [
   '/images/hero-banner-01.webp',
   '/images/hero-banner-02.webp',
-  '/images/hero-banner-03.webp',
-  '/images/hero-banner-04.webp',
 ].map((url) => ({ url, type: 'image' }));
 
 export default function HeroSection({ siteName }) {
