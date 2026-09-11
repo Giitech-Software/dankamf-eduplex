@@ -11,12 +11,15 @@
 
 const {setGlobalOptions} = require("firebase-functions");
 const {onRequest} = require("firebase-functions/v2/https");
+const {onDocumentWritten} = require("firebase-functions/v2/firestore");
+const {defineSecret} = require("firebase-functions/params");
 const {getFirestore} = require("firebase-admin/firestore");
 const admin = require("firebase-admin");
 const logger = require("firebase-functions/logger");
 
 admin.initializeApp();
 const db = getFirestore();
+const indexNowKey = defineSecret("INDEXNOW_KEY");
 
 // For cost control, you can set the maximum number of containers that can be
 // running at the same time. This helps mitigate the impact of unexpected
@@ -56,6 +59,75 @@ exports.admissionsStatus = onRequest({cors: true}, async (request, response) => 
     return response.status(500).json({error: "Status lookup is temporarily unavailable."});
   }
 });
+
+const indexNowUrls = {
+  posts: () => [`https://dankamfeducational.com/`, `https://dankamfeducational.com/blog`, `https://dankamfeducational.com/projects`, `https://dankamfeducational.com/student-life`],
+  projects: () => [`https://dankamfeducational.com/`, `https://dankamfeducational.com/projects`, `https://dankamfeducational.com/student-life`, `https://dankamfeducational.com/gallery`],
+  services: () => [`https://dankamfeducational.com/`, `https://dankamfeducational.com/academics`, `https://dankamfeducational.com/academic-departments`],
+  events: () => [`https://dankamfeducational.com/`, `https://dankamfeducational.com/calendar`, `https://dankamfeducational.com/blog`, `https://dankamfeducational.com/contact`],
+  about: () => [`https://dankamfeducational.com/`, `https://dankamfeducational.com/about`, `https://dankamfeducational.com/staff`, `https://dankamfeducational.com/client-confidence`],
+  gallery: () => [`https://dankamfeducational.com/`, `https://dankamfeducational.com/gallery`],
+  downloads: () => [`https://dankamfeducational.com/`, `https://dankamfeducational.com/downloads`],
+  faqs: () => [`https://dankamfeducational.com/`, `https://dankamfeducational.com/faqs`],
+  academicDepartments: () => [`https://dankamfeducational.com/academics`, `https://dankamfeducational.com/academic-departments`],
+  jobs: () => [`https://dankamfeducational.com/`, `https://dankamfeducational.com/admissions`, `https://dankamfeducational.com/jobs`],
+  admissionFees: () => [`https://dankamfeducational.com/admissions`, `https://dankamfeducational.com/admissions/fees`],
+  scholarships: () => [`https://dankamfeducational.com/admissions`, `https://dankamfeducational.com/admissions/fees`],
+  leadership: () => [`https://dankamfeducational.com/`, `https://dankamfeducational.com/about`, `https://dankamfeducational.com/staff`],
+  clientTestimonials: () => [`https://dankamfeducational.com/`, `https://dankamfeducational.com/client-confidence`],
+  enterpriseFeatures: () => [`https://dankamfeducational.com/`, `https://dankamfeducational.com/school-capabilities`],
+  partners: () => [`https://dankamfeducational.com/`],
+  schoolAlerts: () => [`https://dankamfeducational.com/`],
+  videos: () => [`https://dankamfeducational.com/`, `https://dankamfeducational.com/videos`],
+};
+
+/**
+ * Notify IndexNow about public URLs affected by a Firestore change.
+ * @param {string} collectionName Firestore collection that changed.
+ * @param {string} documentId ID of the changed document.
+ * @return {Promise<void>} Resolves after the URLs are submitted.
+ */
+async function notifyIndexNow(collectionName, documentId) {
+  const key = indexNowKey.value();
+  if (!key) return;
+  const urls = indexNowUrls[collectionName]?.(documentId);
+  if (!urls?.length) return;
+  const result = await fetch("https://api.indexnow.org/IndexNow", {
+    method: "POST",
+    headers: {"Content-Type": "application/json; charset=utf-8"},
+    body: JSON.stringify({
+      host: "dankamfeducational.com",
+      key,
+      keyLocation: `https://dankamfeducational.com/${key}.txt`,
+      urlList: [...new Set(urls)],
+    }),
+  });
+  if (!result.ok) throw new Error(`IndexNow returned HTTP ${result.status}`);
+  logger.info("IndexNow URLs submitted", {collectionName, documentId, urls});
+}
+
+const createIndexNowTrigger = (collectionName) => onDocumentWritten({document: `${collectionName}/{documentId}`, secrets: [indexNowKey]}, async (event) => {
+  await notifyIndexNow(collectionName, event.params.documentId);
+});
+
+exports.indexNowPosts = createIndexNowTrigger("posts");
+exports.indexNowProjects = createIndexNowTrigger("projects");
+exports.indexNowServices = createIndexNowTrigger("services");
+exports.indexNowEvents = createIndexNowTrigger("events");
+exports.indexNowAbout = createIndexNowTrigger("about");
+exports.indexNowGallery = createIndexNowTrigger("gallery");
+exports.indexNowDownloads = createIndexNowTrigger("downloads");
+exports.indexNowFaqs = createIndexNowTrigger("faqs");
+exports.indexNowAcademicDepartments = createIndexNowTrigger("academicDepartments");
+exports.indexNowJobs = createIndexNowTrigger("jobs");
+exports.indexNowAdmissionFees = createIndexNowTrigger("admissionFees");
+exports.indexNowScholarships = createIndexNowTrigger("scholarships");
+exports.indexNowLeadership = createIndexNowTrigger("leadership");
+exports.indexNowClientTestimonials = createIndexNowTrigger("clientTestimonials");
+exports.indexNowEnterpriseFeatures = createIndexNowTrigger("enterpriseFeatures");
+exports.indexNowPartners = createIndexNowTrigger("partners");
+exports.indexNowSchoolAlerts = createIndexNowTrigger("schoolAlerts");
+exports.indexNowVideos = createIndexNowTrigger("videos");
 
 // exports.helloWorld = onRequest((request, response) => {
 //   logger.info("Hello logs!", {structuredData: true});

@@ -70,6 +70,7 @@ service cloud.firestore {
     match /interviewRequests/{docId} { allow create: if true; allow read: if isAdmin(); allow update: if isAdmin() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status']); allow delete: if isSuperAdmin(); }
     match /admissionFees/{docId} { allow read: if true; allow write: if isSuperAdmin(); }
     match /scholarships/{docId} { allow read: if true; allow write: if isSuperAdmin(); }
+    match /legalPages/{docId} { allow read: if true; allow write: if isAdmin(); }
     match /jobs/{jobId}/applications/{applicationId} {
       allow create: if true;
       allow read: if isAdmin();

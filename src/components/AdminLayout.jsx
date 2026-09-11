@@ -95,6 +95,7 @@ export default function AdminLayout({ children }) {
         <NavLink to="/admin/alumni" className={navLinkClass}><FaUsers /> Alumni Registrations</NavLink>
         <NavLink to="/admin/interviews" className={navLinkClass}><FaCalendarAlt /> Interview Requests</NavLink>
         <NavLink to="/admin/fees" className={navLinkClass}><FaScroll /> Admissions Fees</NavLink>
+        <NavLink to="/admin/terms" className={navLinkClass}><FaScroll /> Terms of Service</NavLink>
         {role === 'superadmin' && <NavLink to="/admin/add-user" className={navLinkClass}><FaUserPlus /> Add User</NavLink>}
         {role === 'superadmin' && <NavLink to="/admin/hero-images" className={navLinkClass}><FaBriefcase /> Hero Images</NavLink>}
 

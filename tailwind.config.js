@@ -42,7 +42,7 @@ module.exports = {
         darkgray: '#374151',
         ink: '#111827',
         text: '#374151',
-        'text-light': '#6B7280',
+        'text-light': '#1F2937',
         border: '#D1D5DB',
         surface: '#FFFFFF',
         'surface-muted': '#F8FAFC',

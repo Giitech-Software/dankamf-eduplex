@@ -16,7 +16,6 @@ const staticRoutes = [
   "/admissions",
   "/jobs",
   "/school-capabilities",
-  "/private-school-oyibi",
   "/admissions/apply",
   "/admissions/interview",
   "/admissions/fees",

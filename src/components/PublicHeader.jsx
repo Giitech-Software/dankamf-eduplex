@@ -125,7 +125,7 @@ export default function PublicHeader() {
                     <p className="px-3 pb-2 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Explore Dankamf</p>
                     <div className="grid grid-cols-2 gap-1">
                       {[
-                        ['Private School in Oyibi', '/private-school-oyibi'], ['Our Staff', '/staff'], ['Enroll Online', '/admissions/apply'],
+                        ['Our Staff', '/staff'], ['Enroll Online', '/admissions/apply'],
                         ['FAQs', '/faqs'], ['Calendar', '/calendar'], ['Check Status', '/admissions/status'], ['Downloads', '/downloads'],
                         ['Testimonials', '/client-confidence'], ['Alumni', '/alumni'], ['Careers & Vacancies', '/jobs'], ['Contact Us', '/contact'],
                       ].map(([label, to]) => (
@@ -223,7 +223,7 @@ export default function PublicHeader() {
               </button>
               {mobileMoreOpen && <div className="grid grid-cols-2 gap-1">
                 {[
-                  ['Private School in Oyibi', '/private-school-oyibi'], ['Our Staff', '/staff'], ['Enroll Online', '/admissions/apply'],
+                  ['Our Staff', '/staff'], ['Enroll Online', '/admissions/apply'],
                   ['FAQs', '/faqs'], ['Calendar', '/calendar'],
                   ['Check Status', '/admissions/status'], ['Downloads', '/downloads'],
                   ['Testimonials', '/client-confidence'], ['Alumni', '/alumni'],

@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import AcademicProgramDetails from './pages/AcademicProgramDetails';
-import PrivateSchoolOyibi from './pages/PrivateSchoolOyibi';
 
 import Home from './pages/Home';
 import Services from './pages/Services';
@@ -75,6 +74,7 @@ import ManageAlumni from './pages/admin/ManageAlumni';
 import InterviewBooking from './pages/InterviewBooking';
 import InterviewRequests from './pages/admin/InterviewRequests';
 import ManageFees from './pages/admin/ManageFees';
+import ManageTerms from './pages/admin/ManageTerms';
 import Fees from './pages/Fees';
 import AdmissionStatus from './pages/AdmissionStatus';
 import ApplicationDocuments from './pages/admin/ApplicationDocuments';
@@ -109,7 +109,6 @@ export default function App() {
           <Route element={<MainLayout />}>
             <Route path="/" element={<Home />} />
             <Route path="/academics/:slug" element={<AcademicProgramDetails />} />
-            <Route path="/private-school-oyibi" element={<PrivateSchoolOyibi />} />
             {/* Academics is the canonical public programme directory. Keep the
                 legacy Services URL as a safe compatibility redirect. */}
             <Route path="/academics" element={<Services />} />
@@ -263,6 +262,7 @@ export default function App() {
           <Route path="/admin/alumni" element={<ProtectedRoute allowedRoles={['admin', 'superadmin']}><ManageAlumni /></ProtectedRoute>} />
           <Route path="/admin/interviews" element={<ProtectedRoute allowedRoles={['admin', 'superadmin']}><InterviewRequests /></ProtectedRoute>} />
           <Route path="/admin/fees" element={<ProtectedRoute allowedRoles={['admin', 'superadmin']}><ManageFees /></ProtectedRoute>} />
+          <Route path="/admin/terms" element={<ProtectedRoute allowedRoles={['admin', 'superadmin']}><ManageTerms /></ProtectedRoute>} />
           <Route path="/admin/admissions/:applicationId/documents" element={<ProtectedRoute allowedRoles={['admin', 'superadmin']}><ApplicationDocuments /></ProtectedRoute>} />
           <Route
             path="/admin/manage-events"

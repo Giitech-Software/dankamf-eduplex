@@ -115,6 +115,18 @@ h6 {
   padding-left: 0.2rem;
 }
 
+/* Keep regular Markdown copy comfortably readable against white surfaces. */
+.markdown-content {
+  color: #1f2937;
+}
+
+/* Keep preview-card descriptions and metadata readable across public pages. */
+.public-site .text-text-light,
+.public-site .text-slate-500,
+.public-site .text-slate-600 {
+  color: #1f2937 !important;
+}
+
 .markdown-content h1,
 .markdown-content h2,
 .markdown-content h3,

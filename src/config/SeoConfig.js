@@ -1,142 +1,44 @@
-﻿﻿﻿﻿// src/config/SeoConfig.js
-
 const baseUrl = 'https://dankamfeducational.com';
 const siteName = 'Dankamf Educational Complex';
 const siteAuthor = 'Dankamf Educational Complex';
 const sitePublisher = 'Dankamf Educational Complex';
 
-// Static Pages
+const cleanDescription = (text = '') => String(text)
+  .replace(/<[^>]*>/g, '')
+  .replace(/[#*_`]/g, '')
+  .replace(/\s+/g, ' ')
+  .trim()
+  .slice(0, 160);
+
+const page = (title, description, path) => ({
+  title,
+  description: cleanDescription(description),
+  path,
+  url: `${baseUrl}${path}`,
+  author: siteAuthor,
+  publisher: sitePublisher,
+});
+
 const staticPages = {
-  home: {
-    title: `${siteName} | Private School in Oyibi, Greater Accra`,
-    description: 'Dankamf Educational Complex is a trusted private school in Oyibi, Kpone-Katamanso, Greater Accra, Ghana, committed to quality education and strong moral foundations.',
-    path: '/',
-    url: `${baseUrl}/`,
-    author: siteAuthor,
-    publisher: sitePublisher,
-  },
-  services: {
-    title: `Academics | ${siteName}`,
-    description: 'Explore our comprehensive academic programmes and curriculum.',
-    path: '/academics',
-    url: `${baseUrl}/academics`,
-    author: siteAuthor,
-    publisher: sitePublisher,
-  },
-  projects: {
-    title: `School Life | ${siteName}`,
-    description: 'Discover student activities, events, and life at Dankamf Eduplex.',
-    path: '/projects',
-    url: `${baseUrl}/projects`,
-    author: siteAuthor,
-    publisher: sitePublisher,
-  },
-  blog: {
-    title: `News & Events | ${siteName}`,
-    description: 'Latest news, announcements, and upcoming events at Dankamf Eduplex.',
-    path: '/blog',
-    url: `${baseUrl}/blog`,
-    author: siteAuthor,
-    publisher: sitePublisher,
-  },
-  contact: {
-    title: `Contact Us | ${siteName}`,
-    description: 'Get in touch with Dankamf Educational Complex for admissions and inquiries.',
-    path: '/contact',
-    url: `${baseUrl}/contact`,
-    author: siteAuthor,
-    publisher: sitePublisher,
-  },
-  about: {
-    title: `About Us | ${siteName}`,
-    description: 'Learn about Dankamf Educational Complex, a private school serving families in Oyibi, Kpone-Katamanso and Greater Accra through excellence in learning and character.',
-    path: '/about',
-    url: `${baseUrl}/about`,
-    author: siteAuthor,
-    publisher: sitePublisher,
-  },
-  admissions: {
-    title: `Admissions | ${siteName}`,
-    description: 'Learn about the admission process and join the Dankamf Educational Complex family.',
-    path: '/admissions',
-    url: `${baseUrl}/admissions`,
-    author: siteAuthor,
-    publisher: sitePublisher,
-  },
-  localSchool: {
-    title: `Private School in Oyibi, Kpone-Katamanso | ${siteName}`,
-    description: 'Discover Dankamf Educational Complex, a trusted private basic school in Oyibi, Kpone-Katamanso, Greater Accra, offering nursery, kindergarten, primary, and JHS education.',
-    path: '/private-school-oyibi',
-    url: `${baseUrl}/private-school-oyibi`,
-    author: siteAuthor,
-    publisher: sitePublisher,
-  },
-  careers: {
-    title: `Careers & Vacancies | ${siteName}`,
-    description: 'Explore teaching, administration, and support opportunities at Dankamf Educational Complex.',
-    path: '/jobs',
-    url: `${baseUrl}/jobs`,
-    author: siteAuthor,
-    publisher: sitePublisher,
-  },
-  clientConfidence: {
-    title: `Testimonials | ${siteName}`,
-    description: 'Read what parents and students say about Dankamf Educational Complex.',
-    path: '/client-confidence',
-    url: `${baseUrl}/client-confidence`,
-    author: siteAuthor,
-    publisher: sitePublisher,
-  },
-  faqs: {
-    title: `Frequently Asked Questions | ${siteName}`,
-    description: 'Find answers to common questions about Dankamf Educational Complex.',
-    path: '/faqs',
-    url: `${baseUrl}/faqs`,
-    author: siteAuthor,
-    publisher: sitePublisher,
-  },
+  home: page(`${siteName} | Private School in Oyibi, Accra`, 'Dankamf Educational Complex is a private school in Oyibi offering Crèche, Nursery, Kindergarten, Primary and Junior High School education in Greater Accra.', '/'),
+  services: page(`Academics | Preschool, Primary & JHS in Oyibi | ${siteName}`, 'Explore Crèche, Nursery, Kindergarten, Primary and Junior High School programmes at Dankamf Educational Complex in Oyibi, Greater Accra.', '/academics'),
+  projects: page(`School Life & Activities | ${siteName}`, 'Explore sports, STEM, creative arts, leadership, clubs, events and student activities at Dankamf Educational Complex in Oyibi.', '/projects'),
+  blog: page(`School News & Events | ${siteName}`, 'Read school news, announcements, achievements, activities and upcoming events from Dankamf Educational Complex in Oyibi.', '/blog'),
+  contact: page(`Contact Dankamf Educational Complex | Oyibi`, 'Contact Dankamf Educational Complex in Oyibi for admissions, school enquiries, campus visits, directions and information about our programmes.', '/contact'),
+  about: page(`About Dankamf Educational Complex | Oyibi`, 'Learn about Dankamf Educational Complex, our history, vision, mission, values and commitment to quality education in Oyibi, Greater Accra.', '/about'),
+  admissions: page(`Admissions | Private School in Oyibi | ${siteName}`, 'Apply for admission to Dankamf Educational Complex in Oyibi. Find enrolment information for Crèche, Nursery, Kindergarten, Primary and JHS.', '/admissions'),
+  careers: page(`Teaching Jobs & Vacancies | ${siteName}`, 'View current teaching, administrative and support vacancies at Dankamf Educational Complex in Oyibi and learn how to apply.', '/jobs'),
+  clientConfidence: page(`Parent & Student Testimonials | ${siteName}`, 'Read experiences from parents, learners and members of the Dankamf Educational Complex community in Oyibi.', '/client-confidence'),
+  faqs: page(`School FAQs | ${siteName}`, 'Find answers about admissions, fees, programmes, school life, transport, campus visits and enrolment at Dankamf Educational Complex in Oyibi.', '/faqs'),
 };
 
-// Dynamic Pages
 const dynamicPages = {
-  blogPost: ({ title, excerpt, id }) => ({
-    title: `${title} | News | ${siteName}`,
-    description: excerpt,
-    path: `/blog/${id}`,
-    url: `${baseUrl}/blog/${id}`,
-    author: siteAuthor,
-    publisher: sitePublisher,
-  }),
-  admissionInfo: ({ title, excerpt, id }) => ({
-    title: `${title} | Admissions | ${siteName}`,
-    description: excerpt,
-    path: `/jobs/${id}`,
-    url: `${baseUrl}/jobs/${id}`,
-    author: siteAuthor,
-    publisher: sitePublisher,
-  }),
-  academicProgram: ({ title, excerpt, slug }) => ({
-    title: `${title} | Academics | ${siteName}`,
-    description: excerpt,
-    path: `/academics/${slug}`,
-    url: `${baseUrl}/academics/${slug}`,
-    author: siteAuthor,
-    publisher: sitePublisher,
-  }),
-  eventDetails: ({ title, excerpt, id }) => ({
-    title: `${title} | School Life | ${siteName}`,
-    description: excerpt,
-    path: `/projects/${id}`,
-    url: `${baseUrl}/projects/${id}`,
-    author: siteAuthor,
-    publisher: sitePublisher,
-  }),
+  blogPost: ({ title, excerpt, id }) => page(`${title} | News | ${siteName}`, cleanDescription(excerpt), `/blog/${id}`),
+  admissionInfo: ({ title, excerpt, id }) => page(`${title} | Admissions | ${siteName}`, cleanDescription(excerpt), `/admissions/${id}`),
+  academicProgram: ({ title, excerpt, slug }) => page(`${title} in Oyibi | ${siteName}`, cleanDescription(excerpt), `/academics/${slug}`),
+  eventDetails: ({ title, excerpt, id }) => page(`${title} | School Life | ${siteName}`, cleanDescription(excerpt), `/projects/${id}`),
 };
 
-// Final Export
-const SeoConfig = {
-  ...staticPages,
-  dynamic: dynamicPages,
-};
+const SeoConfig = { ...staticPages, dynamic: dynamicPages };
 
 export default SeoConfig;
