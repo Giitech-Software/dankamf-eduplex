@@ -115,19 +115,6 @@ exports.indexNowProjects = createIndexNowTrigger("projects");
 exports.indexNowServices = createIndexNowTrigger("services");
 exports.indexNowEvents = createIndexNowTrigger("events");
 exports.indexNowAbout = createIndexNowTrigger("about");
-exports.indexNowGallery = createIndexNowTrigger("gallery");
-exports.indexNowDownloads = createIndexNowTrigger("downloads");
-exports.indexNowFaqs = createIndexNowTrigger("faqs");
-exports.indexNowAcademicDepartments = createIndexNowTrigger("academicDepartments");
-exports.indexNowJobs = createIndexNowTrigger("jobs");
-exports.indexNowAdmissionFees = createIndexNowTrigger("admissionFees");
-exports.indexNowScholarships = createIndexNowTrigger("scholarships");
-exports.indexNowLeadership = createIndexNowTrigger("leadership");
-exports.indexNowClientTestimonials = createIndexNowTrigger("clientTestimonials");
-exports.indexNowEnterpriseFeatures = createIndexNowTrigger("enterpriseFeatures");
-exports.indexNowPartners = createIndexNowTrigger("partners");
-exports.indexNowSchoolAlerts = createIndexNowTrigger("schoolAlerts");
-exports.indexNowVideos = createIndexNowTrigger("videos");
 
 // exports.helloWorld = onRequest((request, response) => {
 //   logger.info("Hello logs!", {structuredData: true});

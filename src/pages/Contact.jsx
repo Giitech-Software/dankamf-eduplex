@@ -5,14 +5,23 @@ import { FaEnvelope, FaGlobe, FaMapMarkerAlt, FaPhoneAlt, FaWhatsapp } from 'rea
 import { db } from '../firebase/config';
 import Seo from '../components/Seo';
 import SeoConfig from '../config/SeoConfig';
+import useSiteSettings from '../hooks/useSiteSettings';
 
-const whatsappNumber = '233242172216';
 const whatsappMessage = encodeURIComponent(
   'Hello Dankamf Eduplex, I would like to make an inquiry about admissions.'
 );
-const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`; // Corrected variable name
-
 export default function Contact() {
+  const { settings } = useSiteSettings();
+  const legacyHeadteacherNumbers = /(?:024\s*217\s*2216|233\s*24\s*217\s*2216|0242172216|233242172216)/;
+  const configuredPhone = settings?.phone || '';
+  const configuredWhatsapp = settings?.whatsapp || '';
+  const phone = legacyHeadteacherNumbers.test(configuredPhone.replace(/\D/g, '')) ? '0504453176' : (configuredPhone || '0504453176');
+  const whatsappNumber = (legacyHeadteacherNumbers.test(configuredWhatsapp.replace(/\D/g, '')) ? '0504453176' : (configuredWhatsapp || phone)).replace(/\D/g, '').replace(/^0/, '233');
+  const contacts = settings?.contacts || [];
+  const email = settings?.contactEmail || 'dankamfeducational@gmail.com';
+  const address = settings?.address || 'Oyibi-Accra, near SDA Church, Greater Accra Region, Ghana';
+  const officeHours = settings?.officeHours || 'Monday-Friday: 7:00am-3:00pm';
+  const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
   const [form, setForm] = useState({ name: '', email: '', message: '' });
   const [status, setStatus] = useState('');
 
@@ -49,18 +58,18 @@ export default function Contact() {
           <div className="mb-6 space-y-3 px-4 text-gray-700 sm:px-0">
             <div className="grid gap-3 sm:grid-cols-2">
               <a
-                href="mailto:dankamfeducational@gmail.com"
+                href={`mailto:${email}`}
                 className="flex min-h-14 items-center gap-3 rounded-lg border border-gray-200 bg-white p-3 text-primary shadow-sm transition hover:border-primary"
               >
                 <FaEnvelope className="shrink-0" />
-                <span className="min-w-0 truncate">dankamfeducational@gmail.com</span>
+                <span className="min-w-0 truncate">{email}</span>
               </a>
               <a
-                href="tel:+233242172216"
+                href={`tel:${phone.replace(/\s/g, '')}`}
                 className="flex min-h-14 items-center gap-3 rounded-lg border border-gray-200 bg-white p-3 text-primary shadow-sm transition hover:border-primary"
               >
                 <FaPhoneAlt className="shrink-0" />
-                <span>+23324 217 2216</span>
+                <span>{phone}</span>
               </a>
               <a
                 href="https://dankamfeducational.com"
@@ -73,7 +82,7 @@ export default function Contact() {
               </a>
               <p className="flex min-h-14 items-center gap-3 rounded-lg border border-gray-200 bg-white p-3 shadow-sm">
                 <FaMapMarkerAlt className="shrink-0 text-primary" />
-                <span>Oyibi–Accra, near SDA Church, Greater Accra Region, Ghana</span>
+                <span>{address}</span>
               </p>
             </div>
 
@@ -100,12 +109,13 @@ export default function Contact() {
                 <p className="text-xs font-black uppercase tracking-[0.2em] text-accent">Visit Our Campus</p>
                 <h3 className="mt-2 text-xl font-black text-primary">Office Hours</h3>
                 <dl className="mt-4 space-y-3 text-sm text-text-light">
-                  <div className="flex justify-between gap-4"><dt className="font-bold text-darkgray">Monday–Friday</dt><dd>7:00am–3:00pm</dd></div>
+                  <div className="flex justify-between gap-4"><dt className="font-bold text-darkgray">Office hours</dt><dd>{officeHours}</dd></div>
                   <div className="flex justify-between gap-4"><dt className="font-bold text-darkgray">Weekend & holidays</dt><dd>Closed</dd></div>
                 </dl>
                 <a href="https://www.google.com/maps/search/?api=1&query=Dankamf+Educational+Complex,+Accra,+Ghana" target="_blank" rel="noopener noreferrer" className="mt-5 inline-flex rounded-full bg-primary px-4 py-2 text-xs font-bold text-white hover:bg-primary-dark">Get Directions</a>
               </div>
             </div>
+            {contacts.length > 0 && <section className="mt-6 rounded-xl border border-slate-200 bg-white p-5 shadow-sm"><h2 className="text-xl font-black text-primary">Key Contacts</h2><div className="mt-4 grid gap-3 sm:grid-cols-2">{contacts.map((contact, index) => <div key={`${contact.phone}-${index}`} className="rounded-lg border border-slate-100 bg-slate-50 p-4"><p className="font-black text-primary">{contact.name}</p><p className="mt-1 text-sm font-semibold text-accent">{contact.role}</p><a href={`tel:${contact.phone}`} className="mt-2 inline-block text-sm font-bold text-primary hover:underline">{contact.phone}</a></div>)}</div></section>}
           </div>
           <form onSubmit={handleSubmit} className="space-y-3 bg-white p-5 shadow sm:rounded-lg sm:p-6">
             <input

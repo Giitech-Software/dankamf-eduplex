@@ -12,7 +12,7 @@ export default function LoadingSpinner({
       role="status"
       aria-live="polite"
     >
-      <div className="flex flex-col items-center gap-4 text-center">
+      <div className="flex flex-col items-center gap-3 text-center">
         <div className="loading-dots" aria-hidden="true">
           <span />
           <span />
@@ -20,7 +20,7 @@ export default function LoadingSpinner({
           <span />
           <span />
         </div>
-        {showLabel && <p className={`text-sm font-black uppercase tracking-[0.25em] ${fullPage ? 'text-sky-100' : 'text-slate-500'}`}>{label}</p>}
+        {showLabel && <p className={`text-xs font-bold uppercase tracking-[0.16em] ${fullPage ? 'text-sky-100' : 'text-slate-500'}`}>{label}</p>}
       </div>
     </div>
   );

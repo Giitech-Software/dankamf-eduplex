@@ -7,7 +7,7 @@ import LoadingSpinner from '../../components/LoadingSpinner';
 import { db, storage } from '../../firebase/config';
 import { requireRecentAdminAuth } from '../../firebase/security';
 
-const initial = { history: '', schoolIntroduction: '', vision: '', mission: '', educationalPhilosophy: '', values: '', achievements: '', headteacherMessage: '', proprietorName: '', proprietorRole: 'Proprietor', headteacherName: '', headteacherRole: 'Headteacher', proprietorImage: null, headteacherImage: null };
+const initial = { history: '', schoolIntroduction: '', vision: '', mission: '', educationalPhilosophy: '', values: '', achievements: '', headteacherMessage: '', proprietorName: '', proprietorRole: 'Proprietor', headteacherName: 'Mr Jacob Zanu', headteacherRole: 'Headmaster', headteacherPhone: '0504453176', proprietorImage: null, headteacherImage: null };
 
 export default function ManageAbout() {
   const [form, setForm] = useState(initial); const [record, setRecord] = useState({}); const [loading, setLoading] = useState(true); const [saving, setSaving] = useState(false); const [message, setMessage] = useState(''); const [confirmPassword, setConfirmPassword] = useState('');

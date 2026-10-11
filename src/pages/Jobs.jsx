@@ -67,7 +67,7 @@ export default function Jobs() {
                 <li><strong>Visit Us:</strong> Come to the school premises to pick up an official admission form.</li>
                 <li><strong>Submit:</strong> Return the completed form along with all required documentation.</li>
                 <li><strong>Payment:</strong> Payments can be made to the school accounts office.</li>
-                <li><strong>Inquiry:</strong> For any questions, please contact the Headmaster at <strong>024 217 2216</strong>.</li>
+                <li><strong>Inquiry:</strong> For any questions, please contact the Headmaster, <strong>Mr Jacob Zanu</strong>, at <strong>0504453176</strong>.</li>
               </ol>
             </div>
           </div>

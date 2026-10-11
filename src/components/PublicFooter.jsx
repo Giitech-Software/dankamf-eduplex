@@ -10,6 +10,7 @@ import {
   FaMapMarkerAlt,
 } from 'react-icons/fa';
 import { FaXTwitter } from 'react-icons/fa6';
+import useSiteSettings from '../hooks/useSiteSettings';
 
 const socialLinks = [
   { icon: <FaFacebookF />, label: 'Facebook', url: 'https://www.facebook.com/share/1Bp8KYhmvn/?mibextid=wwXIfr' },
@@ -25,6 +26,10 @@ const socialLinks = [
 ];
 
 const PublicFooter = () => {
+  const { settings } = useSiteSettings();
+  const legacyWhatsapp = /(?:0242172216|233242172216)/;
+  const configuredWhatsapp = (settings?.whatsapp || settings?.phone || '').replace(/\D/g, '');
+  const footerWhatsapp = (legacyWhatsapp.test(configuredWhatsapp) ? '0504453176' : (configuredWhatsapp || '0504453176')).replace(/^0/, '233');
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState('idle');
   const [message, setMessage] = useState('');
@@ -88,7 +93,7 @@ const PublicFooter = () => {
             {socialLinks.map(({ icon, label, url }) => (
               <li key={label}>
                 <a
-                  href={url}
+                  href={label === 'WhatsApp' ? `https://wa.me/${footerWhatsapp}?text=Hello%20Dankamf%20Eduplex%2C%20I%20would%20like%20to%20make%20an%20inquiry.` : url}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 hover:text-sky-blue"

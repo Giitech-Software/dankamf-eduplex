@@ -2,6 +2,67 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Presentation-style public reveals. Sections and their contents remain
+   visible by default, then receive the animation class as they enter view. */
+.public-site .scroll-section-reveal {
+  opacity: 0.01;
+  transform: translate3d(0, 4rem, 0) scale(0.96);
+  transition: opacity 1000ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 1000ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.public-site .scroll-section-reveal.is-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
+.public-site .scroll-reveal {
+  --reveal-x: -2.5rem;
+  opacity: 0;
+  transform: translate3d(var(--reveal-x), 2rem, 0);
+  transition: opacity 900ms cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay, 0ms),
+    transform 900ms cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+.public-site section .scroll-reveal:is(img, video) {
+  --reveal-x: 1.25rem;
+}
+
+.public-site .scroll-reveal.is-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+/* Headings get a dedicated editorial entrance, distinct from body copy. */
+.public-site .scroll-title {
+  --reveal-x: -3.25rem;
+  filter: blur(3px);
+  transition-duration: 1400ms;
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  transition-property: opacity, transform, filter;
+}
+
+.public-site .scroll-title.is-visible {
+  filter: blur(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .public-site .scroll-reveal {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    transition: none;
+  }
+
+  .public-site .scroll-section-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
 /* Enterprise-wide typography system. */
 body,
 button,
@@ -634,6 +695,15 @@ main.min-h-screen.bg-background-alt > section.bg-primary-dark h1 {
 .loading-shell,
 .login-shell {
   background: radial-gradient(circle at 15% 10%, rgba(0, 150, 255, 0.32), transparent 32%), radial-gradient(circle at 88% 86%, rgba(65, 105, 225, 0.25), transparent 35%), linear-gradient(135deg, #003153 0%, #001b36 52%, #0047ab 100%);
+}
+
+/* Keep every full-page loading label compact, including auth and detail-page
+   loaders that render outside the public layout splash component. */
+.loading-shell p {
+  font-size: 0.7rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.16em !important;
+  line-height: 1.25 !important;
 }
 
 .loading-shell::before,

@@ -49,7 +49,7 @@ const AboutUs = () => {
         <section className="about-markdown-card">
           <h2>Message from the Headmaster</h2>
           {about.headteacherImage && <img src={about.headteacherImage} alt={about.headteacherName || 'Headteacher'} className="mb-5 h-48 w-40 rounded-xl object-cover shadow-md" />}
-          {about.headteacherName && <p className="font-bold text-primary">{about.headteacherName} · {about.headteacherRole || 'Headteacher'}</p>}
+          {about.headteacherName && <p className="font-bold text-primary">{about.headteacherName} · {about.headteacherRole || 'Headteacher'}{about.headteacherPhone && ` · ${about.headteacherPhone}`}</p>}
           <ReactMarkdown>{about.headteacherMessage}</ReactMarkdown>
           {about.proprietorImage && <div className="mt-6 flex items-center gap-4"><img src={about.proprietorImage} alt={about.proprietorName || 'Proprietor'} className="h-24 w-24 rounded-full object-cover" /><p className="font-bold text-primary">{about.proprietorName} · {about.proprietorRole || 'Proprietor'}</p></div>}
         </section>

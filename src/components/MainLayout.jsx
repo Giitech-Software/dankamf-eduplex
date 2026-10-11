@@ -4,6 +4,7 @@ import PublicFooter from "./PublicFooter";
 import GuidedAssistant from "./GuidedAssistant";
 import { Outlet, useLocation } from "react-router-dom";
 import logo from "../assets/logo.png";
+import ScrollReveal from "./ScrollReveal";
 
 export default function MainLayout() {
   const [loading, setLoading] = useState(true);
@@ -45,6 +46,7 @@ export default function MainLayout() {
       {/* Actual homepage layout */}
       <div className={`transition-opacity duration-500 ease-out ${contentVisible ? 'opacity-100' : 'opacity-0'}`}>
         <PublicHeader />
+        <ScrollReveal />
         <main>
           <Outlet />
         </main>
@@ -58,7 +60,7 @@ export default function MainLayout() {
           className="loading-shell fixed inset-0 z-[100] flex flex-col items-center justify-center"
         >
           <img key={location.pathname} src={logo} alt="Dankamf Educational Complex Logo" className="h-36 w-36 rounded-full bg-white p-2 animate-pulse object-contain drop-shadow-xl sm:h-44 sm:w-44" />
-          <p className="mt-5 text-sm font-black uppercase tracking-[0.22em] text-sky-100">{loadingLabel}</p>
+          <p className="mt-4 text-xs font-bold uppercase tracking-[0.16em] text-sky-100">{loadingLabel}</p>
         </div>
       )}
     </div>
